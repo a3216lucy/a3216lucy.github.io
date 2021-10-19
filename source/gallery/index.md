@@ -2,13 +2,9 @@
 title: Gallery
 date: 2021-02-25 21:20:01
 albums: [
-  ["/img/6.png","123"],
-  ["https://camo.githubusercontent.com/a31123334bf8e89c331f67f0fb10a6f13ead147b17d44e4c8ea4ad6dc4c366a7/68747470733a2f2f75706c6f61642d696d616765732e6a69616e7368752e696f2f75706c6f61645f696d616765732f31383732323730372d306233343338613433386234356662322e706e673f696d6167654d6f6772322f6175746f2d6f7269656e742f7374726970253743696d61676556696577322f322f772f31323430" , "123"]
+  ["/img/6.png","/img/6.png","test1"],
+  ["/img/6.png","/img/6.png","test2"],
+  ["/img/6.png","/img/6.png","test3"],
 ]
-# justifiedGallery: [
-#   ["/img/6.png","/img/6.png","123"]
-# ]
 ---
-<!-- 
-![](https://miro.medium.com/max/1400/1*-mmXEsYov4s11mpPSvu0yA.png)
-![](https://miro.medium.com/max/1400/1*-mmXEsYov4s11mpPSvu0yA.png) -->
+
