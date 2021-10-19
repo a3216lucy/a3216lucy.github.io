@@ -101,7 +101,7 @@
       
       <p>身為活動的 PO，很高興能夠邀請到硬體業 PM Eva 和軟體業 PM Rafeni 來和大家分享他們的經歷。</p>
 <p><img src="https://miro.medium.com/max/1400/1*oEIRVqvHSzxU-h9ugsPSKQ.png"></p>
-<p style ="text-align:center"><i>活動 ：PM 相談室《新手篇》</i></p>
+<p style="text-align:center"><i>活動 ：PM 相談室《新手篇》</i></p>
 
 <blockquote>
 <h2 id="前情提要"><a href="#前情提要" class="headerlink" title="前情提要"></a>前情提要</h2><p>筆者隸屬於 PM361 社群，近期於 2021/09 月時舉辦了「PM 相談室《新手篇》」活動，主要的 TA 為那些想要轉職 PM 或剛入行的新手 PM 們。<br>我們希望能夠透過有經驗者的分享，來幫助他們解決一些常見的疑惑、瞭解 PM 的工作職務，因而對 PM 的認知有個基礎的架構。</p>
@@ -162,11 +162,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/09/30/pm361_activity/" data-id="ckuyg40p2000123atd4ngbcq8" class="article-share-link">
+      <a data-url="http://example.com/2021/09/30/pm361_activity/" data-id="ckuyjbjui0001wyat6jjm9mdf" class="article-share-link">
         Share
       </a>
       
-<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/PM/" rel="tag">PM</a></li></ul>
+<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/PM/" rel="tag">PM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/%E5%BF%83%E5%BE%97/" rel="tag">心得</a></li></ul>
 
     </footer>
 
@@ -230,7 +230,7 @@
 <h3 id="安裝-Hexo-Git"><a href="#安裝-Hexo-Git" class="headerlink" title="安裝 Hexo Git"></a>安裝 Hexo Git</h3><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
 
 <p>接下來即可初始化我們的部落格了。</p>
-<p>執行下方指令，Hexo 就會在指定資料夾 <folder> 新增所需的檔案。</p>
+<p>執行下方指令，Hexo 就會在指定資料夾 <folder> 新增所需的檔案。</folder></p>
 <figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo init <span class="params">&lt;folder&gt;</span>   <span class="meta"># 初始化 blog 資料夾（自己命名）</span></span><br><span class="line">cd <span class="params">&lt;folder&gt;</span>          <span class="meta"># 移動到剛創建的 blog 資料夾裡</span></span><br><span class="line">npm install          <span class="meta"># 安裝相關套件</span></span><br></pre></td></tr></table></figure>
 
 <p>安裝完成之後，docs 的目錄結構如下：</p>
@@ -261,12 +261,12 @@
 </ul>
 <p>簡單起見，假設我們新建立了一個名為 <code>yourname.github.io</code> 的倉庫（repository），當然你也可以用一個已經存在的專案繼續下面的操作。</p>
 <p><img src="https://miro.medium.com/max/1400/1*-mmXEsYov4s11mpPSvu0yA.png"></p>
-<p style ="text-align:center"><i>請將上面的 yourname 替換成你 GitHub 的帳號名稱</i></p>
+<p style="text-align:center"><i>請將上面的 yourname 替換成你 GitHub 的帳號名稱</i></p>
 
 <p><img src="https://miro.medium.com/max/1400/1*cOqn6zvl5jWSGLqinnhuAw.png"></p>
-<p style ="text-align:center"><i>創建完新 repo 的畫面</i></p>
+<p style="text-align:center"><i>創建完新 repo 的畫面</i></p>
 
-<p>再來，到已創立的指定資料夾 <folder>中找一個 <code>_config.yml</code> 的檔案。</p>
+<p>再來，到已創立的指定資料夾 <folder>中找一個 <code>_config.yml</code> 的檔案。</folder></p>
 <figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Site</span></span><br><span class="line">title: <span class="regexp">/標題(會顯示在網頁標題與頁首)/</span></span><br><span class="line">subtitle: <span class="regexp">/子標題(顯示在頁首)/</span></span><br><span class="line">description: <span class="regexp">/內容描述(給搜尋引擎看的)/</span></span><br><span class="line">author: <span class="regexp">/作者(顯示在頁尾)/</span></span><br><span class="line">language: <span class="regexp">/網站預設語言(台灣:zh-tw)/</span></span><br><span class="line">timezone: <span class="regexp">/時區(預設使用你電腦的時區)/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># URL</span></span><br><span class="line">url: <span class="regexp">/網站的網域位址/</span></span><br><span class="line">root: <span class="regexp">/網站根目錄/</span></span><br><span class="line">permalink: <span class="regexp">/文章目錄(預設使用 YYYY\MM\DD\文章名稱)/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Extensions</span></span><br><span class="line">theme: <span class="regexp">/網站的佈景主題/</span><span class="comment"># Deployment</span></span><br><span class="line">deploy:</span><br><span class="line"> type: <span class="regexp">/發佈型態/</span> </span><br><span class="line"> repository: <span class="regexp">/部署位置/</span> </span><br><span class="line"> branch: <span class="regexp">/分支/</span></span><br><span class="line"> message: <span class="regexp">/部署訊息/</span></span><br></pre></td></tr></table></figure>
 
 <p>開啟之後，拉到檔案最底部，可以看到</p>
@@ -311,7 +311,7 @@
 <p>進去網站後，挑選並確定了自己想購買的網址後，在購物車結帳頁面可以選擇自己想要購買的年限，至少要買一年，若一年後還要再使用可以自行續約。</p>
 <p>以 Gandi.net 為例，購買後，到 域名－區域檔紀錄－新增</p>
 <p><img src="https://miro.medium.com/max/1400/1*Yjbd4zMuUMw2n56nJysL-Q.png"></p>
-<p style ="text-align:center"><i>新增紅框中的四筆 DNS</i></p>
+<p style="text-align:center"><i>新增紅框中的四筆 DNS</i></p>
 
 <p>新增 DNS 紀錄 （可參考 <a target="_blank" rel="noopener" href="https://docs.github.com/en/github/working-with-github-pages/managing-a-custom-domain-for-your-github-pages-site">GitHub Page 官方說明文件</a></p>
 <figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">類型： A</span><br><span class="line">TTL： <span class="number">1800</span></span><br><span class="line">IPv4： </span><br><span class="line"><span class="number">185.199.108.153</span></span><br><span class="line"><span class="number">185.199.109.153</span></span><br><span class="line"><span class="number">185.199.110.153</span></span><br><span class="line"><span class="number">185.199.111.153</span></span><br></pre></td></tr></table></figure>
@@ -340,7 +340,7 @@
 
 <p>這樣就更改成功了！</p>
 <p><img src="https://miro.medium.com/max/1400/1*0Ji-3ir8nokLgZGvtzKVIw.png"></p>
-<p style ="text-align:center"><i>修改後的 Ocean 主題</i></p>
+<p style="text-align:center"><i>修改後的 Ocean 主題</i></p>
 
 <br>
 <hr>
@@ -364,11 +364,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/09/09/teach-hexo/" data-id="ckuyg40p7000223atal6f0rvw" class="article-share-link">
+      <a data-url="http://example.com/2021/09/09/teach-hexo/" data-id="ckuyjbjul0003wyathfksajac" class="article-share-link">
         Share
       </a>
       
-<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/%E6%95%99%E5%AD%B8/" rel="tag">教學</a></li></ul>
+<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/Hexo/" rel="tag">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/%E6%95%99%E5%AD%B8/" rel="tag">教學</a></li></ul>
 
     </footer>
 
