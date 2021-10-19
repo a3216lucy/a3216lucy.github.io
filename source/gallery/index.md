@@ -1,5 +1,5 @@
 ---
-title: gallery
+title: 作品集
 date: 2021-10-19 23:42:06
 layout: "gallery"
 albums: [

@@ -1,9 +1,7 @@
 ---
-title: About Me
+title: 賴奕書 Kimi Lai
 date: 2021-10-19 23:40:29
 ---
-# 賴奕書 Kimi Lai
-
 &#x1F4ED;   : a3216lucy@gmail.com  |   &#x260E;  : +886963878009 ｜ [Github](https://github.com/a3216lucy) ｜ [Gitlab](https://gitlab.com/Kimi_Lai) ｜ [LinkedIn](https://www.linkedin.com/in/kimilai) ｜ [Behance](https://www.behance.net/kimilai/) ｜  [CV](https://www.cakeresume.com/s--rdHG23bNbPr52dYQnzeEvA--/kimilai)
 
 - 資歷：曾待過 FinTech 產業（B2B），其中 PM 經歷約 1 年，開發經歷約 3 個月
