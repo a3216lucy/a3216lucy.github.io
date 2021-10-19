@@ -102,4 +102,6 @@ theme: ocean
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-  type: ''
+  type: 'git'
+  repo: https://github.com/a3216lucy/a3216lucy.github.io
+  branch: gh-pages
