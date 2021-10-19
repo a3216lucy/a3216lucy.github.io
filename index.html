@@ -17,11 +17,11 @@
     <link rel="shortcut icon" href="/favicon.ico">
     
   
-<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="css/style.css">
 
   
   
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+<link rel="stylesheet" href="fancybox/jquery.fancybox.min.css">
 
   
   
@@ -49,7 +49,7 @@
       <div class="video-overlay"></div>
     </div>
     <div class="video-inner text-center text-white">
-      <h1><a href="/">Kimi&#39;s Personal Blog</a></h1>
+      <h1><a href="index.html">Kimi&#39;s Personal Blog</a></h1>
       <p></p>
       <div><img src="/images/hexo-inverted.svg" class="brand" alt="Kimi&#39;s Personal Blog"></div>
     </div>
@@ -74,7 +74,7 @@
       
 
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/09/30/pm361_activity/">【心得分享】寫在活動之後</a>
+  <a class="article-title" href="2021/09/30/pm361_activity/">【心得分享】寫在活動之後</a>
 </h2>
 
 
@@ -84,7 +84,7 @@
 
     
     <div class="article-meta">
-      <a href="/2021/09/30/pm361_activity/" class="article-date">
+      <a href="2021/09/30/pm361_activity/" class="article-date">
   <time datetime="2021-09-29T16:23:17.000Z" itemprop="datePublished">2021-09-30</time>
 </a>
       
@@ -162,11 +162,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/09/30/pm361_activity/" data-id="ckuydenhm0002fnat93ty8jeq" class="article-share-link">
+      <a data-url="http://example.com/2021/09/30/pm361_activity/" data-id="ckuyg40p2000123atd4ngbcq8" class="article-share-link">
         Share
       </a>
       
-<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PM/" rel="tag">PM</a></li></ul>
+<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/PM/" rel="tag">PM</a></li></ul>
 
     </footer>
 
@@ -187,7 +187,7 @@
       
 
 <h2 itemprop="name">
-  <a class="article-title" href="/2021/09/09/teach-hexo/">【基礎教學】利用 Hexo 與 GitPage 建置個人 Blog</a>
+  <a class="article-title" href="2021/09/09/teach-hexo/">【基礎教學】利用 Hexo 與 GitPage 建置個人 Blog</a>
 </h2>
 
 
@@ -197,7 +197,7 @@
 
     
     <div class="article-meta">
-      <a href="/2021/09/09/teach-hexo/" class="article-date">
+      <a href="2021/09/09/teach-hexo/" class="article-date">
   <time datetime="2021-09-08T16:52:41.000Z" itemprop="datePublished">2021-09-09</time>
 </a>
       
@@ -222,16 +222,16 @@
 <li>瞭解 cmd 或 bash 指令（下文中所有以 ‘$’ 為開頭的，皆為 bash 指令）</li>
 </ul>
 <h3 id="建置-Hexo"><a href="#建置-Hexo" class="headerlink" title="建置 Hexo"></a>建置 Hexo</h3><h3 id="安裝-Hexo"><a href="#安裝-Hexo" class="headerlink" title="安裝 Hexo"></a>安裝 Hexo</h3><p>使用 npm 來安裝 hexo （須先安裝 Node.js）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-<span class="keyword">cli</span></span><br></pre></td></tr></table></figure>
 
 <p>安裝成功後，輸入以下指令可查看版本。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo version</span><br></pre></td></tr></table></figure>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo <span class="built_in">version</span></span><br></pre></td></tr></table></figure>
 <p><img src="https://miro.medium.com/max/1400/1*OUtcy0m_9ASKBBHJS__9jg.png"></p>
-<h3 id="安裝-Hexo-Git"><a href="#安裝-Hexo-Git" class="headerlink" title="安裝 Hexo Git"></a>安裝 Hexo Git</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+<h3 id="安裝-Hexo-Git"><a href="#安裝-Hexo-Git" class="headerlink" title="安裝 Hexo Git"></a>安裝 Hexo Git</h3><figure class="highlight ada"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git <span class="comment">--save</span></span><br></pre></td></tr></table></figure>
 
 <p>接下來即可初始化我們的部落格了。</p>
 <p>執行下方指令，Hexo 就會在指定資料夾 <folder> 新增所需的檔案。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo init &lt;folder&gt;   # 初始化 blog 資料夾（自己命名）</span><br><span class="line">cd &lt;folder&gt;          # 移動到剛創建的 blog 資料夾裡</span><br><span class="line">npm install          # 安裝相關套件</span><br></pre></td></tr></table></figure>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo init <span class="params">&lt;folder&gt;</span>   <span class="meta"># 初始化 blog 資料夾（自己命名）</span></span><br><span class="line">cd <span class="params">&lt;folder&gt;</span>          <span class="meta"># 移動到剛創建的 blog 資料夾裡</span></span><br><span class="line">npm install          <span class="meta"># 安裝相關套件</span></span><br></pre></td></tr></table></figure>
 
 <p>安裝完成之後，docs 的目錄結構如下：</p>
 <ul>
@@ -241,13 +241,13 @@
 <li><code>source</code> MarkDown 和各種原始檔，放置內容的地方。</li>
 <li><code>themes</code> Hexo 的主題資料夾，會根據主題來產生靜態檔案。</li>
 </ul>
-<h3 id="本地端啟動"><a href="#本地端啟動" class="headerlink" title="本地端啟動"></a>本地端啟動</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<h3 id="本地端啟動"><a href="#本地端啟動" class="headerlink" title="本地端啟動"></a>本地端啟動</h3><figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo <span class="keyword">generate</span></span><br></pre></td></tr></table></figure>
 
 <p>亦可用 <code>hexo g</code>，產生靜態檔案，會在目錄下產生 public 資料夾。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo <span class="keyword">server</span></span><br></pre></td></tr></table></figure>
 
 <p>亦可用 <code>hexo s</code>，啟動伺服器，預設是 <code>http://localhost:4000/</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$ </span>hexo deploy</span><br></pre></td></tr></table></figure>
 
 <p>亦可用 <code>hexo d</code>，部署網站。（ 如：github、heroku 等 ）</p>
 <p>完成上述步驟後，在瀏覽器中即可看到本地端啟動的個人網頁了。</p>
@@ -267,13 +267,13 @@
 <p style ="text-align:center"><i>創建完新 repo 的畫面</i></p>
 
 <p>再來，到已創立的指定資料夾 <folder>中找一個 <code>_config.yml</code> 的檔案。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"># Site</span><br><span class="line">title: /標題(會顯示在網頁標題與頁首)/</span><br><span class="line">subtitle: /子標題(顯示在頁首)/</span><br><span class="line">description: /內容描述(給搜尋引擎看的)/</span><br><span class="line">author: /作者(顯示在頁尾)/</span><br><span class="line">language: /網站預設語言(台灣:zh-tw)/</span><br><span class="line">timezone: /時區(預設使用你電腦的時區)/</span><br><span class="line"></span><br><span class="line"># URL</span><br><span class="line">url: /網站的網域位址/</span><br><span class="line">root: /網站根目錄/</span><br><span class="line">permalink: /文章目錄(預設使用 YYYY\MM\DD\文章名稱)/</span><br><span class="line"></span><br><span class="line"># Extensions</span><br><span class="line">theme: /網站的佈景主題/# Deployment</span><br><span class="line">deploy:</span><br><span class="line"> type: /發佈型態/ </span><br><span class="line"> repository: /部署位置/ </span><br><span class="line"> branch: /分支/</span><br><span class="line"> message: /部署訊息/</span><br></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Site</span></span><br><span class="line">title: <span class="regexp">/標題(會顯示在網頁標題與頁首)/</span></span><br><span class="line">subtitle: <span class="regexp">/子標題(顯示在頁首)/</span></span><br><span class="line">description: <span class="regexp">/內容描述(給搜尋引擎看的)/</span></span><br><span class="line">author: <span class="regexp">/作者(顯示在頁尾)/</span></span><br><span class="line">language: <span class="regexp">/網站預設語言(台灣:zh-tw)/</span></span><br><span class="line">timezone: <span class="regexp">/時區(預設使用你電腦的時區)/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># URL</span></span><br><span class="line">url: <span class="regexp">/網站的網域位址/</span></span><br><span class="line">root: <span class="regexp">/網站根目錄/</span></span><br><span class="line">permalink: <span class="regexp">/文章目錄(預設使用 YYYY\MM\DD\文章名稱)/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Extensions</span></span><br><span class="line">theme: <span class="regexp">/網站的佈景主題/</span><span class="comment"># Deployment</span></span><br><span class="line">deploy:</span><br><span class="line"> type: <span class="regexp">/發佈型態/</span> </span><br><span class="line"> repository: <span class="regexp">/部署位置/</span> </span><br><span class="line"> branch: <span class="regexp">/分支/</span></span><br><span class="line"> message: <span class="regexp">/部署訊息/</span></span><br></pre></td></tr></table></figure>
 
 <p>開啟之後，拉到檔案最底部，可以看到</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line"> type:</span><br></pre></td></tr></table></figure>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">deploy:</span></span><br><span class="line"><span class="symbol"> type:</span></span><br></pre></td></tr></table></figure>
 
 <p>將以下資訊對應輸入</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line"> type: git</span><br><span class="line"> repository: http://github.com/yourname/yourname.github.io.git</span><br><span class="line"> branch: master</span><br></pre></td></tr></table></figure>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">deploy:</span></span><br><span class="line"><span class="symbol"> type:</span> git</span><br><span class="line"><span class="symbol"> repository:</span> http:<span class="comment">//github.com/yourname/yourname.github.io.git</span></span><br><span class="line"><span class="symbol"> branch:</span> master</span><br></pre></td></tr></table></figure>
 
 <blockquote>
 <p><b>注意：</b><br>設定中的 : 後一定要有一個空格<br>將上面的 yourname 改成你的 GitHub 帳號名稱</p>
@@ -284,19 +284,19 @@
 <p>過程中，可能會需要輸入GitHub的帳號、密碼做授權。</p>
 </blockquote>
 <p>使用下方的命令在本地 clone 專案：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git clone http://github.com/yourname/yourname.github.io.git</span><br></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git clone http:<span class="regexp">//gi</span>thub.com<span class="regexp">/yourname/y</span>ourname.github.io.git</span><br></pre></td></tr></table></figure>
 
 <p>將 <code>USERNAME</code> 替換為你的使用者名稱，<code>REPOSITORY</code> 替換為你的專案名稱。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git add .</span><br></pre></td></tr></table></figure>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="builtin-name">add</span> .</span><br></pre></td></tr></table></figure>
 
 <p>為 commit 留註解。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git commit -m “first commit”</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="keyword">commit</span> <span class="operator">-</span>m “<span class="keyword">first</span> <span class="keyword">commit</span>”</span><br></pre></td></tr></table></figure>
 
 <p>手動新增 GitHub 遠端 branch 名稱、連結</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote origin  http://github.com/yourname/yourname.github.io.git</span><br></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote origin  http:<span class="regexp">//gi</span>thub.com<span class="regexp">/yourname/y</span>ourname.github.io.git</span><br></pre></td></tr></table></figure>
 
 <p>推到你的 GitHub master。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git push origin master</span><br><span class="line"># 只有第一次 push 需要全打，第二次以後執行 git push 即可</span><br></pre></td></tr></table></figure>
+<figure class="highlight maxima"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">push</span> <span class="built_in">origin</span> master</span><br><span class="line"># 只有第一次 <span class="built_in">push</span> 需要全打，第二次以後執行 git <span class="built_in">push</span> 即可</span><br></pre></td></tr></table></figure>
 
 <p>這樣就把本地的檔案上傳到 GitHub 囉！</p>
 <h3 id="設定-GitPage"><a href="#設定-GitPage" class="headerlink" title="設定 GitPage"></a>設定 GitPage</h3><p>打開 GitHub 專案的 Setting，下面有個 GitHub Page 的地方，將其勾選設定，接著就可以在你個人的 <a target="_blank" rel="noopener" href="https://yourname.github.io/">https://yourname.github.io/</a> 看到畫面了。</p>
@@ -314,7 +314,7 @@
 <p style ="text-align:center"><i>新增紅框中的四筆 DNS</i></p>
 
 <p>新增 DNS 紀錄 （可參考 <a target="_blank" rel="noopener" href="https://docs.github.com/en/github/working-with-github-pages/managing-a-custom-domain-for-your-github-pages-site">GitHub Page 官方說明文件</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">類型： A</span><br><span class="line">TTL： 1800</span><br><span class="line">IPv4： </span><br><span class="line">185.199.108.153</span><br><span class="line">185.199.109.153</span><br><span class="line">185.199.110.153</span><br><span class="line">185.199.111.153</span><br></pre></td></tr></table></figure>
+<figure class="highlight accesslog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">類型： A</span><br><span class="line">TTL： <span class="number">1800</span></span><br><span class="line">IPv4： </span><br><span class="line"><span class="number">185.199.108.153</span></span><br><span class="line"><span class="number">185.199.109.153</span></span><br><span class="line"><span class="number">185.199.110.153</span></span><br><span class="line"><span class="number">185.199.111.153</span></span><br></pre></td></tr></table></figure>
 
 <p>再來，到 GitHub 的 Setting，Custom Domain 欄位輸入購買的網址，按儲存就設定完成了。</p>
 <blockquote>
@@ -327,16 +327,16 @@
 
 <h2 id="更換主題"><a href="#更換主題" class="headerlink" title="更換主題"></a>更換主題</h2><p>Hexo 預設的主題是 <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo-theme-landscape">landscape</a>，而我們可以到 <a target="_blank" rel="noopener" href="https://hexo.io/themes/">Hexo主題庫</a> 來挑選我們欲安裝的主題，以下以 <a target="_blank" rel="noopener" href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a> 為例。</p>
 <h3 id="安裝-Ocean"><a href="#安裝-Ocean" class="headerlink" title="安裝 Ocean"></a>安裝 Ocean</h3><p>安裝 Ocean</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https://github.com/zhwangart/hexo-theme-ocean.git themes/ocean</span><br></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https:<span class="regexp">//gi</span>thub.com<span class="regexp">/zhwangart/</span>hexo-theme-ocean.git themes/ocean</span><br></pre></td></tr></table></figure>
 
 <p>修改網站設定 <code>&lt;folder&gt;/ _config.yml</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">theme: ocean</span><br></pre></td></tr></table></figure>
+<figure class="highlight avrasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">theme:</span> ocean</span><br></pre></td></tr></table></figure>
 
 <p>在 <code>&lt;folder&gt;/theme/ocean/</code> 裡面的 <code>_config.yml</code> 也可以自己設定</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"># Menu</span><br><span class="line">menu:</span><br><span class="line">  Home: /</span><br><span class="line">  Archives: /archives</span><br><span class="line">  Gallery: /gallery</span><br><span class="line">  About: /about</span><br><span class="line">  Links: /links</span><br><span class="line">rss: /atom.xml</span><br><span class="line"></span><br><span class="line"># Miscellaneous</span><br><span class="line">favicon: /favicon.ico</span><br><span class="line">brand: /images/hexo.svg</span><br><span class="line"></span><br><span class="line"># Ocean Video</span><br><span class="line"># Because I put videos in multiple formats on the same path, I just labeled the path here.</span><br><span class="line">ocean:</span><br><span class="line">  overlay: true</span><br><span class="line">  path: images/ocean/      # Video storage path, formats: mp4/ogg/webm</span><br><span class="line">  brand: /images/hexo-inverted.svg      # Optional, a small logo</span><br><span class="line"></span><br><span class="line"># Content</span><br><span class="line">excerpt_link: Read More...</span><br><span class="line"></span><br><span class="line"># fancybox</span><br><span class="line">fancybox: true</span><br><span class="line"></span><br><span class="line"># Local search</span><br><span class="line">search_text: Search</span><br><span class="line"></span><br><span class="line"># Gitalk</span><br><span class="line">gitalk:</span><br><span class="line">  enable: true</span><br><span class="line">  clientID: # GitHub Application Client ID</span><br><span class="line">  clientSecret: # Client Secret</span><br><span class="line">  repo: # Repository name</span><br><span class="line">  owner: # GitHub ID</span><br><span class="line">  admin: # GitHub ID</span><br><span class="line"></span><br><span class="line"># Valine</span><br><span class="line">valine:</span><br><span class="line">  enable: false    # Default: false.</span><br><span class="line">  el: &#x27;vcomments&#x27;    # The DOM element to be mounted on initialization.</span><br><span class="line">  appId:    # Application appId from Leancloud.</span><br><span class="line">  appKey:    # Application appKey from Leancloud.</span><br><span class="line">  notify: false    # Mail notifier, Default: false.</span><br><span class="line">  verify: true    # Validation code, Default: true.</span><br><span class="line">  avatar: &#x27;mp&#x27;    # Gravatar type.</span><br><span class="line">  pageSize: &#x27;10&#x27;    # Number of pages per page.</span><br><span class="line">  placeholder: &#x27;請輸入...&#x27;    #</span><br></pre></td></tr></table></figure>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Menu</span></span><br><span class="line"><span class="attr">menu:</span></span><br><span class="line">  <span class="attr">Home:</span> <span class="string">/</span></span><br><span class="line">  <span class="attr">Archives:</span> <span class="string">/archives</span></span><br><span class="line">  <span class="attr">Gallery:</span> <span class="string">/gallery</span></span><br><span class="line">  <span class="attr">About:</span> <span class="string">/about</span></span><br><span class="line">  <span class="attr">Links:</span> <span class="string">/links</span></span><br><span class="line"><span class="attr">rss:</span> <span class="string">/atom.xml</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Miscellaneous</span></span><br><span class="line"><span class="attr">favicon:</span> <span class="string">/favicon.ico</span></span><br><span class="line"><span class="attr">brand:</span> <span class="string">/images/hexo.svg</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Ocean Video</span></span><br><span class="line"><span class="comment"># Because I put videos in multiple formats on the same path, I just labeled the path here.</span></span><br><span class="line"><span class="attr">ocean:</span></span><br><span class="line">  <span class="attr">overlay:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">images/ocean/</span>      <span class="comment"># Video storage path, formats: mp4/ogg/webm</span></span><br><span class="line">  <span class="attr">brand:</span> <span class="string">/images/hexo-inverted.svg</span>      <span class="comment"># Optional, a small logo</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Content</span></span><br><span class="line"><span class="attr">excerpt_link:</span> <span class="string">Read</span> <span class="string">More...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># fancybox</span></span><br><span class="line"><span class="attr">fancybox:</span> <span class="literal">true</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Local search</span></span><br><span class="line"><span class="attr">search_text:</span> <span class="string">Search</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Gitalk</span></span><br><span class="line"><span class="attr">gitalk:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">true</span></span><br><span class="line">  <span class="attr">clientID:</span> <span class="comment"># GitHub Application Client ID</span></span><br><span class="line">  <span class="attr">clientSecret:</span> <span class="comment"># Client Secret</span></span><br><span class="line">  <span class="attr">repo:</span> <span class="comment"># Repository name</span></span><br><span class="line">  <span class="attr">owner:</span> <span class="comment"># GitHub ID</span></span><br><span class="line">  <span class="attr">admin:</span> <span class="comment"># GitHub ID</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Valine</span></span><br><span class="line"><span class="attr">valine:</span></span><br><span class="line">  <span class="attr">enable:</span> <span class="literal">false</span>    <span class="comment"># Default: false.</span></span><br><span class="line">  <span class="attr">el:</span> <span class="string">&#x27;vcomments&#x27;</span>    <span class="comment"># The DOM element to be mounted on initialization.</span></span><br><span class="line">  <span class="attr">appId:</span>    <span class="comment"># Application appId from Leancloud.</span></span><br><span class="line">  <span class="attr">appKey:</span>    <span class="comment"># Application appKey from Leancloud.</span></span><br><span class="line">  <span class="attr">notify:</span> <span class="literal">false</span>    <span class="comment"># Mail notifier, Default: false.</span></span><br><span class="line">  <span class="attr">verify:</span> <span class="literal">true</span>    <span class="comment"># Validation code, Default: true.</span></span><br><span class="line">  <span class="attr">avatar:</span> <span class="string">&#x27;mp&#x27;</span>    <span class="comment"># Gravatar type.</span></span><br><span class="line">  <span class="attr">pageSize:</span> <span class="string">&#x27;10&#x27;</span>    <span class="comment"># Number of pages per page.</span></span><br><span class="line">  <span class="attr">placeholder:</span> <span class="string">&#x27;請輸入...&#x27;</span>    <span class="comment">#</span></span><br></pre></td></tr></table></figure>
 
 <p>重新啟動 server</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<figure class="highlight axapta"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo <span class="keyword">server</span></span><br></pre></td></tr></table></figure>
 
 <p>這樣就更改成功了！</p>
 <p><img src="https://miro.medium.com/max/1400/1*0Ji-3ir8nokLgZGvtzKVIw.png"></p>
@@ -345,30 +345,30 @@
 <br>
 <hr>
 
-<h2 id="發佈文章"><a href="#發佈文章" class="headerlink" title="發佈文章"></a>發佈文章</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new [layout] &lt;title&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="發佈文章"><a href="#發佈文章" class="headerlink" title="發佈文章"></a>發佈文章</h2><figure class="highlight gauss"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo <span class="keyword">new</span> [layout] &lt;<span class="built_in">title</span>&gt;</span><br></pre></td></tr></table></figure>
 
 <p>你可以在指令中指定文章的佈局（layout），預設為 post ，也可以透過修改 <code>_config.yml</code> 中的 <code>default_layout</code> 設定來指定預設佈局。</p>
 <h3 id="佈局（Layout）"><a href="#佈局（Layout）" class="headerlink" title="佈局（Layout）"></a>佈局（Layout）</h3><p>Hexo 有三種預設佈局：post、page 和 draft，它們分別對應不同的路徑，而你所自定的其他佈局和 post 相同，都儲存至 source/_posts 資料夾。</p>
 <p><img src="https://miro.medium.com/max/824/1*eFVpwYyoIyZZ2x19f8r8Pw.png"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new “postName”         # 新建文章</span><br><span class="line">$ hexo new page “pageName”    # 新建頁面</span><br><span class="line">$ hexo publish “draftName”    # 新建草稿</span><br></pre></td></tr></table></figure>
+<figure class="highlight haxe"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo <span class="keyword">new</span> <span class="type"></span>“postName”         <span class="meta"># 新建文章</span></span><br><span class="line">$ hexo <span class="keyword">new</span> <span class="type">page</span> “pageName”    <span class="meta"># 新建頁面</span></span><br><span class="line">$ hexo publish “draftName”    <span class="meta"># 新建草稿</span></span><br></pre></td></tr></table></figure>
 
 <h3 id="刪除文章"><a href="#刪除文章" class="headerlink" title="刪除文章"></a>刪除文章</h3><p>首先進入到 <code>source /_post</code> 資料夾中，找到 <code>helloworld.md</code>，在本地直接執行刪除。</p>
 <p><img src="https://miro.medium.com/max/1400/0*q6PVwd41rT6-e47s.png"></p>
 <p>執行以下操作，一段時間後就會發現文章已刪除。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean       # 清除快取檔案和已產生的靜態檔案。</span><br><span class="line">$ hexo d -g        # d = deploy, g = generate</span><br></pre></td></tr></table></figure>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean       # 清除快取檔案和已產生的靜態檔案。</span><br><span class="line">$ hexo d -g        # d = deploy, g = <span class="keyword">generate</span></span><br></pre></td></tr></table></figure>
 
-<h3 id="其他指令"><a href="#其他指令" class="headerlink" title="其他指令"></a>其他指令</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server -p 5000</span><br><span class="line"># 如果 port:4000 被佔用，可以用這個$ hexo render &lt;file1&gt; [file2] </span><br><span class="line"># 將文件渲染成靜態頁面</span><br></pre></td></tr></table></figure>
+<h3 id="其他指令"><a href="#其他指令" class="headerlink" title="其他指令"></a>其他指令</h3><figure class="highlight vala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server -p <span class="number">5000</span></span><br><span class="line"><span class="meta"># 如果 port:4000 被佔用，可以用這個$ hexo render &lt;file1&gt; [file2] </span></span><br><span class="line"><span class="meta"># 將文件渲染成靜態頁面</span></span><br></pre></td></tr></table></figure>
 
 <p>附錄：<a target="_blank" rel="noopener" href="https://hexo.io/docs/">Hexo 官方參考文件</a></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://example.com/2021/09/09/teach-hexo/" data-id="ckuydenhh0001fnat1uh2b69n" class="article-share-link">
+      <a data-url="http://example.com/2021/09/09/teach-hexo/" data-id="ckuyg40p7000223atal6f0rvw" class="article-share-link">
         Share
       </a>
       
-<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%99%E5%AD%B8/" rel="tag">教學</a></li></ul>
+<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="tags/%E6%95%99%E5%AD%B8/" rel="tag">教學</a></li></ul>
 
     </footer>
 
@@ -413,13 +413,13 @@
 <nav class="navbar">
   
   <div class="logo">
-    <a href="/"><img src="/images/hexo.svg" alt="Kimi&#39;s Personal Blog"></a>
+    <a href="index.html"><img src="/images/hexo.svg" alt="Kimi&#39;s Personal Blog"></a>
   </div>
   
   <ul class="nav nav-main">
     
     <li class="nav-item">
-      <a class="nav-item-link" href="/">Home</a>
+      <a class="nav-item-link" href="index.html">Home</a>
     </li>
     
     <li class="nav-item">
@@ -479,7 +479,7 @@
 
 
 
-<script src="/fancybox/jquery.fancybox.min.js"></script>
+<script src="fancybox/jquery.fancybox.min.js"></script>
 
 
 
@@ -491,7 +491,7 @@
 
 
 
-<script src="/js/ocean.js"></script>
+<script src="js/ocean.js"></script>
 
 </body>
 
