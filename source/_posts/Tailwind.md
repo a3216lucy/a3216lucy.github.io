@@ -1,17 +1,11 @@
 ---
-title: TailwindCSS
+title: 【基礎教學】 TailwindCSS 逐步上手
 date: 2022-01-19 17:44:17
 tags:
 - 教學
 - 技術文件
 - TailwindCSS
 ---
----
-date: 2022-01-1915:54
----
-###### Tags: #TailwindCSS #css 
-
-# 初學 TailwindCSS
 
 正好想學，在研究之餘，順便寫個教學留個紀錄。
 
