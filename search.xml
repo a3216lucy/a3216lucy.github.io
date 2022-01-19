@@ -367,10 +367,9 @@
       </tags>
   </entry>
   <entry>
-    <title>TailwindCSS</title>
+    <title>【基礎教學】 TailwindCSS 逐步上手</title>
     <url>/2022/01/19/Tailwind/</url>
-    <content><![CDATA[<hr>
-<h2 id="date-2022-01-1915-54"><a href="#date-2022-01-1915-54" class="headerlink" title="date: 2022-01-1915:54"></a>date: 2022-01-1915:54</h2><h6 id="Tags-TailwindCSS-css"><a href="#Tags-TailwindCSS-css" class="headerlink" title="Tags: #TailwindCSS #css"></a>Tags: #TailwindCSS #css</h6><h1 id="初學-TailwindCSS"><a href="#初學-TailwindCSS" class="headerlink" title="初學 TailwindCSS"></a>初學 TailwindCSS</h1><p>正好想學，在研究之餘，順便寫個教學留個紀錄。</p>
+    <content><![CDATA[<p>正好想學，在研究之餘，順便寫個教學留個紀錄。</p>
 <h2 id="Tailwind-安裝流程-（使用-npm）"><a href="#Tailwind-安裝流程-（使用-npm）" class="headerlink" title="Tailwind 安裝流程 （使用 npm）"></a>Tailwind 安裝流程 （使用 npm）</h2><p>依照 <a href="https://tailwindcss.com/docs/installation">Tailwind 的官網</a>，安裝有兩種方式：</p>
 <ul>
 <li>使用 CDN</li>
