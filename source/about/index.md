@@ -10,6 +10,8 @@ date: 2021-10-19 23:40:29
 
 ## 關於程式
 前端切版的部分，目前能運用 Bootstrap4 開發，了解JavaScript 基礎知識（包含 ES6／AJAX ／jQuery ... 等相關觀念／函式庫），框架（Vue.js）目前還在學習精進中。
+
+## 網頁相關作品
 平常會寫一些小作品，歡迎到我的 Portfolio 或者 [GitHub](https://github.com/a3216lucy) Profile 查看，也會不定期在這裡記錄所學所聞，未來希望發展更多更有趣的 Side Project。
 
 <!-- - 資歷：曾待過 FinTech 產業（B2B），其中 PM 經歷約 1 年，開發經歷約 3 個月
