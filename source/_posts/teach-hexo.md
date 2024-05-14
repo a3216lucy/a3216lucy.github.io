@@ -2,11 +2,12 @@
 title: 【基礎教學】利用 Hexo 與 GitPage 建置個人 Blog
 date: 2021-09-09 00:52:41
 author: "Kimi"
+img: https://miro.medium.com/max/1400/0*wtxNrIzieLhNGPmP
+categories: Hexo
 tags: 
 - 教學
 - Hexo
 ---
-![](https://miro.medium.com/max/1400/0*wtxNrIzieLhNGPmP)
 
 ## 前言
 
