@@ -3,12 +3,12 @@ title: 【基礎教學】利用 Hexo 與 GitPage 建置個人 Blog
 date: 2021-09-09 00:52:41
 author: "Kimi"
 img: https://miro.medium.com/max/1400/0*wtxNrIzieLhNGPmP
-categories: Hexo
+categories: 
+- 技術筆記
 tags: 
 - 教學
 - Hexo
 ---
-
 ## 前言
 
 本文主要介紹如何使用 Hexo 來製作個人 Blog，並利用 GitPage 進行自動更新部署，讓沒接觸過新手小白也能輕鬆上手。
@@ -22,7 +22,7 @@ tags:
 * 註冊 [GitHub](https://github.com/) 帳號
 * 瞭解 cmd 或 bash 指令（下文中所有以 ‘$’ 為開頭的，皆為 bash 指令）
 
-### 建置 Hexo
+## 建置 Hexo
 
 ### 安裝 Hexo
 
@@ -37,6 +37,7 @@ $ npm install -g hexo-cli
 ```
 $ hexo version
 ```
+
 ![](https://miro.medium.com/max/1400/1*OUtcy0m_9ASKBBHJS__9jg.png)
 
 ### 安裝 Hexo Git
@@ -56,6 +57,7 @@ npm install          # 安裝相關套件
 ```
 
 安裝完成之後，docs 的目錄結構如下：
+
 * `_config.yml` 網站 全域配置 檔案，可以在此設置大部分的設定，其設定是用 yaml 格式編寫。
 * `package.json` Node.js 的套件版本控制。
 * `scaffolds` Hexo 釋出文章的時候使用，建立新文章時，會根據 scaffold 來建立檔案。
@@ -84,10 +86,8 @@ $ hexo deploy
 
 完成上述步驟後，在瀏覽器中即可看到本地端啟動的個人網頁了。
 
-<br>
-<hr>
-
 ## 部署到 GitHub
+
 ### 新建 GitHub Repository
 
 接著，我們可以在 Github 的主分支上來建立我們的文件了。有兩種方式可以達成：
@@ -98,9 +98,11 @@ $ hexo deploy
 簡單起見，假設我們新建立了一個名為 `yourname.github.io` 的倉庫（repository），當然你也可以用一個已經存在的專案繼續下面的操作。
 
 ![](https://miro.medium.com/max/1400/1*-mmXEsYov4s11mpPSvu0yA.png)
+
 <p style ="text-align:center"><i>請將上面的 yourname 替換成你 GitHub 的帳號名稱</i></p>
 
 ![](https://miro.medium.com/max/1400/1*cOqn6zvl5jWSGLqinnhuAw.png)
+
 <p style ="text-align:center"><i>創建完新 repo 的畫面</i></p>
 
 再來，到已創立的指定資料夾 <folder>中找一個 `_config.yml` 的檔案。
@@ -136,6 +138,7 @@ deploy:
 ```
 
 將以下資訊對應輸入
+
 ```
 deploy:
  type: git
@@ -146,8 +149,6 @@ deploy:
 > <b>注意：</b>
 > 設定中的 : 後一定要有一個空格
 > 將上面的 yourname 改成你的 GitHub 帳號名稱
-
-<br>
 
 ### 連線上傳 GitHub
 
@@ -192,8 +193,6 @@ $ git push origin master
 
 ![](https://miro.medium.com/max/1400/1*fbLuA1K6Vik-ezAiUbAuJA.jpeg)
 
-<br>
-
 ## 設定專屬個人 Domain
 
 有了個人的 GitHub Page 後，若想把網址換成專屬網域名稱，提供以下兩個網站可供參考：
@@ -206,6 +205,7 @@ $ git push origin master
 以 Gandi.net 為例，購買後，到 域名－區域檔紀錄－新增
 
 ![](https://miro.medium.com/max/1400/1*Yjbd4zMuUMw2n56nJysL-Q.png)
+
 <p style ="text-align:center"><i>新增紅框中的四筆 DNS</i></p>
 
 新增 DNS 紀錄 （可參考 [GitHub Page 官方說明文件](https://docs.github.com/en/github/working-with-github-pages/managing-a-custom-domain-for-your-github-pages-site)
@@ -227,9 +227,6 @@ IPv4：
 ![](https://miro.medium.com/max/1400/1*895UBYgeMPzh1OjOyQlgRA.png)
 
 稍待一陣子，就可以用新購買的網址進入個人網站囉。
-
-<hr>
-<br>
 
 ## 更換主題
 
@@ -312,10 +309,8 @@ $ hexo server
 這樣就更改成功了！
 
 ![](https://miro.medium.com/max/1400/1*0Ji-3ir8nokLgZGvtzKVIw.png)
-<p style ="text-align:center"><i>修改後的 Ocean 主題</i></p>
 
-<br>
-<hr>
+<p style ="text-align:center"><i>修改後的 Ocean 主題</i></p>
 
 ## 發佈文章
 
@@ -359,4 +354,3 @@ $ hexo server -p 5000
 ```
 
 附錄：[Hexo 官方參考文件](https://hexo.io/docs/)
-

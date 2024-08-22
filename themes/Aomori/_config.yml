@@ -1,8 +1,0 @@
-version: 1654266144177
-language: tw
-aomori_widgets:
-  - toc
-  - category
-  - tag
-  - recent_posts
-  - archive

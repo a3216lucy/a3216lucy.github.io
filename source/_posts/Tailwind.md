@@ -1,25 +1,28 @@
 ---
 title: 【基礎教學】 TailwindCSS 逐步上手
 date: 2022-01-19 17:44:17
+categories: 
+- 技術筆記
 tags:
 - 教學
 - 技術文件
 - TailwindCSS
 ---
-
 正好想學，在研究之餘，順便寫個教學留個紀錄。
 
 ## Tailwind 安裝流程 （使用 npm）
+
 依照 [Tailwind 的官網](https://tailwindcss.com/docs/installation)，安裝有兩種方式：
+
 - 使用 CDN
-- 使用 npm 
+- 使用 npm
 
 而今天主要是以 npm 的方式來展示。
 
 因為 Tailwind 若是靠 CDN 的方式，會導致很多強大的功能沒有全開，我們這邊就簡單舉例幾個：
 
-- 基本的，就是無法 **新增自訂顏色** 跟 **支援深色模式**。  
-- 再進階一點，就是無法使用 **`` `@apply` ``** 指令將語法整理起來。  
+- 基本的，就是無法 **新增自訂顏色** 跟 **支援深色模式**。
+- 再進階一點，就是無法使用 **`` `@apply` ``** 指令將語法整理起來。
 - 最嚴重的，就是 **無法壓縮檔案**，CDN 版大小約 2.79MB。 （完整版約 3.7MB~4MB）
 
 所以如果只是為了 **玩玩、體驗 Tailwind 的特性及帶來的方便性**，完全可以**使用 CDN** 的方式就好，但如果是想要做公司產品／成品上線，這個沒壓縮的大小很有可能讓你被火了XDDD
@@ -51,11 +54,10 @@ curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
 sudo apt-get install nodejs
 ```
 
-
 ## 安裝 Tailwind
 
 > 注意：Tailwind CSS 需要 Node.js 版本在 12.13.0 以上
-  
+
 1. 首先，因為 Thailwind 有 node.js 的版本限制，可以先執行以下的指令檢查 node.js 的版本。
 
 ```shell
@@ -70,15 +72,13 @@ npm init
 
 在打入 `NPM init` 後，會被要求輸入幾個欄位
 
-> 
-> `package name`: 你這個 Project 要叫什麼名字  
-> `version`: 你決定這個 Project 現在該是第幾版  
-> `description`: Project 基本介紹  
-> `entry point`: 進入點，如果要跑你的 Project 應該要執行哪個檔案  
-> `author`: 作者（自己）  
-> `license`: 你這個 Project 是採用什麼授權的  
+> `package name`: 你這個 Project 要叫什麼名字
+> `version`: 你決定這個 Project 現在該是第幾版
+> `description`: Project 基本介紹
+> `entry point`: 進入點，如果要跑你的 Project 應該要執行哪個檔案
+> `author`: 作者（自己）
+> `license`: 你這個 Project 是採用什麼授權的
 > `test command`: 這個不太重要，待會會說明
-> 
 
 基本上結束後，你可以看到這個資料夾底下，新增了一個 `Package.json`
 
@@ -98,14 +98,12 @@ npm init
 
 基本上使用 NPM 來創建的 Project，他會連一些專案的資訊都幫你做管理。
 
-> 
 > **Optional Info**：
 > 如果你覺得上面要一直輸入很冗，可以使用  `npm init -y` 。
 > 他跟  `npm init`  幾乎一樣，只是它會幫你把預設選項全部跳過，產生一個空白的 `package.json` （懶人專用）
-> 
 
 3. 接著， 依照官方教學，需安裝 Tailwind CSS、PostCSS，還有 autoprefixer 這三個檔案；因為 Tailwind 不會自動加上瀏覽器前缀詞到產生的 CSS 中，所以瀏覽器無法讀取 CSS，要加上 autoprefixer 這個套件去處理此問題。
-    我們使用一行指令就三個安裝好了，輕鬆愉快。
+   我們使用一行指令就三個安裝好了，輕鬆愉快。
 
 ```shell
 npm install tailwindcss@latest postcss@latest autoprefixer@latest
@@ -121,6 +119,7 @@ npm install
 如果你還會透過 postCSS 安裝其他插件、或是像官方的推薦使用 autoprefixer的話，可以看一下下方的 **安裝 PostCSS 套件。
 
 ### Optional Info
+
 如果在安裝過程中，有遇到以下錯誤，那可能是 **將 Tailwind 與舊版本的 PostCSS 混合使用** 所導致的結果， v2.0 版本的 Tailwind 依賴於 PostCSS 8。
 
 ```shell
@@ -151,13 +150,13 @@ npm install tailwindcss autoprefixer postcss postcss-cli
 
 在前面的步驟產生完 Tailwind 設定檔之後，我們要來產生 PostCSS 的設定檔，不然 PostCSS 不會幫我們載入 tailwind 和 autoprefixer。
 
--   **Windows用戶**
+- **Windows用戶**
 
 ```
 在專案目錄下新增檔案 -> 檔名為 "postcss.config.js"
 ```
 
--   **Linux、Ubuntu、MacOS 類用戶**，直接下指令即可（ 在專案目錄下）
+- **Linux、Ubuntu、MacOS 類用戶**，直接下指令即可（ 在專案目錄下）
 
 ```shell
 touch postcss.config.js
@@ -196,7 +195,7 @@ scripts:[
 ],
 ```
 
-剩下的步驟，都跟上面 tailwind 的教學一樣囉~ 
+剩下的步驟，都跟上面 tailwind 的教學一樣囉~
 
 ## 設定 Tailwind
 
@@ -235,12 +234,13 @@ module.exports = {
 };
 ```
 
-這麼一來，就可以自訂專屬於你的 Tailwind 設定了！ 
+這麼一來，就可以自訂專屬於你的 Tailwind 設定了！
 
 ## 新增 Tailwind 到 CSS 中
 
 現在需要在你存放 CSS 樣式檔的資料夾裡，建立兩個 CSS 檔：
--  一個是你頁面要掛載的 `style.css` （名稱可自訂）
+
+- 一個是你頁面要掛載的 `style.css` （名稱可自訂）
 - 一個是用來寫 CSS 樣式的 `tailwind.css` （名稱也可自訂）
 
 這樣講可能有點抽象，拿我的專案目錄來舉例好了。
@@ -259,13 +259,12 @@ module.exports = {
 @tailwind utilities;
 ```
 
-> 
 > 我們要掛載的 CSS 檔 (這邊叫做 `app.css`) 保持空白就好，以後所有要補充的樣式都寫在另一個 CSS 檔（`tailwind.css`）裡。
 > 因為如果接下來 **進行編譯**， 要掛載的 CSS 檔 (`app.css`) 的 **內容會被覆蓋掉**。
-> 
 
 ## 編譯
-終於進入最後一步了。 
+
+終於進入最後一步了。
 開啟剛剛 `` `npm init` `` 執行後產生的 `package.json`，在 scripts 裡面加一行：
 
 ```js
@@ -284,13 +283,13 @@ scripts:[
 ],
 ```
 
-最後，我們只要執行 `` npm run {你的執行名稱} ``，那他就會開始進行編譯了！
+最後，我們只要執行 ``npm run {你的執行名稱}``，那他就會開始進行編譯了！
 
 ```shell
 npm run build-css
 ```
 
-編譯完成後，應該會在命令列 (終端機) 看到下面的訊息： 
+編譯完成後，應該會在命令列 (終端機) 看到下面的訊息：
 
 ![](https://i.imgur.com/vYO0NIn.png)
 
@@ -362,4 +361,3 @@ module.exports = {
 ```
 
 2. 這樣程式執行時，就會去監聽我哪支檔案有使用到，只會編譯使用的檔案，真的很方便！
-

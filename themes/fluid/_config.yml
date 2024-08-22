@@ -1,0 +1,1130 @@
+#---------------------------
+# Hexo Theme Fluid
+# Author: Fluid-dev
+# Github: https://github.com/fluid-dev/hexo-theme-fluid
+#
+# 配置指南: https://hexo.fluid-dev.com/docs/guide/
+# 你可以从指南中获得更详细的说明
+#
+# Guide: https://hexo.fluid-dev.com/docs/en/guide/
+# You can get more detailed help from the guide
+#---------------------------
+
+
+#---------------------------
+# 全局
+# Global
+#---------------------------
+
+# 用於瀏覽器標籤的圖標
+# Icon for browser tab
+favicon: /img/icon.png
+
+# 用於蘋果設備的圖標
+# Icon for Apple touch
+apple_touch_icon: /img/icon.png
+
+# 瀏覽器標籤頁中的標題分隔符，效果：文章名 - 站點名
+# Title separator in browser tab, eg: article - site
+tab_title_separator: " - "
+
+# 強制所有鏈接升級為 HTTPS（適用於圖片等資源出現 HTTP 混入報錯）
+# Force all links to be HTTPS (applicable to HTTP mixed error)
+force_https: false
+
+# 代碼塊的增強配置
+# Enhancements to code blocks
+code:
+  # 是否開啓複製代碼的按鈕
+  # Enable copy code button
+  copy_btn: true
+
+  # 代碼語言
+  # Code language
+  language:
+    enable: true
+    default: "TEXT"
+
+  # 代碼高亮
+  # Code highlight
+  highlight:
+    enable: true
+
+    # 代碼塊是否顯示行號
+    # If true, the code block display line numbers
+    line_number: true
+
+    # 實現高亮的庫，對應下面的設置
+    # Highlight library
+    # Options: highlightjs | prismjs
+    lib: "highlightjs"
+
+    highlightjs:
+      # 在鏈接中挑選 style 填入
+      # Select a style in the link
+      # See: https://highlightjs.org/demo/
+      style: "github gist"
+      style_dark: "dark"
+
+    prismjs:
+      # 在下方鏈接頁面右側的圓形按鈕挑選 style 填入，也可以直接填入 css 鏈接
+      # Select the style button on the right side of the link page, you can also set the CSS link
+      # See: https://prismjs.com/
+      style: "default"
+      style_dark: "tomorrow night"
+
+      # 設為 true 高亮將本地靜態生成（但只支持部分 prismjs 插件），設為 false 高亮將在瀏覽器通過 js 生成
+      # If true, it will be generated locally (but some prismjs plugins are not supported). If false, it will be generated via JS in the browser
+      preprocess: true
+
+# 一些好玩的功能
+# Some fun features
+fun_features:
+  # 為 subtitle 添加打字機效果
+  # Typing animation for subtitle
+  typing:
+    enable: true
+
+    # 打印速度，数字越大越慢
+    # Typing speed, the larger the number, the slower
+    typeSpeed: 70
+
+    # 游標字符
+    # Cursor character
+    cursorChar: "_"
+
+    # 是否循環播放效果
+    # If true, loop animation
+    loop: false
+
+    # 在指定頁面開啓，不填則在所有頁面開啓
+    # Enable in specified page, all pages by default
+    # Options: home | post | tag | category | about | links | page | 404
+    scope: [home]
+
+  # 為文章內容中的標題添加錨圖標
+  # Add an anchor icon to the title on the post page
+  anchorjs:
+    enable: true
+    element: h1,h2,h3,h4,h5,h6
+    # Options: left | right
+    placement: left
+
+    # Options: hover | always
+    visible: hover
+
+    # Options: § | # | ❡
+    icon: ""
+
+  # 加載進度條
+  # Progress bar when loading
+  progressbar:
+    enable: true
+    height_px: 3
+    color: "#29d"
+    # See: https://github.com/rstacruz/nprogress
+    options: { showSpinner: false, trickleSpeed: 100 }
+
+# 主題暗色模式，開啓後菜單中會出現切換按鈕，用戶瀏覽器會存儲切換選項，並且會遵循 prefers-color-scheme 自動切換
+# Theme dark mode. If enable, a switch button will appear on the menu, each of the visitor's browser will store his switch option
+dark_mode:
+  enable: true
+  # 默认的选项（当用户手动切换后则不再按照默认模式），选择 `auto` 会优先遵循 prefers-color-scheme，其次按用户本地时间 18 点到次日 6 点之间进入暗色模式
+  # Default option (when the visitor switches manually, the default mode is no longer followed), choosing `auto` will give priority to prefers-color-scheme, and then enter the dark mode from 18:00 to 6:00 in the visitor's local time
+  # Options: auto | light | dark
+  default: auto
+
+# 主題顏色配置，其他不生效的地方請使用自定義 css 解決，配色可以在下方鏈接中獲得啓發
+# Theme color, please use custom CSS to solve other colors, color schema can be inspired by the links below
+# See: https://www.webdesignrankings.com/resources/lolcolors/
+color:
+  # body 背景色
+  # Color of body background
+  body_bg_color: "#eee"
+  # 暗色模式下的 body 背景色，下同
+  # Color in dark mode, the same below
+  body_bg_color_dark: "#181c27"
+
+  # 頂部菜單背景色
+  # Color of navigation bar background
+  navbar_bg_color: "#2f4154"
+  navbar_bg_color_dark: "#1f3144"
+
+  # 頂部菜單字體色
+  # Color of navigation bar text
+  navbar_text_color: "#fff"
+  navbar_text_color_dark: "#d0d0d0"
+
+  # 副標題字體色
+  # Color of subtitle text
+  subtitle_color: "#fff"
+  subtitle_color_dark: "#d0d0d0"
+
+  # 全局字體色
+  # Color of global text
+  text_color: "#3c4858"
+  text_color_dark: "#c4c6c9"
+
+  # 全局次級字體色（摘要、簡介等位置）
+  # Color of global secondary text (excerpt, introduction, etc.)
+  sec_text_color: "#718096"
+  sec_text_color_dark: "#a7a9ad"
+
+  # 主面板背景色
+  # Color of main board
+  board_color: "#fff"
+  board_color_dark: "#252d38"
+
+  # 文章正文字體色
+  # Color of post text
+  post_text_color: "#2c3e50"
+  post_text_color_dark: "#c4c6c9"
+
+  # 文章正文字體色（h1 h2 h3...）
+  # Color of Article heading (h1 h2 h3...)
+  post_heading_color: "#1a202c"
+  post_heading_color_dark: "#c4c6c9"
+
+  # 文章超鏈接字體色
+  # Color of post link
+  post_link_color: "#0366d6"
+  post_link_color_dark: "#1589e9"
+
+  # 超鏈接懸浮時字體色
+  # Color of link when hovering
+  link_hover_color: "#30a9de"
+  link_hover_color_dark: "#30a9de"
+
+  # 超鏈接懸浮背景色
+  # Color of link background when hovering
+  link_hover_bg_color: "#f8f9fa"
+  link_hover_bg_color_dark: "#364151"
+
+  # 分隔線和表格邊線的顏色
+  # Color of horizontal rule and table border
+  line_color: "#eaecef"
+  line_color_dark: "#435266"
+
+  # 滾動條顏色
+  # Color of scrollbar
+  scrollbar_color: "#c4c6c9"
+  scrollbar_color_dark: "#687582"
+  # 滾動條懸浮顏色
+  # Color of scrollbar when hovering
+  scrollbar_hover_color: "#a6a6a6"
+  scrollbar_hover_color_dark: "#9da8b3"
+
+  # 按鈕背景色
+  # Color of button
+  button_bg_color: "transparent"
+  button_bg_color_dark: "transparent"
+  # 按鈕懸浮背景色
+  # Color of button when hovering
+  button_hover_bg_color: "#f2f3f5"
+  button_hover_bg_color_dark: "#46647e"
+
+# 主題字體配置
+# Font
+font:
+  font_size: 16px
+  font_family:
+  letter_spacing: 0.02em
+  code_font_size: 85%
+
+# 指定自定義 .js 文件路徑，支持列表；路徑是相對 source 目錄，如 /js/custom.js 對應存放目錄 source/js/custom.js
+# Specify the path of your custom js file, support list. The path is relative to the source directory, such as `/js/custom.js` corresponding to the directory `source/js/custom.js`
+custom_js:
+
+# 指定自定義 .css 文件路徑，用法和 custom_js 相同
+# The usage is the same as custom_js
+custom_css:
+
+# 網頁訪問統計
+# Analysis of website visitors
+web_analytics:
+  enable: false
+
+  # 遵循訪客瀏覽器"請勿追蹤"的設置，如果開啓則不統計其訪問
+  # Follow the "Do Not Track" setting of the visitor's browser
+  # See: https://www.w3.org/TR/tracking-dnt/
+  follow_dnt: true
+
+  # 百度統計的 Key，值需要獲取下方鏈接中 `hm.js?` 後邊的字符串
+  # Baidu analytics, get the string behind `hm.js?`
+  # See: https://tongji.baidu.com/sc-web/10000033910/home/site/getjs?siteId=13751376
+  baidu:
+
+  # Google Analytics 4 的媒体资源 ID
+  # Google Analytics 4 MEASUREMENT_ID
+  # See: https://support.google.com/analytics/answer/9744165#zippy=%2Cin-this-article
+  google:
+    measurement_id:
+
+  # 騰訊統計的 H5 App ID，開啓高級功能才有cid
+  # Tencent analytics, set APP ID
+  # See: https://mta.qq.com/h5/manage/ctr_app_manage
+  tencent:
+    sid:
+    cid:
+
+  # LeanCloud 計數統計，可用於 PV UV 展示，如果 `web_analytics: enable` 沒有開啓，PV UV 展示只會查詢不會增加
+  # LeanCloud count statistics, which can be used for PV UV display. If `web_analytics: enable` is false, PV UV display will only query and not increase
+  leancloud:
+    app_id:
+    app_key:
+    # REST API 服務器地址，國際版不填
+    # Only the Chinese mainland users need to set
+    server_url:
+    # 統計頁面時獲取路徑的屬性
+    # Get the attribute of the page path during statistics
+    path: window.location.pathname
+    # 開啓後不統計本地路徑( localhost 與 127.0.0.1 )
+    # If true, ignore localhost & 127.0.0.1
+    ignore_local: false
+
+  # Umami Analytics，僅支持自部署。如果要展示 PV UV 需要填寫所有配置項，否則只填寫 `src` 和 `website_id` 即可
+  # Umami Analytics, only Self-host support. If you want to display PV UV need to set all config items, otherwise only set 'src' and 'website_id'
+  # See: https://umami.is/docs/authentication
+  umami:
+    # umami js 文件地址，需要在 umami 後台創建站點後獲取
+    # umami js file url, get after create website in umami
+    src:
+
+    # umami 的 website id，需要在 umami 後台創建站點後獲取
+    # umami website id, get after create website in umami
+    website_id:
+
+    # 如果你只想統計特定的域名可以填入此字段，多個域名通過逗號分隔，這可以避免統計 localhost。
+    # If you only want to tracker to specific domains you can fill in this field, multiple domain names are separated by commas, which can avoid tracker localhost
+    domains:
+
+    # 用於統計 PV UV 的開始時間，格式為 "YYYY-MM-DD"
+    # statistics on the start time, the format is "YYYY-MM-DD"
+    start_time: 2024-01-01
+
+    # 新建一個 umami viewOnly 用戶，然後通過 login api 獲取該用戶 token
+    # create an umami viewOnly user, and then get user token through the login api
+    token:
+
+    # 填寫 umami 部署的服務器地址，如 "https://umami.example.com"
+    # server url of umami deployment, such as "https://umami.example.com"
+    api_server:
+
+# Canonical 用於向 Google 搜索指定規範網址，開啓前確保 hexo _config.yml 中配置 `url: http://yourdomain.com`
+# Canonical, to specify a canonical URL for Google Search, need to set up `url: http://yourdomain.com` in hexo _config.yml
+# See: https://support.google.com/webmasters/answer/139066
+canonical:
+  enable: false
+
+# 對頁面中的圖片和評論插件進行懶加載處理，可見範圍外的元素不會提前加載
+# Lazy loading of images and comment plugin on the page
+lazyload:
+  enable: true
+
+  # 加載時的佔位圖片
+  # The placeholder image when loading
+  loading_img: /img/loading.gif
+
+  # 開啓後懶加載僅在文章頁生效，如果自定義頁面需要使用，可以在 Front-matter 里指定 `lazyload: true`
+  # If true, only enable lazyload on the post page. For custom pages, you can set 'lazyload: true' in front-matter
+  onlypost: false
+
+  # 觸發加載的偏移倍數，基數是視窗高度，可根據部署環境的請求速度調節
+  # The factor of viewport height that triggers loading
+  offset_factor: 2
+
+# 圖標庫，包含了大量社交類圖標，主題依賴的不包含在內，因此可自行修改，詳見 https://hexo.fluid-dev.com/docs/icon/
+# Icon library, which includes many social icons, does not include those theme dependent, so your can modify link by yourself. See: https://hexo.fluid-dev.com/docs/en/icon/
+iconfont: //at.alicdn.com/t/c/font_1736178_k526ubmyhba.css
+
+
+#---------------------------
+# 頁頭
+# Header
+#---------------------------
+
+# 導航欄的相關配置
+# Navigation bar
+navbar:
+  # 導航欄左側的標題，為空則按 hexo config 中 `title` 顯示
+  # The title on the left side of the navigation bar. If empty, it is based on `title` in hexo config
+  blog_title: "Kimi's Personal Blog"
+
+  # 導航欄毛玻璃特效，實驗性功能，可能會造成頁面滾動掉幀和抖動，部分瀏覽器不支持會自動不生效
+  # Navigation bar frosted glass special animation. It is an experimental feature
+  ground_glass:
+    enable: false
+
+    # 模糊像素，只能為數字，數字越大模糊度越高
+    # Number of blurred pixel. the larger the number, the higher the blur
+    px: 3
+
+    # 不透明度，數字越大透明度越低，注意透明過度可能看不清菜單字體
+    # Ratio of opacity, 1.0 is completely opaque
+    # available: 0 - 1.0
+    alpha: 0.7
+
+  # 導航欄菜單，可自行增減，key 用來關聯 languages/*.yml，如不存在關聯則顯示 key 本身的值；icon 是 css class，可以省略；增加 name 可以強制顯示指定名稱
+  # Navigation bar menu. `key` is used to associate languages/*.yml. If there is no association, the value of `key` itself will be displayed; if `icon` is a css class, it can be omitted; adding `name` can force the display of the specified name
+  menu:
+    - { key: "home", link: "/", icon: "iconfont icon-home-fill" }
+    - { key: "archive", link: "/archives/", icon: "iconfont icon-archive-fill" }
+    - { key: "category", link: "/categories/", icon: "iconfont icon-category-fill" }
+    - { key: "tag", link: "/tags/", icon: "iconfont icon-tags-fill" }
+    # - { key: "about", link: "/about/", icon: "iconfont icon-user-fill" }
+    #- { key: "links", link: "/links/", icon: "iconfont icon-link-fill" }
+
+# 搜索功能，基於 hexo-generator-search 插件，若已安裝其他搜索插件請關閉此功能，以避免生成多餘的索引文件
+# Search feature, based on hexo-generator-search. If you have installed other search plugins, please disable this feature to avoid generating redundant index files
+search:
+  enable: true
+
+  # 搜索索引文件的路徑，可以是相對路徑或外站的絕對路徑
+  # Path for search index file, it can be a relative path or an absolute path
+  path: /local-search.xml
+
+  # 文件生成在本地的位置，必須是相對路徑
+  # The location where the index file is generated locally, it must be a relative location
+  generate_path: /local-search.xml
+
+  # 搜索的範圍
+  # Search field
+  # Options: post | page | all
+  field: post
+
+  # 搜索是否掃描正文
+  # If true, search will scan the post content
+  content: true
+
+# 首屏圖片的相關配置
+# Config of the big image on the first screen
+banner:
+  # 視差滾動，圖片與板塊會隨著屏幕滾動產生視差效果
+  # Scrolling parallax
+  parallax: true
+
+  # 圖片最小的寬高比，以免圖片兩邊被過度裁剪，適用於移動端竪屏時，如需關閉設為 0
+  # Minimum ratio of width to height, applicable to the vertical screen of mobile device, if you need to close it, set it to 0
+  width_height_ratio: 1.0
+
+# 向下滾動的箭頭
+# Scroll down arrow
+scroll_down_arrow:
+  enable: true
+
+  # 头图高度不小于指定比例，才显示箭头
+  # Only the height of the banner image is greater than the ratio, the arrow is displayed
+  # Available: 0 - 100
+  banner_height_limit: 80
+
+  # 翻頁後自動滾動
+  # Auto scroll after page turning
+  scroll_after_turning_page: true
+
+# 向頂部滾動的箭頭
+# Scroll top arrow
+scroll_top_arrow:
+  enable: true
+
+# Open Graph metadata
+# See: https://hexo.io/docs/helpers.html#open-graph
+open_graph:
+  enable: true
+  twitter_card: summary_large_image
+  twitter_id:
+  twitter_site:
+  google_plus:
+  fb_admins:
+  fb_app_id:
+
+
+#---------------------------
+# 頁腳
+# Footer
+#---------------------------
+footer:
+  # 頁腳第一行文字的 HTML，建議保留 Fluid 的鏈接，用於向更多人推廣本主題
+  # HTML of the first line of the footer, it is recommended to keep the Fluid link to promote this theme to more people
+  content: '
+    <span>Kimi 2024</span>
+    <i class="iconfont icon-love"></i>
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo </span></a>
+     <span>Theme </span>
+     <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>'
+
+  # 展示網站的 PV、UV 統計數
+  # Display website PV and UV statistics
+  statistics:
+    enable: false
+
+    # 统计数据来源，使用 leancloud, umami 需要设置 `web_analytics` 中对应的参数；使用 busuanzi 不需要额外设置，但是有时不稳定，另外本地运行时 busuanzi 显示统计数据很大属于正常现象，部署后会正常
+    # Data source. If use leancloud, umami, you need to set the parameter in `web_analytics`
+    # Options: busuanzi | leancloud | umami
+    source: "busuanzi"
+
+  # 國內大陸服務器的備案信息
+  # For Chinese mainland website policy, other areas keep disable
+  beian:
+    enable: false
+    # ICP證號
+    icp_text: 京ICP證123456號
+    # 公安備案號，不填則只顯示ICP
+    police_text: 京公網安備12345678號
+    # 公安備案的編號，用於URL跳轉查詢
+    police_code: 12345678
+    # 公安備案的圖片. 為空時不顯示備案圖片
+    police_icon: /img/police_beian.png
+
+
+#---------------------------
+# 首頁
+# Home Page
+#---------------------------
+index:
+  # 首頁 Banner 頭圖，可以是相對路徑或絕對路徑，以下相同
+  # Path of Banner image, can be a relative path or an absolute path, the same on other pages
+  banner_img: /img/default.png
+
+  # 頭圖高度，屏幕百分比
+  # Height ratio of banner image
+  # Available: 0 - 100
+  banner_img_height: 100
+
+  # 頭圖黑色蒙版的不透明度，available: 0 - 1.0，1 是完全不透明
+  # Opacity of the banner mask, 1.0 is completely opaque
+  # Available: 0 - 1.0
+  banner_mask_alpha: 0.3
+
+  # 首頁副標題的獨立設置
+  # Independent config of home page subtitle
+  slogan:
+    enable: true
+
+    # 為空則按 hexo config.subtitle 顯示
+    # If empty, text based on `subtitle` in hexo config
+    text: "A developer with Creative, Passion and Curiosity"
+
+    # 通過 API 接口作為首頁副標題的內容，必須返回的是 JSON 格式，如果請求失敗則按 text 字段顯示，該功能必須先開啓 typing 打字機功能
+    # Subtitle of the homepage through the API, must be returned a JSON. If the request fails, it will be displayed in `text` value. This feature must first enable the typing animation
+    api:
+      enable: false
+
+      # 請求地址
+      # Request url
+      url: ""
+
+      # 請求方法
+      # Request method
+      # Available: GET | POST | PUT
+      method: "GET"
+
+      # 請求頭
+      # Request headers
+      headers: {}
+
+      # 從請求結果獲取字符串的取值字段，最終必須是一個字符串，例如返回結果為 {"data": {"author": "fluid", "content": "An elegant theme"}}, 則取值字段為 ['data', 'content']；如果返回是列表則自動選擇第一項
+      # The value field of the string obtained from the response. For example, the response content is {"data": {"author": "fluid", "content": "An elegant theme"}}, the expected `keys: ['data','content']`; if the return is a list, the first item is automatically selected
+      keys: []
+
+  # 自動截取文章摘要
+  # Auto extract post
+  auto_excerpt:
+    enable: true
+
+  # 打開文章的標籤方式
+  # The browser tag to open the post
+  # Available: _blank | _self
+  post_url_target: _self
+
+  # 是否顯示文章信息（時間、分類、標籤）
+  # Meta information of post
+  post_meta:
+    date: true
+    category: true
+    tag: true
+
+  # 文章通過 sticky 排序後，在首頁文章標題前顯示圖標
+  # If the posts are sorted by `sticky`, an icon is displayed in front of the post title
+  post_sticky:
+    enable: true
+    icon: "iconfont icon-top"
+
+
+#---------------------------
+# 文章頁
+# Post Page
+#---------------------------
+post:
+  banner_img: /img/default.png
+  banner_img_height: 70
+  banner_mask_alpha: 0.3
+
+  # 文章在首頁的默認封面圖，當沒有指定 index_img 時會使用該圖片，若兩者都為空則不顯示任何圖片
+  # Path of the default post cover when `index_img` is not set. If both are empty, no image will be displayed
+  default_index_img:
+
+  # 文章標題下方的元信息
+  # Meta information below title
+  meta:
+    # 作者，優先根據 front-matter 里 author 字段，其次是 hexo 配置中 author 值
+    # Author, based on `author` field in front-matter, if not set, based on `author` value in hexo config
+    author:
+      enable: false
+
+    # 文章日期，優先根據 front-matter 里 date 字段，其次是 md 文件日期
+    # Post date, based on `date` field in front-matter, if not set, based on create date of .md file
+    date:
+      enable: true
+      # 格式参照 ISO-8601 日期格式化
+      # ISO-8601 date format
+      # See: http://momentjs.cn/docs/#/parsing/string-format/
+      format: "YYYY-MM-DD"
+
+    # 字數統計
+    # Word count
+    wordcount:
+      enable: true
+
+    # 估計閱讀全文需要的時長
+    # Estimated reading time
+    min2read:
+      enable: true
+      # 每個字詞的長度，建議：中文≈2，英文≈5，中英混合可自行調節
+      # Average word length (chars count in word), ZH ≈ 2, EN ≈ 5
+      awl: 2
+      # 每分鐘閱讀字數，如果大部分是技術文章可適度調低
+      # Words per minute
+      wpm: 60
+
+    # 瀏覽量計數
+    # Number of visits
+    views:
+      enable: false
+      # 統計數據來源
+      # Data Source
+      # Options: busuanzi | leancloud | umami
+      source: "busuanzi"
+
+  # 在文章開頭顯示文章更新時間，該時間默認是 md 文件更新時間，可通過 front-matter 中 `updated` 手動指定（和 date 一樣格式）
+  # Update date is displayed at the beginning of the post. The default date is the update date of the md file, which can be manually specified by `updated` in front-matter (same format as date)
+  updated:
+    enable: false
+
+    # 格式參照 ISO-8601 日期格式化
+    # ISO-8601 date format
+    # See: http://momentjs.cn/docs/#/parsing/string-format/
+    date_format: "LL a"
+
+    # 是否使用相對時間表示，比如："3 天前"
+    # If true, it will be a relative time, such as: "3 days ago"
+    relative: false
+
+    # 提示標籤類型
+    # Note class
+    # Options: default | primary | info | success | warning | danger | light
+    note_class: info
+
+  # 側邊欄展示當前分類下的文章
+  # Sidebar of category
+  category_bar:
+    enable: true
+
+    # 開啓後，只有在文章 Front-matter 里指定 `category_bar: true` 才會展示分類，也可以通過 `category_bar: ["分類A"]` 來指定分類
+    # If true, only set `category_bar: true` in Front-matter will enable sidebar of category, also set `category_bar: ["CategoryA"]` to specify categories
+    specific: true
+
+    # 置於板塊的左側或右側
+    # place in the board
+    # Options: left | right
+    placement: left
+
+    # 文章的排序字段，前面帶減號是倒序，不帶減號是正序
+    # Sort field for posts, with a minus sign is reverse order
+    # Options: date | title | or other field of front-matter
+    post_order_by: "title"
+
+    # 單個分類中折疊展示文章數的最大值，超過限制會顯示 More，0 則不限制
+    # The maximum number of posts in a single category. If the limit is exceeded, it will be displayed More. If 0 no limit
+    post_limit: 0
+
+  # 側邊欄展示文章目錄
+  # Table of contents (TOC) in the sidebar
+  toc:
+    enable: true
+
+    # 置於板塊的左側或右側
+    # place in the board
+    # Options: left | right
+    placement: right
+
+    # 目錄會選擇這些節點作為標題
+    # TOC will select these nodes as headings
+    headingSelector: "h1,h2,h3,h4,h5,h6"
+
+    # 層級的折疊深度，0 是全部折疊，大於 0 後如果存在下級標題則默認展開
+    # Collapse depth. If 0, all headings collapsed. If greater than 0, it will be expanded by default if there are sub headings
+    collapseDepth: 0
+
+  # 版權聲明，會顯示在每篇文章的結尾
+  # Copyright, will be displayed at the end of each post
+  copyright:
+    enable: false
+
+    # CreativeCommons license
+    # See: https://creativecommons.org/share-your-work/cclicenses/
+    # Options: BY | BY-SA | BY-ND | BY-NC | BY-NC-SA | BY-NC-ND | ZERO
+    license: 'BY'
+
+    # 顯示作者
+    author:
+      enable: true
+
+    # 顯示發佈日期
+    # Show post date
+    post_date:
+      enable: true
+      format: "LL"
+
+    # 顯示更新日期
+    # Show update date
+    update_date:
+      enable: false
+      format: "LL"
+
+  # 文章底部上一篇下一篇功能
+  # Link to previous/next post
+  prev_next:
+    enable: true
+
+  # 文章圖片標題
+  # Image caption
+  image_caption:
+    enable: true
+
+  # 文章圖片可點擊放大
+  # Zoom feature of images
+  image_zoom:
+    enable: true
+    # 放大後圖片鏈接替換規則，可用於將壓縮圖片鏈接替換為原圖片鏈接，如 ['-slim', ''] 是將鏈接中 `-slim` 移除；如果想使用正則請使用 `re:` 前綴，如 ['re:\\d{3,4}\\/\\d{3,4}\\/', '']
+    # The image url replacement when zooming, the feature can be used to replace the compressed image to the original image, eg: ['-slim', ''] removes `-slim` from the image url when zooming; if you want to use regular, use prefix `re:`, eg: ['re:\\d{3,4}\\/\\d{3,4}\\/','']
+    img_url_replace: ['', '']
+
+  # 脚注语法，会在文章底部生成脚注，如果 Markdown 渲染器本身支持，则建议关闭，否则可能会冲突
+  # Support footnote syntax, footnotes will be generated at the bottom of the post page. If the Markdown renderer itself supports it, please disable it, otherwise it may conflict
+  footnote:
+    enable: true
+    # 脚注的节标题，也可以在 front-matter 中通过 `footnote: <h2>Reference</h2>` 这种形式修改单独页面的 header
+    # The section title of the footnote, you can also modify the header of a single page in the form of `footnote: <h2>Reference</h2>` in front-matter
+    header: ''
+
+  # 数学公式，开启之前需要更换 Markdown 渲染器，否则复杂公式会有兼容问题，具体请见：https://hexo.fluid-dev.com/docs/guide/##latex-数学公式
+  # Mathematical formula. If enable, you need to change the Markdown renderer, see: https://hexo.fluid-dev.com/docs/en/guide/#math
+  math:
+    # 开启后文章默认可用，自定义页面如需使用，需在 Front-matter 中指定 `math: true`
+    # If you want to use math on the custom page, you need to set `math: true` in Front-matter
+    enable: false
+
+    # 开启后，只有在文章 Front-matter 里指定 `math: true` 才会在文章页启动公式转换，以便在页面不包含公式时提高加载速度
+    # If true, only set `math: true` in Front-matter will enable math, to load faster when the page does not contain math
+    specific: false
+
+    # Options: mathjax | katex
+    engine: mathjax
+
+  # 流程图，基于 mermaid-js，具体请见：https://hexo.fluid-dev.com/docs/guide/#mermaid-流程图
+  # Flow chart, based on mermaid-js, see: https://hexo.fluid-dev.com/docs/en/guide/#mermaid
+  mermaid:
+    # 开启后文章默认可用，自定义页面如需使用，需在 Front-matter 中指定 `mermaid: true`
+    # If you want to use mermaid on the custom page, you need to set `mermaid: true` in Front-matter
+    enable: false
+
+    # 开启后，只有在文章 Front-matter 里指定 `mermaid: true` 才会在文章页启动公式转换，以便在页面不包含公式时提高加载速度
+    # If true, only set `mermaid: true` in Front-matter will enable mermaid, to load faster when the page does not contain mermaid
+    specific: false
+
+    # See: http://mermaid-js.github.io/mermaid/
+    options: { theme: 'default' }
+
+  # 評論插件
+  # Comment plugin
+  comments:
+    enable: false
+    # 指定的插件，需要同时设置对应插件的必要参数
+    # The specified plugin needs to set the necessary parameters at the same time
+    # Options: utterances | disqus | gitalk | valine | waline | changyan | livere | remark42 | twikoo | cusdis | giscus | discuss
+    type: disqus
+
+
+#---------------------------
+# 评论插件
+# Comment plugins
+#
+# 开启评论需要先设置上方 `post: comments: enable: true`，然后根据 `type` 设置下方对应的评论插件参数
+# Enable comments need to be set `post: comments: enable: true`, then set the corresponding comment plugin parameters below according to `type`
+#---------------------------
+
+# Utterances
+# 基于 GitHub Issues
+# Based on GitHub Issues
+# See: https://utteranc.es
+utterances:
+  repo:
+  issue_term: pathname
+  label: utterances
+  theme: github-light
+  theme_dark: github-dark
+
+# Disqus
+# 基于第三方的服务，国内用户直接使用容易被墙，建议配合 Disqusjs
+# Based on third-party service
+# See: https://disqus.com
+disqus:
+  shortname:
+  # 以下为 Disqusjs 支持, 国内用户如果想使用 Disqus 建议配合使用
+  # The following are Disqusjs configurations, please ignore if DisqusJS is not required
+  # See: https://github.com/SukkaW/DisqusJS
+  disqusjs: false
+  apikey:
+
+# Gitalk
+# 基于 GitHub Issues
+# Based on GitHub Issues
+# See: https://github.com/gitalk/gitalk#options
+gitalk:
+  clientID:
+  clientSecret:
+  repo:
+  owner:
+  admin: ['name']
+  language: zh-TW
+  labels: ['Gitalk']
+  perPage: 10
+  pagerDirection: last
+  distractionFreeMode: false
+  createIssueManually: true
+  # 默认 proxy 可能会失效，解决方法请见下方链接
+  # The default proxy may be invalid, refer to the links for solutions
+  # https://github.com/gitalk/gitalk/issues/429
+  # https://github.com/Zibri/cloudflare-cors-anywhere
+  proxy: https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token
+
+# Valine
+# 基于 LeanCloud
+# Based on LeanCloud
+# See: https://valine.js.org/
+valine:
+  appId:
+  appKey:
+  path: window.location.pathname
+  placeholder:
+  avatar: 'retro'
+  meta: ['nick', 'mail', 'link']
+  requiredFields: []
+  pageSize: 10
+  lang: 'zh-TW'
+  highlight: false
+  recordIP: false
+  serverURLs: ''
+  emojiCDN:
+  emojiMaps:
+  enableQQ: false
+
+# Waline
+# 從 Valine 衍生而來，額外增加了服務端和多種功能
+# Derived from Valine, with self-hosted service and new features
+# See: https://waline.js.org/
+waline:
+  serverURL: ''
+  path: window.location.pathname
+  meta: ['nick', 'mail', 'link']
+  requiredMeta: ['nick']
+  lang: 'zh-TW'
+  emoji: ['https://cdn.jsdelivr.net/gh/walinejs/emojis/weibo']
+  dark: 'html[data-user-color-scheme="dark"]'
+  wordLimit: 0
+  pageSize: 10
+
+# 畅言 Changyan
+# 基于第三方的服务
+# Based on third-party service, insufficient support for regions outside China
+# http://changyan.kuaizhan.com
+changyan:
+  appid: ''
+  appkey: ''
+
+# 来必力 Livere
+# 基于第三方的服务
+# Based on third-party service
+# See: https://www.livere.com
+livere:
+  uid: ''
+
+# Remark42
+# 需要自托管服务端
+# Based on self-hosted service
+# See: https://remark42.com
+remark42:
+  host:
+  site_id:
+  max_shown_comments: 10
+  locale: zh
+  components: ['embed']
+
+# Twikoo
+# 支持腾讯云、Vercel、Railway 等多种平台部署
+# Based on Tencent CloudBase
+# See: https://twikoo.js.org
+twikoo:
+  envId:
+  region: ap-shanghai
+  path: window.location.pathname
+
+# Cusdis
+# 基于第三方服务或自托管服务
+# Based on third-party or self-hosted service
+# See https://cusdis.com
+cusdis:
+  host:
+  app_id:
+  lang: zh-cn
+
+# Giscus
+# 基于 GitHub Discussions，类似于 Utterances
+# Based on GitHub Discussions, similar to Utterances
+# See: https://giscus.app/
+giscus:
+  repo:
+  repo-id:
+  category:
+  category-id:
+  theme-light: light
+  theme-dark: dark
+  mapping: pathname
+  reactions-enabled: 1
+  emit-metadata: 0
+  input-position: top
+  lang: zh-CN
+
+# Discuss
+# 多平台、多数据库、自托管、免费开源评论系统
+# Self-hosted, small size, multi-platform, multi-database, free and open source commenting system
+# See: https://discuss.js.org
+discuss:
+  serverURLs:
+  path: window.location.pathname
+
+
+#---------------------------
+# 歸檔頁
+# Archive Page
+#---------------------------
+archive:
+  banner_img: /img/default.png
+  banner_img_height: 60
+  banner_mask_alpha: 0.3
+
+
+#---------------------------
+# 分類頁
+# Category Page
+#---------------------------
+category:
+  enable: true
+  banner_img: /img/default.png
+  banner_img_height: 60
+  banner_mask_alpha: 0.3
+
+  # 分類的排序字段，前面帶減號是倒序，不帶減號是正序
+  # Sort field for categories, with a minus sign is reverse order
+  # Options: length | name
+  order_by: "-length"
+
+  # 層級的折疊深度，0 是全部折疊，大於 0 後如果存在子分類則默認展開
+  # Collapse depth. If 0, all posts collapsed. If greater than 0, it will be expanded by default if there are subcategories
+  collapse_depth: 0
+
+  # 文章的排序字段，前面帶減號是倒序，不帶減號是正序
+  # Sort field for posts, with a minus sign is reverse order
+  # Options: date | title | or other field of front-matter
+  post_order_by: "-date"
+
+  # 單個分類中折疊展示文章數的最大值，超過限制會顯示 More，0 則不限制
+  # The maximum number of posts in a single category. If the limit is exceeded, it will be displayed More. If 0 no limit
+  post_limit: 10
+
+
+#---------------------------
+# 標籤頁
+# Tag Page
+#---------------------------
+tag:
+  enable: true
+  banner_img: /img/default.png
+  banner_img_height: 80
+  banner_mask_alpha: 0.3
+  tagcloud:
+    min_font: 15
+    max_font: 17
+    unit: px
+    start_color: "#B0B0DD"
+    end_color: "#7893A9"
+
+
+#---------------------------
+# 關於頁
+# About Page
+#---------------------------
+about:
+  enable: true
+  banner_img: /img/default.png
+  banner_img_height: 60
+  banner_mask_alpha: 0.3
+  avatar: /img/avatar.png
+  name: "Fluid"
+  intro: "An elegant theme for Hexo"
+  # 更多图标可从 https://hexo.fluid-dev.com/docs/icon/ 查找，`class` 代表图标的 css class，添加 `qrcode` 后，图标不再是链接而是悬浮二维码
+  # More icons can be found from https://hexo.fluid-dev.com/docs/en/icon/  `class` is the css class of the icon. If adding `qrcode`, the icon is no longer a link, but a hovering QR code
+  icons:
+    - { class: "iconfont icon-github-fill", link: "https://github.com", tip: "GitHub" }
+    - { class: "iconfont icon-douban-fill", link: "https://douban.com", tip: "豆瓣" }
+    - { class: "iconfont icon-wechat-fill", qrcode: "/img/favicon.png" }
+
+
+#---------------------------
+# 自定義頁
+# Custom Page
+#
+# 通過 hexo new page 命令創建的頁面
+# Custom Page through `hexo new page`
+#---------------------------
+page:
+  banner_img: /img/default.png
+  banner_img_height: 60
+  banner_mask_alpha: 0.3
+
+
+#---------------------------
+# 404页
+# 404 Page
+#---------------------------
+page404:
+  enable: true
+  banner_img: /img/default.png
+  banner_img_height: 85
+  banner_mask_alpha: 0.3
+  # 重定向到首頁的延遲(毫秒)
+  # Delay in redirecting to home page (milliseconds)
+  redirect_delay: 5000
+
+
+#---------------------------
+# 友鏈頁
+# Links Page
+#---------------------------
+links:
+  enable: true
+  banner_img: /img/default.png
+  banner_img_height: 60
+  banner_mask_alpha: 0.3
+  # 友鏈的成員項
+  # Member item of page
+  items:
+    - {
+      title: "Fluid Blog",
+      intro: "主题博客",
+      link: "https://hexo.fluid-dev.com/",
+      avatar: "/img/favicon.png"
+    }
+    - {
+      title: "Fluid Docs",
+      intro: "主题使用指南",
+      link: "https://hexo.fluid-dev.com/docs/",
+      avatar: "/img/favicon.png"
+    }
+    - {
+      title: "Fluid Repo",
+      intro: "主题 GitHub 仓库",
+      link: "https://github.com/fluid-dev/hexo-theme-fluid",
+      avatar: "/img/favicon.png"
+    }
+
+  # 当成员头像加载失败时，替换为指定图片
+  # When the member avatar fails to load, replace the specified image
+  onerror_avatar: /img/avatar.png
+
+  # 友链下方自定义区域，支持 HTML，可插入例如申请友链的文字
+  # Custom content at the bottom of the links
+  custom:
+    enable: false
+    content: '<hr><p>在下方留言申请加入我的友链，按如下格式提供信息：</p><ul><li>博客名：Fluid</li><li>简介：Fluid 主题官方博客</li><li>链接：https://hexo.fluid-dev.com</li><li>图片：https://hexo.fluid-dev.com/img/favicon.png</li></ul>'
+
+  # 评论插件
+  # Comment plugin
+  comments:
+    enable: false
+    # 指定的插件，需要同时设置对应插件的必要参数
+    # The specified plugin needs to set the necessary parameters at the same time
+    # Options: utterances | disqus | gitalk | valine | waline | changyan | livere | remark42 | twikoo | cusdis | giscus | discuss
+    type: disqus
+
+
+#---------------------------
+# 以下是配置 JS CSS 等静态资源的 URL 前缀，可以自定义成 CDN 地址，
+# 如果需要修改，最好使用与默认配置相同的版本，以避免潜在的问题，
+# ** 如果你不知道如何设置，请不要做任何改动 **
+#
+# Here is the url prefix to configure the static assets. Set CDN addresses you want to customize.
+# Be aware that you would better use the same version as default ones to avoid potential problems.
+# DO NOT EDIT THE FOLLOWING SETTINGS UNLESS YOU KNOW WHAT YOU ARE DOING
+#---------------------------
+
+static_prefix:
+  # 内部静态
+  # Internal static
+  internal_js: /js
+  internal_css: /css
+  internal_img: /img
+
+  anchor: https://lib.baomitu.com/anchor-js/5.0.0/
+
+  github_markdown: https://lib.baomitu.com/github-markdown-css/4.0.0/
+
+  jquery: https://lib.baomitu.com/jquery/3.6.4/
+
+  bootstrap: https://lib.baomitu.com/twitter-bootstrap/4.6.1/
+
+  prismjs: https://lib.baomitu.com/prism/1.29.0/
+
+  tocbot: https://lib.baomitu.com/tocbot/4.20.1/
+
+  typed: https://lib.baomitu.com/typed.js/2.0.12/
+
+  fancybox: https://lib.baomitu.com/fancybox/3.5.7/
+
+  nprogress: https://lib.baomitu.com/nprogress/0.2.0/
+
+  mathjax: https://lib.baomitu.com/mathjax/3.2.2/
+
+  katex: https://lib.baomitu.com/KaTeX/0.16.2/
+
+  busuanzi: https://busuanzi.ibruce.info/busuanzi/2.3/
+
+  clipboard: https://lib.baomitu.com/clipboard.js/2.0.11/
+
+  mermaid: https://lib.baomitu.com/mermaid/8.14.0/
+
+  valine: https://lib.baomitu.com/valine/1.5.1/
+
+  waline: https://registry.npmmirror.com/@waline/client/2.15.8/files/dist/
+
+  gitalk: https://lib.baomitu.com/gitalk/1.8.0/
+
+  disqusjs: https://lib.baomitu.com/disqusjs/1.3.0/
+
+  twikoo: https://lib.baomitu.com/twikoo/1.6.8/
+
+  discuss: https://lib.baomitu.com/discuss/1.2.1/
+
+  hint: https://lib.baomitu.com/hint.css/2.7.0/
+
+  moment: https://lib.baomitu.com/moment.js/2.29.4/
