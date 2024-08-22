@@ -1,5 +1,5 @@
 ---
-title: 【基礎教學】 TailwindCSS 逐步上手
+title: TailwindCSS 逐步上手
 date: 2022-01-19 17:44:17
 categories: 
 - 技術筆記
