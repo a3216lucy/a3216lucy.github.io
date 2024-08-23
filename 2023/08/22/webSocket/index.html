@@ -1,0 +1,616 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-TW" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="../../../../img/icon.png">
+  <link rel="icon" href="../../../../img/icon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Kimi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="在介紹 WebSocket 之前，先來了解幾個 HTTP 的連線方式。 HTTP 的連線方式Polling這種方式是早期透過 Javascript 定時（setInterval、setTimeout）來向後端請求最新資料並呈現於頁面之上， 這麼做的好處是容易實現， 但我們並不知曉 Server 端何時會更新， 只能傻傻的定時獲取， 造成的影響就是頻寬的浪費及資料呈現不即時。  Long-Polli">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WebSocket 介紹與使用">
+<meta property="og:url" content="https://lyskimi.org/2023/08/22/webSocket/index.html">
+<meta property="og:site_name" content="Kimi&#39;s Personal Blog">
+<meta property="og:description" content="在介紹 WebSocket 之前，先來了解幾個 HTTP 的連線方式。 HTTP 的連線方式Polling這種方式是早期透過 Javascript 定時（setInterval、setTimeout）來向後端請求最新資料並呈現於頁面之上， 這麼做的好處是容易實現， 但我們並不知曉 Server 端何時會更新， 只能傻傻的定時獲取， 造成的影響就是頻寬的浪費及資料呈現不即時。  Long-Polli">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1382/1*HJww54OsxD5D3Cn5YyJunQ.png">
+<meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1204/1*kseayTfoDyTzI8uFSen9Cg.png">
+<meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1400/1*9akWJheWpyJuTvo6AfoEow.png">
+<meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1106/1*xPnOxyaKv5NleFy_13kCqg.png">
+<meta property="og:image" content="https://miro.medium.com/v2/resize:fit:696/format:webp/1*Aefa0WHo_VsgQMjvj9rPFg.png">
+<meta property="article:published_time" content="2023-08-22T13:07:27.000Z">
+<meta property="article:modified_time" content="2024-08-22T13:43:30.605Z">
+<meta property="article:author" content="Kimi">
+<meta property="article:tag" content="webpack">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1382/1*HJww54OsxD5D3Cn5YyJunQ.png">
+  
+  
+  
+  <title>WebSocket 介紹與使用 - Kimi&#39;s Personal Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="../../../../css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="../../../../css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="../../../../css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lyskimi.org","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="../../../../js/utils.js" ></script>
+  <script  src="../../../../js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="../../../../index.html">
+      <strong>Kimi&#39;s Personal Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../index.html" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首頁</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>總覽</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分類</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>標籤</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('../../../../img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">WebSocket 介紹與使用</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2023-08-22 21:07" pubdate>
+          2023-08-22
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          9 分鐘
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">WebSocket 介紹與使用</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>在介紹 WebSocket 之前，先來了解幾個 HTTP 的連線方式。</p>
+<h2 id="HTTP-的連線方式"><a href="#HTTP-的連線方式" class="headerlink" title="HTTP 的連線方式"></a>HTTP 的連線方式</h2><h3 id="Polling"><a href="#Polling" class="headerlink" title="Polling"></a>Polling</h3><p>這種方式是早期透過 Javascript 定時（<code>setInterval</code>、<code>setTimeout</code>）來向後端請求最新資料並呈現於頁面之上， 這麼做的好處是容易實現， 但我們並不知曉 Server 端何時會更新， 只能<strong>傻傻的定時獲取</strong>， 造成的影響就是<U>頻寬的浪費及資料呈現不即時</U>。</p>
+<p><img src="https://miro.medium.com/v2/resize:fit:1382/1*HJww54OsxD5D3Cn5YyJunQ.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="Long-Polling（長時間輪詢）"><a href="#Long-Polling（長時間輪詢）" class="headerlink" title="Long-Polling（長時間輪詢）"></a>Long-Polling（長時間輪詢）</h3><p>這種方式就是收到前端請求後，Server 端會等待， 若這段時間有資料就會將最新資料回傳給前端， 因此等待的這段期間 Client 什麼事情也不用做，等待資料回傳後再發送下一個請求， 雖然長時間的連接解決了 Polling 開銷的問題，<u>但如果在更新資料很頻繁的狀況下，也會造成連續的 Polling 的動作產生，<strong>效能未必較佳</strong></u>。</p>
+<p><img src="https://miro.medium.com/v2/resize:fit:1204/1*kseayTfoDyTzI8uFSen9Cg.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="Server-Sent-Events"><a href="#Server-Sent-Events" class="headerlink" title="Server Sent Events"></a>Server Sent Events</h3><p>簡單來說就是 <u><strong>伺服端單向的推送資料給瀏覽器</strong></u>，實作起來相對容易。<br>但這種方式較少被使用，  因為 SSE 能做的功能 Websocket 也能完成， 差別只是雙向溝通還是單向溝通而已。<br>不過在某些應用上，瀏覽器不太需要主動發送資料給 Server 端（例：股市行情、即時新聞…），只需要接收 Server 端的最新資料即可，就適合使用。</p>
+<p><img src="https://miro.medium.com/v2/resize:fit:1400/1*9akWJheWpyJuTvo6AfoEow.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="Websocket"><a href="#Websocket" class="headerlink" title="Websocket"></a>Websocket</h3><p>以上幾個方式的共同點就是都基於 HTTP 進行傳輸，而我們也知道 HTTP 的傳輸為了確保正確性會帶有較多的標頭…等資訊；而 <strong>Websocket 只有一開始確定連線時會走 HTTP 以外，之後的傳輸都不是基於 HTTP</strong>，在傳輸上會來的更有效率，且提供了<strong>雙向溝通</strong>的功能，避免延遲，因此需要即時互動的應用就非常適合使用 Websocket 的方式來進行實作。</p>
+<p><img src="https://miro.medium.com/v2/resize:fit:1106/1*xPnOxyaKv5NleFy_13kCqg.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="WebSocket-和-HTTP-的差異"><a href="#WebSocket-和-HTTP-的差異" class="headerlink" title="WebSocket 和 HTTP 的差異"></a>WebSocket 和 HTTP 的差異</h2><p>和 <code>HTTP</code> 最大的差別是，<u><code>WebScoket</code> 在建立連線之後，可以實現 client 與 server 的雙向溝通機制</u>，也就是說，雙方可以即時的交換資訊，<u>不用再等待 client 發出請求，或使用佔用資源的輪詢方式來實現</u>。</p>
+<p>另一方面，在建立連線之後就會持續保持著連線狀態，所以每次通訊時所發出的 message，就可以省略掉 headers 當中一些關於連線狀態的資訊，因而效率高了不少。</p>
+<h3 id="WebSocket-與-HTTP-："><a href="#WebSocket-與-HTTP-：" class="headerlink" title="WebSocket 與 HTTP ："></a>WebSocket 與 HTTP ：</h3><ul>
+<li>同屬於應用層， 都是基於 TCP 來進行連線傳輸</li>
+<li>默認的 port 也是為 80 和 443，並透過同樣的 HTTP 3-way handshake 建立連線</li>
+<li>與 HTTP 一樣可以進行加密傳輸， HTTP 的部份為 <code>https</code>， WebSocket 則為 <code>wss</code>。</li>
+<li>但 WebSocket 真正傳輸資料時就不必經過 HTTP 的方式（要進行像是 HTTPS 當中的 SSL&#x2F;TLS 的加密安全傳輸，有 <code>WebSocket Secure</code> 協議可以使用）</li>
+</ul>
+<p><img src="https://miro.medium.com/v2/resize:fit:696/format:webp/1*Aefa0WHo_VsgQMjvj9rPFg.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="WebSocket-的使用"><a href="#WebSocket-的使用" class="headerlink" title="WebSocket 的使用"></a>WebSocket 的使用</h2><p>WebSocket 在使用上其實不難。<a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/WebSocket">MDN</a> 上有關於 WebSocket API (client 端) 的範例。</p>
+<p>這裡我們來簡單建立一下連線：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// Create WebSocket connection.</span><br><span class="hljs-keyword">const</span> socket = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WebSocket</span>(<span class="hljs-string">&quot;wss://echo.websocket.org&quot;</span>);<br><br><span class="hljs-comment">// Connection opened</span><br>socket.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;open&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Open connection&#x27;</span>)<br>    socket.<span class="hljs-title function_">send</span>(<span class="hljs-string">&#x27;Hello Server!&#x27;</span>);<br>&#125;);<br><br><span class="hljs-comment">// Listen for messages</span><br>socket.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;message&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Message from server: <span class="hljs-subst">$&#123;event.data&#125;</span>`</span>);<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<p>如果把上面這段程式碼貼到 DevTool 的 console 當中，就可以看到其連線運作。</p>
+<p>內容其實相當簡單，首先建立 WebSocket 連線實例，接著，就可以監聽各種 events，像是</p>
+<ul>
+<li>open （連線開啟）</li>
+<li>close （連線關閉）</li>
+<li>error （連線錯誤）</li>
+<li>message （連線訊息）</li>
+</ul>
+<p>之後，再根據不同的 events 做出不同的對應方式，譬如在畫面上呈現連線訊息等。</p>
+<p>除了監聽事件之外，也可以透過 <code>socket.send()</code> 來送出資訊，以及 <code>send.close()</code> 來關閉連線。</p>
+<p>MDN 上介紹的 WebSocket API 其實就可以幫助我們快速建立 <code>WebSocket</code> 連線，不過如果我們想要在自己的專案當中進行更複雜的操作，也可以找到很完整的套件來幫助我們（例如： <a target="_blank" rel="noopener" href="https://socket.io/">socket.io</a>），可以同時用在 client 端與 server 端。</p>
+<hr>
+<p>有了 <code>WebSocket</code> 讓我們的應用程式可以和使用者有更多的互動，除了「聊天室」的應用之外，還有其他的應用場景像是「訊息推播」、「即時訊息更新」、「共同編輯」等等，應用相當廣泛。</p>
+<h2 id="Ref"><a href="#Ref" class="headerlink" title="Ref"></a>Ref</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/WebSocket#History">WebSocket</a></li>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/API/WebSocket">WebSocket (MDN)</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="../../../../categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" class="category-chain-item">技術筆記</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="../../../../tags/webpack/" class="print-no-link">#webpack</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="../../../../2022/01/19/Tailwind/" title="TailwindCSS 逐步上手">
+                        <span class="hidden-mobile">TailwindCSS 逐步上手</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目錄</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜尋</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">關鍵字</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <span>Kimi 2024</span> <i class="iconfont icon-love"></i> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo </span></a> <span>Theme </span> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="../../../../js/events.js" ></script>
+<script  src="../../../../js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="../../../../js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="../../../../js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="../../../../js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允許 JavaScript 運行的環境下瀏覽效果更佳</div>
+  </noscript>
+</body>
+</html>

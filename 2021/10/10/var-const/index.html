@@ -1,0 +1,730 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-TW" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="../../../../img/icon.png">
+  <link rel="icon" href="../../../../img/icon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Kimi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="如果你像我一樣開始學 JS，多少會有個疑惑：  學習時是用 let &#x2F; const 宣告變數，怎麼網路上查詢的 JS 程式碼，有些是用 var 宣告變數的呢？到底它們之間有什麼差異？  ES6 後，從 var 到 let &#x2F; const目前 JavaScript 主流是 ES6 版本，在這個版本中，是推薦使用 let 和 const 宣告變數，而在網上查詢的資料，很可能是 ES">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS 宣告變數： var／ let &#x2F; const 差異">
+<meta property="og:url" content="https://lyskimi.org/2021/10/10/var-const/index.html">
+<meta property="og:site_name" content="Kimi&#39;s Personal Blog">
+<meta property="og:description" content="如果你像我一樣開始學 JS，多少會有個疑惑：  學習時是用 let &#x2F; const 宣告變數，怎麼網路上查詢的 JS 程式碼，有些是用 var 宣告變數的呢？到底它們之間有什麼差異？  ES6 後，從 var 到 let &#x2F; const目前 JavaScript 主流是 ES6 版本，在這個版本中，是推薦使用 let 和 const 宣告變數，而在網上查詢的資料，很可能是 ES">
+<meta property="og:locale" content="zh_TW">
+<meta property="og:image" content="https://i.imgur.com/PQ05GIL.png">
+<meta property="article:published_time" content="2021-10-09T20:36:50.000Z">
+<meta property="article:modified_time" content="2024-08-22T14:41:36.838Z">
+<meta property="article:author" content="Kimi">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Studies">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://i.imgur.com/PQ05GIL.png">
+  
+  
+  
+  <title>JS 宣告變數： var／ let / const 差異 - Kimi&#39;s Personal Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="../../../../css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="../../../../css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="../../../../css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lyskimi.org","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="../../../../js/utils.js" ></script>
+  <script  src="../../../../js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="../../../../index.html">
+      <strong>Kimi&#39;s Personal Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../index.html" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首頁</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>總覽</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分類</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>標籤</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('../../../../img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">JS 宣告變數： var／ let / const 差異</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-10-10 04:36" pubdate>
+          2021-10-10
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          2.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          24 分鐘
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">JS 宣告變數： var／ let / const 差異</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>如果你像我一樣開始學 JS，多少會有個疑惑：</p>
+<blockquote>
+<p>學習時是用 let &#x2F; const 宣告變數，怎麼網路上查詢的 JS 程式碼，有些是用 var 宣告變數的呢？到底它們之間有什麼差異？</p>
+</blockquote>
+<h2 id="ES6-後，從-var-到-let-const"><a href="#ES6-後，從-var-到-let-const" class="headerlink" title="ES6 後，從 var 到 let &#x2F; const"></a>ES6 後，從 var 到 let &#x2F; const</h2><p>目前 JavaScript 主流是 ES6 版本，在這個版本中，是推薦使用 let 和 const 宣告變數，而在網上查詢的資料，很可能是 ES6 版本前撰寫的程式碼，那時候宣告變數的方式還是用 var 語法，才會導致上述疑惑的現象。</p>
+<h4 id="var-與-let-const-，主要有幾項差異："><a href="#var-與-let-const-，主要有幾項差異：" class="headerlink" title="var 與 let &#x2F; const ，主要有幾項差異："></a>var 與 let &#x2F; const ，主要有幾項差異：</h4><ul>
+<li>作用域 (scope) 不同</li>
+<li>for 迴圈的綁定 (bind) 差異</li>
+<li>變量提升 (hoisting) 不同</li>
+<li>重複宣告的差異</li>
+</ul>
+<p>這些改變的主要好處是： <u>讓 JS 變數的操作更加嚴謹</u>，減少不直覺、出錯或重複宣告的可能性，藉此讓多人或個人大型開發更順利。</p>
+<h2 id="var-是函式作用域，let-const-是區塊作用域"><a href="#var-是函式作用域，let-const-是區塊作用域" class="headerlink" title="var 是函式作用域，let &#x2F; const 是區塊作用域"></a>var 是函式作用域，let &#x2F; const 是區塊作用域</h2><p>在 ES6 前，並沒有區塊作用域（block scope）的概念，僅有全域（global scope）與函式作用域（function scope），所以 var 宣告的變數，具有函式作用域（function scope）的性質，代表切分最小單位的有效範圍是 function。</p>
+<p>直到 ES6 後，新增區塊（ <code>&#123; &#125; 大括號範圍</code> ）切分的概念， let &#x2F; const 宣告的變數，才具有區塊作用域（block scope）的性質，切分最小單位的有效範圍是 blcok。</p>
+<p>而所謂的作用域就是 「變數有效的作用範圍」，最大為全域作用範圍，意指變數有效範圍是全部範圍。</p>
+<blockquote>
+<p><strong>綜合整理：</strong></p>
+<ul>
+<li>var 具有「函式作用域」，亦即在函式中宣告的變數，有效作用範圍會被限制在該函式中。但不具有區塊作用域，所以<u>在區塊中宣告的變數，依然會作用到區塊之外，並不會被區塊限制住</u>。</li>
+<li>let &#x2F; const 具有「區塊作用域」，亦即<u>在區塊中宣告的變數，有效作用範圍會被限制在該區塊中</u>。</li>
+</ul>
+</blockquote>
+<p>可以先來看看下方的例子。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-comment">/// 「var」 不受區塊限制，區塊外變數存取成功。///</span><br><br>&#123;<br>  <span class="hljs-keyword">var</span> corgiDogName = <span class="hljs-string">&#x27;吐司&#x27;</span>;<br>&#125;<br><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(corgiDogName);<br><span class="hljs-comment">// 吐司</span><br><br><span class="hljs-comment">///「let」會受區塊限制，區塊外變數存取失敗。///</span><br>&#123;<br>  <span class="hljs-keyword">let</span> corgiDogName = <span class="hljs-string">&#x27;吐司&#x27;</span>;<br>&#125;<br><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(corgiDogName);<br><span class="hljs-comment">// ReferenceError: corgiName is not defined</span><br></code></pre></td></tr></table></figure>
+
+<p>雖然 var 不受區塊限制，但會受到函式範圍限制，如下:</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-comment">/// 「var」 受函式限制，函式外變數存取失敗。///</span><br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">callCorgi</span>(<span class="hljs-params"></span>) &#123;<br>  <span class="hljs-keyword">var</span> corgiDogName = <span class="hljs-string">&#x27;吐司&#x27;</span>;<br>&#125;<br><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(corgiDogName);<br><span class="hljs-comment">// ReferenceError: corgiDogName is not defined</span><br><br><span class="hljs-comment">/// 即使用 var 宣告相同的變數名稱 dogName，但因為「 函式作用域 」，所以不會讓同名變數衝突。 ///</span><br><br><span class="hljs-comment">// 將柯基犬命名為吐司，之後用 callCargi() 呼叫</span><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">callCargi</span>(<span class="hljs-params"></span>) &#123;<br>  <span class="hljs-keyword">var</span> dogName = <span class="hljs-string">&#x27;吐司&#x27;</span>;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(dogName);<br>&#125;<br><br><span class="hljs-comment">// 將米克斯犬命名為厚片，之後用 callMix() 呼叫</span><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">callMix</span>(<span class="hljs-params"></span>) &#123;<br>  <span class="hljs-keyword">var</span> dogName = <span class="hljs-string">&#x27;厚片&#x27;</span>;<br>  <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(dogName);<br>&#125;<br><br><span class="hljs-title function_">callCargi</span>(); <span class="hljs-comment">// 吐司</span><br><span class="hljs-title function_">callMix</span>(); <span class="hljs-comment">// 厚片</span><br></code></pre></td></tr></table></figure>
+
+<p>由上述範例，可以看出限定作用域範圍有兩個好處：</p>
+<ul>
+<li>避免同名變數的衝突。</li>
+<li>能維持最小權限的原則，以避免變數資料被不當存取。</li>
+</ul>
+<p>而過往用 var 宣告，僅有 function 函式範圍有這樣的好處，而如今用 let &#x2F; const 宣告，就能讓上述好處發生在 if、for 等「 區塊作用域 」當中，藉此降低多人協作或大型專案的衝突情況。</p>
+<h2 id="var-與-let-，for-迴圈的綁定（bind）差異"><a href="#var-與-let-，for-迴圈的綁定（bind）差異" class="headerlink" title="var 與 let ，for 迴圈的綁定（bind）差異"></a>var 與 let ，for 迴圈的綁定（bind）差異</h2><p>讓我們用一個經典案例作為第二部分的開場。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-comment">/// 用 for 迴圈執行五次，每隔 0.1 秒會印出 i ///</span><br><br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) &#123;<br>  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(i);<br>  &#125;, <span class="hljs-number">100</span>);<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>你覺得上述的程式執行的結果為何？</p>
+<p>（Ａ） 0 、 1 、 2 （Ｂ） 3 、 3 、 3</p>
+<p>是不是 A 啊 ～ No ～ No ～ No ～ 其實是 B 哦。</p>
+<hr>
+<p>我想很多沒學過 var 的人，包括我，都會直覺性的選擇 A ，因為如果我們學的是 let ，而將 var 替換成 let ，答案就會是 A ，這不是更符合 for 的效用嗎！！！ 可惜事與願違，真正執行的結果會是 B。</p>
+<p>上述預期結果應該是 0 1 2 ，卻莫名變成 3 3 3，正與宣告變數語法 var &#x2F; let 有關。究竟怎麼了？</p>
+<p>要解釋這個問題，要分成兩點討論：</p>
+<ol>
+<li>setTimeout() 的時間延遲，與 function 中 console.log(i) 的「 執行時間點 」。</li>
+<li>function 中 console.log(i) 的「 值怎麼來 」的。</li>
+</ol>
+<p>首先來看第一點，當進入 for 迴圈時，宣告變數 <code>var i = 0</code> ，並開始條件判斷，當 <code>i &lt; 3 </code>時， <code>i + 1</code>，執行完後，接著需要等待 0.1 秒的時間，才會進行 <code>setTimeout()</code> 內的 <code>function() &#123; console.log( i ) ; &#125;</code>。</p>
+<p>而 JavaScript 是「異步&#x2F;非同步」語言，因此在等待執行 <code>function() &#123; console.log( i ) ; &#125;</code> 前的這 0.1 秒內，會先執行完已經能執行的 for 迴圈。</p>
+<p>所以現在能理解第一點的結論： <code>function</code> 中，<code>console.log( i )</code> 的執行時間點會在 for 迴圈執行完畢之後。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-comment">///因為非同步與延遲時間，所以會先執行完 for 迴圈後，才執行 function。///</span><br><br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) &#123;<br>  <span class="hljs-comment">// for 迴圈正在 murmur : 還要等你 setTimeout 0.1 秒，不如我先做一做，不要浪費時間。</span><br>  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(i);<br>  &#125;, <span class="hljs-number">100</span>);<br>&#125;<br><span class="hljs-comment">// 3 3 3</span><br></code></pre></td></tr></table></figure>
+
+<p>澄清一下，目前為止所提的第一點，其實與 var 和 let 的差異是沒關係的，只是說明非同步和時間點的狀況。接著進入到第二點，console.log(i) 的值是怎麼來的，這就與 var 和 let 的差異有關了。</p>
+<p>var 是函式作用域，這段 for 迴圈程式碼外沒有任何包覆，所以 var 所宣告的 i 會存在於全域 window (瀏覽器) 當中，且只會被綁定（bind）一次，也可以說是共用一個 instance。</p>
+<p>加上 for 迴圈會先跑完，才 console.log( i )，所以最後 console.log( i ) 的值會才會是 3。</p>
+<p>至於 let 則是「 區塊作用域 」每次 i 都會被紀錄在創造出來的區域中，更精確地說，是每次迭代都會建立一個新的環境（context），而這個環境會紀錄當下的變數 i 值，不會覆蓋掉上一個環境裡面的變數值，因此可以產生多個 i 值。。</p>
+<p>可以看下方的示意圖，來便於理解「整體概念」，但細節上可能有出入。</p>
+<p><img src="https://i.imgur.com/PQ05GIL.png" srcset="/img/loading.gif" lazyload></p>
+<p>讓們適時地整理一下，在 for 迴圈中，</p>
+<ul>
+<li>var 的情況只會綁定一次，而且不具區塊作用域，最終會只有一個值存在於全域中（以此例而言），也可以說只有一個 instance。</li>
+<li>let 的情況會發生重複綁定，而且具有區塊作用域，或者說多個紀錄變數的環境，最終會有多的值存在於 for 迴圈區塊中，也可以說會有多個 instance。</li>
+</ul>
+<p>就實作而言，雖然僅有 var 的情況下也可以用「立即呼叫執行函式 IIFE」處理這樣的狀況，但較為複雜且不直覺，改用 let 後，就能簡單處理，且能更直覺地知道 for 迴圈結果啦！</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-comment">///將 var i 改為 let i 後，輕易解決問題。///</span><br><br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) &#123;<br>  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(i);<br>  &#125;, <span class="hljs-number">100</span>);<br>&#125;<br><span class="hljs-comment">// 0 1 2</span><br><br><span class="hljs-comment">///不改 var i 的情況下，以 IIFE 相對複雜且不直覺。///</span><br><br><span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) &#123;<br>  (<span class="hljs-keyword">function</span> (<span class="hljs-params">x</span>) &#123;<br>    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) &#123;<br>      <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(x);<br>    &#125;, <span class="hljs-number">100</span> * x);<br>  &#125;)(i);<br>&#125;<br><span class="hljs-comment">// 0 1 2</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="var-的提升與-let-const-不同"><a href="#var-的提升與-let-const-不同" class="headerlink" title="var 的提升與 let &#x2F; const 不同"></a>var 的提升與 let &#x2F; const 不同</h2><p>讓我們再次以一個問題開始 :</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(i);<br><span class="hljs-keyword">var</span> i = <span class="hljs-number">5</span>;<br></code></pre></td></tr></table></figure>
+
+<p>你覺得上述的程式執行的結果為何？</p>
+<ul>
+<li>（Ａ） 5</li>
+<li>（Ｂ） ReferenceError</li>
+<li>（Ｃ） undefined</li>
+</ul>
+<p>可以想一下 XD</p>
+<blockquote>
+<p>如果你跟我一樣比較少使用 var ，常使用 let 的話，應該會認為是（Ｂ） ReferenceError。</p>
+<p>當然，不會那麼容易，印出來的結果其實是 （Ｃ） undefined。</p>
+</blockquote>
+<p>非常不直覺啊…，因為 undefined 代表找不到值，已經被宣告，但尚未賦值，而 ReferenceError 則表示根本找不到 i ，尚未宣告。所以一般而言，會預期上述程式碼結果應該為「尚未宣告變數的ReferenceError」。</p>
+<p>但以結果來說，卻是印出 undefined ，即是代表：雖然我們看不見，但其實在 <code>console.log(i)</code> 之前，i 就已經被宣告了，只是尚未賦值。</p>
+<p>是不是頗違反直覺，因為 console.log(i) 前，根本沒有程式碼…。上述狀況，我們可以想像成下面這段程式碼來表示：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-comment">///由於 var 直接變量提升，所以上面程式碼等同下面程式碼///</span><br><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(i);<br><span class="hljs-keyword">var</span> i = <span class="hljs-number">5</span>;<br><span class="hljs-comment">//undefined</span><br><br><span class="hljs-keyword">var</span> i;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(i);<br>i = <span class="hljs-number">5</span>;<br><span class="hljs-comment">//undefined</span><br></code></pre></td></tr></table></figure>
+
+<p>這其中是因為 var 有著「提升（hoisting）」的特性，其實不僅是 var ，function 也有這個特性。</p>
+<p>以 var 宣告變數而言，「 變數提升 」簡而言之是：在執行任何程式碼前，會把變數放進記憶體中，這樣的特點是，可以在程式碼宣告該變數之前使用它。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-comment">/// 因為 hoisting，所以可以在宣告變數前，就預先使用變數，所以可以寫完後一起宣告///</span><br><br>i = <span class="hljs-number">2</span>;<br>n = <span class="hljs-number">3</span>;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(i + n);<br><span class="hljs-keyword">var</span> i;<br><span class="hljs-keyword">var</span> n;<br><span class="hljs-comment">// 5</span><br></code></pre></td></tr></table></figure>
+
+<p>在這樣的情況下，只需要有賦值就不會出錯，即使尚未宣告變數也不會出錯。</p>
+<p>這樣會造成什麼問題？當養成了「 後宣告 」的習慣，如果最後忘了用 var 宣告呢？並不會出錯，只是變數會跑到全域中，變成全域變數，可能造成些 bug，像是：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-comment">/// 函式中沒有用 var 宣告，導致污染到全域 ///</span><br><br><span class="hljs-keyword">var</span> x = <span class="hljs-number">1</span>;<br><br><span class="hljs-keyword">function</span> <span class="hljs-title function_">addFunc</span>(<span class="hljs-params">y</span>) &#123;<br>  x = <span class="hljs-number">100</span>;<br>  x = x + y;<br>&#125;<br><br><span class="hljs-title function_">addFunc</span>(<span class="hljs-number">50</span>);<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(x);<br><span class="hljs-comment">// 150，預期應該要是 1，但函式中的 x 跑出來了</span><br></code></pre></td></tr></table></figure>
+
+<p>而 <code>let</code> 與 <code>const</code> 則不會，而是會進到 暫時死區 (TDZ)，因此在 <code>let</code> 與 <code>const</code> 宣告變數前使用該變數，會出現錯誤：</p>
+<figure class="highlight jsx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs jsx"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(greeting); <span class="hljs-comment">// Uncaught ReferenceError: greeting is not defined</span><br><span class="hljs-keyword">let</span> greeting = <span class="hljs-string">&quot;hi there&quot;</span>;<br></code></pre></td></tr></table></figure>
+
+<h2 id="var-允許重複宣告，let-const-會出錯"><a href="#var-允許重複宣告，let-const-會出錯" class="headerlink" title="var 允許重複宣告，let &#x2F; const 會出錯"></a>var 允許重複宣告，let &#x2F; const 會出錯</h2><p>最後再提一個能幫助防止開發錯誤或衝突的小地方，就是用 var 可以重複宣告同樣名稱的變數，而 let &#x2F; const 如果重複宣告同名變數會出錯。</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">var</span> myDogName = <span class="hljs-string">&#x27;吐司&#x27;</span>;<br><span class="hljs-keyword">var</span> myDogName = <span class="hljs-string">&#x27;厚片&#x27;</span>;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(myDogName);<br><span class="hljs-comment">// 厚片</span><br><br><span class="hljs-keyword">let</span> myDogName = <span class="hljs-string">&#x27;吐司&#x27;</span>;<br><span class="hljs-keyword">let</span> myDogName = <span class="hljs-string">&#x27;厚片&#x27;</span>;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(myDogName);<br><span class="hljs-comment">// SyntaxError: Identifier &#x27;myDogName&#x27; has already been declared</span><br><br><span class="hljs-keyword">const</span> myDogName = <span class="hljs-string">&#x27;吐司&#x27;</span>;<br><span class="hljs-keyword">const</span> myDogName = <span class="hljs-string">&#x27;厚片&#x27;</span>;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(myDogName);<br><span class="hljs-comment">// SyntaxError: Identifier &#x27;myDogName&#x27; has already been declared</span><br></code></pre></td></tr></table></figure>
+
+<p>這點對初學者或多人學做而言更能防止錯誤、容易尋找到錯誤所在。</p>
+<h2 id="var-與-let-const-差異總結"><a href="#var-與-let-const-差異總結" class="headerlink" title="var 與 let &#x2F; const 差異總結"></a>var 與 let &#x2F; const 差異總結</h2><h4 id="名詞解釋"><a href="#名詞解釋" class="headerlink" title="名詞解釋"></a>名詞解釋</h4><ul>
+<li>區域作用域（Function-Scope）：<code>let</code>、<code>const</code> 在區域內才能使用，離開宣告的區域就無法取得資料。</li>
+<li>函式作用域（Block-Scope）：<code>var</code> 依函示決定作用域。</li>
+<li>向上提升（Hoisting）：因為 JavaScript 是依順序執行，若在宣告變數前先執行變數，宣告的變數會提升到最上面，優先宣告變數。</li>
+</ul>
+<h4 id="統整"><a href="#統整" class="headerlink" title="統整"></a>統整</h4><table>
+<thead>
+<tr>
+<th>變數</th>
+<th>Function-Scope 函式作用域 &#x2F; Global-Scope</th>
+<th>Block-Scope 區域作用域</th>
+<th>Reassignable 重複定義</th>
+<th>Redeclarable 重複宣告</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>const</td>
+<td>Ｘ</td>
+<td>Ｖ</td>
+<td>Ｘ</td>
+<td>Ｘ</td>
+</tr>
+<tr>
+<td>Let</td>
+<td>Ｘ</td>
+<td>Ｖ</td>
+<td>Ｖ</td>
+<td>Ｘ</td>
+</tr>
+<tr>
+<td>Var</td>
+<td>Ｖ</td>
+<td>Ｘ</td>
+<td>Ｖ</td>
+<td>Ｖ</td>
+</tr>
+</tbody></table>
+<ul>
+<li>var：ES5 新增的方法，屬於 Function Scope 全域變數，定義後的變數可以被修改，但後來很少人用。</li>
+<li>let： ES6 後新增的方法，屬於 Block Scope 區域變數，定義後的變數可以被修改</li>
+<li>const：ES6 後新增的方法，屬於 Block Scope 區域變數，定義後的變數不可以被修改</li>
+</ul>
+<hr>
+<p>綜合來說就是 let&#x2F;const 將宣告變數變得更加嚴謹，藉此增加易讀性、防止出錯，而最重要的 CTA ，我想就是：</p>
+<blockquote>
+<p>在 JS 中，不要再用 var ，請都使用 let &#x2F; const 宣告變數吧！</p>
+</blockquote>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="../../../../categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" class="category-chain-item">技術筆記</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="../../../../tags/JavaScript/" class="print-no-link">#JavaScript</a>
+      
+        <a href="../../../../tags/Studies/" class="print-no-link">#Studies</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="../../../../2022/01/19/Tailwind/" title="TailwindCSS 逐步上手">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">TailwindCSS 逐步上手</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="../../../09/30/pm361_activity/" title="【心得分享】寫在活動之後">
+                        <span class="hidden-mobile">【心得分享】寫在活動之後</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目錄</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜尋</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">關鍵字</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <span>Kimi 2024</span> <i class="iconfont icon-love"></i> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo </span></a> <span>Theme </span> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="../../../../js/events.js" ></script>
+<script  src="../../../../js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="../../../../js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="../../../../js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="../../../../js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允許 JavaScript 運行的環境下瀏覽效果更佳</div>
+  </noscript>
+</body>
+</html>
