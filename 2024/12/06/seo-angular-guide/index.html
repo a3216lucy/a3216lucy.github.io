@@ -1,0 +1,812 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-TW" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="../../../../img/icon.png">
+  <link rel="icon" href="../../../../img/icon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Kimi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="紀錄一下如何為 Angular 專案導入 SEO，從觀念到實際改造成 SSR／預渲染的步驟。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【SEO 導入】指南">
+<meta property="og:url" content="https://lyskimi.org/2024/12/06/seo-angular-guide/index.html">
+<meta property="og:site_name" content="Kimi&#39;s Personal Blog">
+<meta property="og:description" content="紀錄一下如何為 Angular 專案導入 SEO，從觀念到實際改造成 SSR／預渲染的步驟。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2024-12-06T02:14:00.000Z">
+<meta property="article:modified_time" content="2026-07-24T07:23:27.680Z">
+<meta property="article:author" content="Kimi">
+<meta property="article:tag" content="SEO">
+<meta property="article:tag" content="Angular">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>【SEO 導入】指南 - Kimi&#39;s Personal Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="../../../../css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="../../../../css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="../../../../css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lyskimi.org","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="../../../../js/utils.js" ></script>
+  <script  src="../../../../js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="../../../../index.html">
+      <strong>Kimi&#39;s Personal Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../index.html" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首頁</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../archives/" target="_self">
+                <i class="iconfont icon-book"></i>
+                <span>文章</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分類</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>作品</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('../../../../img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">【SEO 導入】指南</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-06 10:14" pubdate>
+          2024-12-06
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.8k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          40 分鐘
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">【SEO 導入】指南</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>紀錄一下如何為 Angular 專案導入 SEO，從觀念到實際改造成 SSR／預渲染的步驟。</p>
+<span id="more"></span>
+
+<h2 id="SEO-是什麼？"><a href="#SEO-是什麼？" class="headerlink" title="SEO 是什麼？"></a>SEO 是什麼？</h2><p>通過優化網站內容和結構，讓網站在搜索引擎（例如 Google ）的自然搜索結果中排名更高，從而吸引更多的訪客。</p>
+<h2 id="SEO-與-Angular-的關係"><a href="#SEO-與-Angular-的關係" class="headerlink" title="SEO 與 Angular 的關係"></a>SEO 與 Angular 的關係</h2><h3 id="1、Angular-預設使用-CSR"><a href="#1、Angular-預設使用-CSR" class="headerlink" title="1、Angular 預設使用 CSR"></a>1、Angular 預設使用 CSR</h3><p>Angular 預設使用 **Client-Side Rendering (CSR)**，這意味著網頁內容是在瀏覽器上動態生成的。</p>
+<p>這樣不符合 SEO，因爲：</p>
+<ul>
+<li>搜索引擎的爬蟲可能無法執行 JavaScript，導致無法看到完整的內容。</li>
+<li>內容加載時間可能延遲，降低搜索引擎的抓取效率。</li>
+</ul>
+<h3 id="2、使用-SSR-改善-SEO"><a href="#2、使用-SSR-改善-SEO" class="headerlink" title="2、使用 SSR 改善 SEO"></a>2、使用 SSR 改善 SEO</h3><p><strong>Server-Side Rendering (SSR)</strong> 是 Angular 的解決方案，可以在伺服器上生成完整的 HTML，直接發送給瀏覽器。</p>
+<p>這樣：</p>
+<ul>
+<li>搜索引擎可以直接抓取完整的內容。</li>
+<li>網頁的首次加載速度更快。</li>
+<li>提高低功率設備的性能。</li>
+</ul>
+<h2 id="哪些頁面需要改成支援-SEO？"><a href="#哪些頁面需要改成支援-SEO？" class="headerlink" title="哪些頁面需要改成支援 SEO？"></a>哪些頁面需要改成支援 SEO？</h2><p>並非所有頁面都需要支援 SEO，特別是功能性頁面（例如登入、表單提交）通常不會被搜索引擎索引。</p>
+<p>以下是判斷哪些頁面需要 SEO 的標準：</p>
+<h3 id="需要-SEO-支援的頁面："><a href="#需要-SEO-支援的頁面：" class="headerlink" title="需要 SEO 支援的頁面："></a>需要 SEO 支援的頁面：</h3><ol>
+<li><strong>公開頁面</strong>：不需要登入即可訪問的內容，例如：<ul>
+<li>平台介紹、關於我們、聯繫我們。</li>
+<li>部落格文章、新聞、公告等資訊頁。</li>
+<li>特定產品頁、功能說明頁。</li>
+</ul>
+</li>
+<li><strong>需要高排名的頁面</strong>：希望通過 Google 或其他搜索引擎吸引用戶的頁面。</li>
+<li><strong>內容類型頁面</strong>：<ul>
+<li>包含描述性內容的頁面，例如文案、列表、圖片等。</li>
+<li>需要分享的頁面（社群平台上的連結預覽需要正確的標題、圖片和描述）。</li>
+</ul>
+</li>
+<li><strong>多語系頁面</strong>：國際化網站，SEO 可幫助不同地區的搜索引擎更好地理解頁面語言版本。</li>
+</ol>
+<h3 id="不需要-SEO-支援的頁面："><a href="#不需要-SEO-支援的頁面：" class="headerlink" title="不需要 SEO 支援的頁面："></a>不需要 SEO 支援的頁面：</h3><ol>
+<li><strong>私有頁面</strong>：如登入頁、用戶中心、個人資料設定等，通常不對搜索引擎公開。</li>
+<li><strong>動態工具型頁面</strong>：如查詢頁、表單提交頁、即時交互性工具。</li>
+<li><strong>API 呼叫依賴頁面</strong>：需要大量客戶端渲染，或數據全部來自後端 API 的頁面。</li>
+</ol>
+<h2 id="改成-SSR-的影響與注意事項"><a href="#改成-SSR-的影響與注意事項" class="headerlink" title="改成 SSR 的影響與注意事項"></a>改成 SSR 的影響與注意事項</h2><h3 id="正面影響："><a href="#正面影響：" class="headerlink" title="正面影響："></a>正面影響：</h3><ol>
+<li><strong>更快的渲染時間</strong>：伺服器端生成的 HTML 能直接返回完整的內容，提升用戶體驗。</li>
+<li><strong>更好的 SEO 表現</strong>：搜尋引擎能夠讀取完整的 HTML 結構，進一步改善頁面的可見性。</li>
+<li><strong>預加載內容</strong>：減少客戶端 API 請求數量。</li>
+</ol>
+<h3 id="潛在挑戰："><a href="#潛在挑戰：" class="headerlink" title="潛在挑戰："></a>潛在挑戰：</h3><ol>
+<li><strong>伺服器負擔加重</strong>：SSR 需要在伺服器端生成完整的 HTML，對伺服器的性能有額外需求。</li>
+<li><strong>開發複雜性增加</strong>：需要區分伺服器和客戶端的行為，例如 window 或 document 等 API 不能直接使用。</li>
+<li><strong>安全性問題</strong>：伺服器端渲染的數據可能需要額外處理以避免敏感資訊泄露。</li>
+<li><strong>驗證碼、表單等動態功能的限制</strong>：這些功能可能需要額外調整以在 SSR 環境下正常運行。</li>
+</ol>
+<h2 id="如何改造支援-SEO？"><a href="#如何改造支援-SEO？" class="headerlink" title="如何改造支援 SEO？"></a>如何改造支援 SEO？</h2><p>以下我將以 kimi-seo-demo 專案為例，跟著操作時，請將 kimi-seo-demo 置換成你所使用的專案名稱。</p>
+<h3 id="1-確定使用-SSR-或預渲染（Prerendering）"><a href="#1-確定使用-SSR-或預渲染（Prerendering）" class="headerlink" title="1. 確定使用 SSR 或預渲染（Prerendering）"></a>1. 確定使用 SSR 或預渲染（Prerendering）</h3><p>在開始之前，要先確認哪些頁面要改成支援 SSR 和預渲染，哪些維持舊有的 CSR。</p>
+<ul>
+<li><strong>SSR</strong>：適合需要即時渲染或依賴動態內容的頁面，例如多語系、需要數據 API 的頁面。</li>
+<li><strong>預渲染</strong>：適合靜態內容固定的頁面（不需要動態生成內容），如平台介紹、FAQ、隱私政策等。</li>
+</ul>
+<blockquote>
+<p>Angular 中可使用  <a target="_blank" rel="noopener" href="https://angular.io/guide/universal"><strong>Angular Universal</strong></a> <strong>實現 SSR 或 Prerendering。</strong></p>
+</blockquote>
+<h3 id="2-Angular-Universal-詳細步驟"><a href="#2-Angular-Universal-詳細步驟" class="headerlink" title="2. Angular Universal 詳細步驟"></a>2. Angular Universal 詳細步驟</h3><h4 id="1-設定-Angular-Universal"><a href="#1-設定-Angular-Universal" class="headerlink" title="(1) 設定 Angular Universal"></a>(1) 設定 Angular Universal</h4><p>在 Angular 專案中加入 SSR 支援：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">ng add @nguniversal/express-engine<br></code></pre></td></tr></table></figure>
+
+<p>這個指令會自動：</p>
+<p>• 安裝 Angular Universal 的相關套件<br>• 設定 SSR 的 Express 伺服器<br>• 生成一個 <code>server.ts</code> 文件，更新你的 <code>angular.json</code> 和 <code>package.json</code></p>
+<h4 id="2-檢查並確認-angular-json-設定檔"><a href="#2-檢查並確認-angular-json-設定檔" class="headerlink" title="(2) 檢查並確認 angular.json 設定檔"></a>(2) 檢查並確認 angular.json 設定檔</h4><p>確認  projects.architect 內有包含以下配置（若無，請將以下內容加入 angular.json）：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;serve-ssr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;builder&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;@nguniversal/builders:ssr-dev-server&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;configurations&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>	<span class="hljs-attr">&quot;development&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>	  <span class="hljs-attr">&quot;browserTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:build:dev&quot;</span><span class="hljs-punctuation">,</span><br>	  <span class="hljs-attr">&quot;serverTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:server:dev&quot;</span><br>	<span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>	<span class="hljs-attr">&quot;production&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>	  <span class="hljs-attr">&quot;browserTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:build:production&quot;</span><span class="hljs-punctuation">,</span><br>	  <span class="hljs-attr">&quot;serverTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:server:production&quot;</span><br>	<span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;defaultConfiguration&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;development&quot;</span><br><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br><span class="hljs-attr">&quot;prerender&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;builder&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;@nguniversal/builders:prerender&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;options&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>	<span class="hljs-attr">&quot;routes&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>	  <span class="hljs-string">&quot;/&quot;</span><br>	<span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;configurations&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>	<span class="hljs-attr">&quot;production&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>	  <span class="hljs-attr">&quot;browserTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:build:production&quot;</span><span class="hljs-punctuation">,</span><br>	  <span class="hljs-attr">&quot;serverTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:server:production&quot;</span><br>	<span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>	<span class="hljs-attr">&quot;development&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>	  <span class="hljs-attr">&quot;browserTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:build:development&quot;</span><span class="hljs-punctuation">,</span><br>	  <span class="hljs-attr">&quot;serverTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:server:development&quot;</span><br>	<span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>	<span class="hljs-attr">&quot;ssr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>	  <span class="hljs-attr">&quot;browserTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:build:production&quot;</span><span class="hljs-punctuation">,</span><br>	  <span class="hljs-attr">&quot;serverTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:build:server:ssr&quot;</span><br>	<span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;defaultConfiguration&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;production&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="3-確認更新-package-json-設定"><a href="#3-確認更新-package-json-設定" class="headerlink" title="(3) 確認更新 package.json 設定"></a>(3) 確認更新 package.json 設定</h4><p>在你的 package.json 中，設置應該如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;dev:ssr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;ng run kimi-seo-demo:serve-ssr:development&quot;</span><span class="hljs-punctuation">,</span><br><span class="hljs-attr">&quot;serve:ssr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;node dist/kimi-seo-demo/server/main.js&quot;</span><span class="hljs-punctuation">,</span><br><span class="hljs-attr">&quot;build:ssr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;ng build &amp;&amp; ng run kimi-seo-demo:server:production&quot;</span><span class="hljs-punctuation">,</span><br><span class="hljs-attr">&quot;prerender&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;ng run kimi-seo-demo:prerender&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="4-確認-main-server-ts-檔案-import-路徑位置是否正確"><a href="#4-確認-main-server-ts-檔案-import-路徑位置是否正確" class="headerlink" title="(4) 確認 main.server.ts 檔案 import 路徑位置是否正確"></a>(4) 確認 main.server.ts 檔案 import 路徑位置是否正確</h4><p>在安裝 Angular Universal 後，會自動在 src 下生成 <code>main.server.ts</code> ，請確認 <code>tsconfig.server.json</code> 中指定該檔案的路徑位置是否正確。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-comment">//tsconfig.server.json</span><br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;extends&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;./tsconfig.app.json&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;compilerOptions&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;outDir&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;../out-tsc/server&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;types&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>      <span class="hljs-string">&quot;node&quot;</span><br>    <span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;files&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>    <span class="hljs-string">&quot;./main.server.ts&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;../server.ts&quot;</span><br>  <span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">&#125;</span><br><br></code></pre></td></tr></table></figure>
+<h4 id="5-修改應用邏輯"><a href="#5-修改應用邏輯" class="headerlink" title="(5) 修改應用邏輯"></a>(5) 修改應用邏輯</h4><h5 id="要特別注意："><a href="#要特別注意：" class="headerlink" title="要特別注意："></a>要特別注意：</h5><blockquote>
+<p>由於 SSR 是透過 nodejs 預先將頁面進行編譯以及載入，因此是不支援 windows 或是 localStorage等其他在 Web 上的功能。需要額外加上判斷，透過瀏覽器去運行才不會報錯。</p>
+</blockquote>
+<p>在每個組件中，可以根據 PLATFORM_ID 和 isPlatformServer 或 isPlatformBrowser 來判斷當前的渲染模式，由不同的渲染方式來決定資料抓取的策略。</p>
+<p><strong>環境判斷：</strong></p>
+<ul>
+<li>使用 isPlatformBrowser 判斷客戶端行為。</li>
+<li>使用 isPlatformServer 判斷伺服器行為。</li>
+</ul>
+<h5 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h5><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; isPlatformBrowser, isPlatformServer &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/common&#x27;</span>;<br><br><span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-meta">@Inject</span>(PLATFORM_ID) <span class="hljs-keyword">private</span> platformId: <span class="hljs-built_in">any</span></span>) &#123; &#125;<br><br><span class="hljs-keyword">if</span> (<span class="hljs-title function_">isPlatformBrowser</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">platformId</span>)) &#123;<br>  <span class="hljs-comment">// CSR 渲染，客戶端邏輯</span><br>&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-title function_">isPlatformServer</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">platformId</span>)) &#123;<br>  <span class="hljs-comment">// SSR 渲染，伺服器端邏輯</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>localStorage 可以改成這樣的寫法</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-comment">// 讓 node.js 讀懂的語法</span><br><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;localStorage-polyfill&#x27;</span>;<br><br><span class="hljs-variable language_">global</span>[<span class="hljs-string">&#x27;localStorage&#x27;</span>] = <span class="hljs-variable language_">localStorage</span>;<br></code></pre></td></tr></table></figure>
+
+<p>如果需要操作 DOM（與瀏覽器相關的 API，包含 window、document、 jQuery、牽涉到畫面甚至是動畫效果的），可以參考下面的方式來處理。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Inject</span>, <span class="hljs-variable constant_">PLATFORM_ID</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-variable constant_">DOCUMENT</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/common&#x27;</span>;<br><br><span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span><br><span class="hljs-params">	<span class="hljs-meta">@Inject</span>(PLATFORM_ID) <span class="hljs-keyword">private</span> platformId</span><br><span class="hljs-params">	<span class="hljs-meta">@Inject</span>(DOCUMENT) <span class="hljs-keyword">private</span> <span class="hljs-variable language_">document</span>: Document,</span><br><span class="hljs-params"></span>) &#123;<br>	<span class="hljs-variable language_">this</span>.<span class="hljs-property">isBrowser</span> = <span class="hljs-title function_">isPlatformBrowser</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">platformId</span>);<br>	<span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">isBrowser</span>) <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;scroll&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">onWindowScroll</span>(e));<br>&#125;<br><br><span class="hljs-title function_">onWindowScroll</span>(<span class="hljs-params">e</span>) &#123;<br>		<span class="hljs-keyword">if</span> (<span class="hljs-variable language_">window</span>.<span class="hljs-property">scrollY</span> &gt; <span class="hljs-number">30</span>) &#123;<br>			<span class="hljs-keyword">const</span> element = <span class="hljs-variable language_">this</span>.<span class="hljs-property">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;navbar-top&#x27;</span>);<br>			<span class="hljs-keyword">if</span> (element) &#123;<br>				element?.<span class="hljs-property">classList</span>.<span class="hljs-title function_">remove</span>(<span class="hljs-string">&#x27;navbar-transparent&#x27;</span>);<br>				element?.<span class="hljs-property">classList</span>.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;bg-blue&#x27;</span>);<br>			&#125;<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			<span class="hljs-keyword">const</span> element = <span class="hljs-variable language_">this</span>.<span class="hljs-property">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;navbar-top&#x27;</span>);<br>			<span class="hljs-keyword">if</span> (element) &#123;<br>				element?.<span class="hljs-property">classList</span>.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;navbar-transparent&#x27;</span>);<br>				element?.<span class="hljs-property">classList</span>.<span class="hljs-title function_">remove</span>(<span class="hljs-string">&#x27;bg-blue&#x27;</span>);<br>			&#125;<br>		&#125;<br>	&#125;<br></code></pre></td></tr></table></figure>
+
+<p>透過類似像這樣的方式來判斷當前執行此段程式碼是否為 Browser；若是在 SSR 編譯時期，則該段程式就不會被運行。</p>
+<h4 id="6-減少伺服器端-API-請求"><a href="#6-減少伺服器端-API-請求" class="headerlink" title="(6) 減少伺服器端 API 請求"></a>(6) 減少伺服器端 API 請求</h4><p>對於需要 CSR 渲染的頁面，可以使用 TransferState 來延遲資料的抓取，這樣就能避免在 SSR 渲染過程中抓取資料。</p>
+<ol>
+<li><strong>安裝</strong> @angular&#x2F;platform-browser ，以便使用 TransferState。</li>
+<li><strong>在 SSR 渲染時先傳遞資料到客戶端</strong>，然後在客戶端渲染時使用這些資料。</li>
+</ol>
+<p>例如，對於 CSR 頁面，你可以在伺服器端不發出 API 請求，而是讓客戶端控制資料的更新。</p>
+<h5 id="使用-TransferState"><a href="#使用-TransferState" class="headerlink" title="使用 TransferState"></a>使用 TransferState</h5><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Injectable</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">TransferState</span>, makeStateKey &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/platform-browser&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">HttpClient</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/common/http&#x27;</span>;<br><br><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">DATA_KEY</span> = makeStateKey&lt;<span class="hljs-built_in">string</span>&gt;(<span class="hljs-string">&#x27;data&#x27;</span>);<br><br><span class="hljs-meta">@Injectable</span>(&#123;<br>  <span class="hljs-attr">providedIn</span>: <span class="hljs-string">&#x27;root&#x27;</span><br>&#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">DataService</span> &#123;<br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> http: HttpClient, <span class="hljs-keyword">private</span> transferState: TransferState</span>) &#123;&#125;<br><br>  <span class="hljs-title function_">getData</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">const</span> savedData = <span class="hljs-variable language_">this</span>.<span class="hljs-property">transferState</span>.<span class="hljs-title function_">get</span>(<span class="hljs-variable constant_">DATA_KEY</span>, <span class="hljs-literal">null</span>);<br>    <span class="hljs-keyword">if</span> (savedData) &#123;<br>      <span class="hljs-keyword">return</span> savedData;  <span class="hljs-comment">// 使用 TransferState 傳遞的資料</span><br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>      <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">http</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;https://api.example.com/data&#x27;</span>);<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="7-測試-SSR"><a href="#7-測試-SSR" class="headerlink" title="(7) 測試 SSR"></a>(7) 測試 SSR</h4><p>執行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">npm run build:ssr // 部署<br>npm run dev:ssr  // 執行 ssr<br></code></pre></td></tr></table></figure>
+
+<p>就可以開啟瀏覽器到 <a target="_blank" rel="noopener" href="http://localhost:4200/">http://localhost:4200</a> 確認 Web 是否正常執行。</p>
+<h3 id="3-加入基本的-SEO-設定"><a href="#3-加入基本的-SEO-設定" class="headerlink" title="3. 加入基本的 SEO 設定"></a>3. 加入基本的 SEO 設定</h3><h4 id="1-增加-SEO-Metadata"><a href="#1-增加-SEO-Metadata" class="headerlink" title="(1) 增加 SEO Metadata"></a>(1) 增加 SEO Metadata</h4><p>建立 html meta tag，讓網路爬蟲看懂你的網站。<br>在 angular 中，已有定義好 Meta class，我們可以在每頁的 ngOnInit 階段去定義每頁的 mega tag。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Title</span>, <span class="hljs-title class_">Meta</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/platform-browser&#x27;</span>;<br><br><span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> title: Title, <span class="hljs-keyword">private</span> meta: Meta</span>) &#123;&#125;<br><br><span class="hljs-title function_">ngOnInit</span>(<span class="hljs-params"></span>) &#123;<br>  <span class="hljs-variable language_">this</span>.<span class="hljs-property">title</span>.<span class="hljs-title function_">setTitle</span>(<span class="hljs-string">&#x27;kimi SEO demo&#x27;</span>);<br>  <span class="hljs-variable language_">this</span>.<span class="hljs-property">meta</span>.<span class="hljs-title function_">addTags</span>([<br>    &#123; <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;description&#x27;</span>, <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;Page description&#x27;</span> &#125;,<br>    &#123; <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;keywords&#x27;</span>, <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;SEO, Angular, Universal&#x27;</span> &#125;,<br>  ]);<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="2-建立-robots-txt、sitemap-xml"><a href="#2-建立-robots-txt、sitemap-xml" class="headerlink" title="(2) 建立 robots.txt、sitemap.xml"></a>(2) 建立 robots.txt、sitemap.xml</h4><blockquote>
+<p>robots.txt <strong>文件</strong>：</p>
+</blockquote>
+<p>• <strong>控制搜索引擎爬蟲的行為</strong>：robots.txt 是一個用來告訴搜索引擎爬蟲（如 Googlebot）哪些頁面或資料夾不應該被抓取或索引的文件。這對於保護網站的某些私密內容、減少爬蟲負擔、或對 SEO 進行策略性管理非常重要。<br>• <strong>防止敏感內容被抓取</strong>：可以指定不想被爬蟲抓取的頁面，例如登入頁面或管理頁面。<br>• <strong>節省伺服器資源</strong>：有時候，某些頁面不需要被搜索引擎索引（例如登錄頁面或資料夾），設置 robots.txt 可以防止這些頁面被爬蟲掃描，減少伺服器的負擔。</p>
+<blockquote>
+<p>sitemap.xml <strong>文件</strong>：</p>
+</blockquote>
+<p>• <strong>告訴搜索引擎網站的結構</strong>：sitemap.xml 是一個用來告訴搜索引擎網站內所有頁面的檔案。它幫助搜索引擎快速了解網站的頁面結構，並有效地抓取網站內容。<br>• <strong>提高索引效率</strong>：對於大型網站，sitemap.xml 可以提高頁面的抓取效率，特別是當網站有很多頁面或是頁面經常更新的時候。<br>• <strong>標示重要頁面</strong>：可以在 sitemap.xml 中指定某些頁面的優先級，告訴搜索引擎哪些頁面應該被優先索引。</p>
+<hr>
+<p>在專案根目錄下，新增  robots.txt 文件</p>
+<h5 id="範例-1"><a href="#範例-1" class="headerlink" title="範例"></a>範例</h5><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-comment">//robots.txt</span><br><span class="hljs-title class_">User</span>-<span class="hljs-attr">agent</span>: *        <span class="hljs-comment">// 這告訴所有爬蟲（*表示所有爬蟲）</span><br><span class="hljs-title class_">Disallow</span>: <span class="hljs-regexp">/login/</span>    <span class="hljs-comment">// 這告訴爬蟲不要抓取網站上的 /login/ 路徑</span><br><span class="hljs-title class_">Disallow</span>: <span class="hljs-regexp">/admin/</span><br><span class="hljs-title class_">Allow</span>: <span class="hljs-regexp">/public/</span>      <span class="hljs-comment">// 這告訴爬蟲可以抓取 /public/ 資料夾中的內容</span><br><span class="hljs-title class_">Sitemap</span>: <span class="hljs-attr">https</span>:<span class="hljs-comment">//www.kunyoutech.com.tw/sitemap.xml       // 這告訴爬蟲你的網站的 URL</span><br></code></pre></td></tr></table></figure>
+
+<p>在專案根目錄下，新增 sitemap.xml 文件</p>
+<h5 id="範例-2"><a href="#範例-2" class="headerlink" title="範例"></a>範例</h5><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;UTF-8&quot;</span>?&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">urlset</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">&quot;http://www.sitemaps.org/schemas/sitemap/0.9&quot;</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">url</span>&gt;</span><br>	<span class="hljs-comment">&lt;!-- loc: 指定 URL 位置 --&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">loc</span>&gt;</span>https://www.example.com/<span class="hljs-tag">&lt;/<span class="hljs-name">loc</span>&gt;</span><br>    <span class="hljs-comment">&lt;!-- lastmod：指定頁面最後一次更新的日期 --&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">lastmod</span>&gt;</span>2024-12-06<span class="hljs-tag">&lt;/<span class="hljs-name">lastmod</span>&gt;</span><br>    <span class="hljs-comment">&lt;!-- changefreq：告訴爬蟲該頁面更新的頻率（如 daily、weekly、monthly） --&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">changefreq</span>&gt;</span>daily<span class="hljs-tag">&lt;/<span class="hljs-name">changefreq</span>&gt;</span><br>    <span class="hljs-comment">&lt;!-- priority：指定該頁面的優先級（0.0 到 1.0），1.0 代表最高優先級 --&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">priority</span>&gt;</span>1.0<span class="hljs-tag">&lt;/<span class="hljs-name">priority</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">url</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">url</span>&gt;</span><br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">loc</span>&gt;</span>https://www.example.com/about<span class="hljs-tag">&lt;/<span class="hljs-name">loc</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">lastmod</span>&gt;</span>2024-12-06<span class="hljs-tag">&lt;/<span class="hljs-name">lastmod</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">changefreq</span>&gt;</span>monthly<span class="hljs-tag">&lt;/<span class="hljs-name">changefreq</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">priority</span>&gt;</span>0.8<span class="hljs-tag">&lt;/<span class="hljs-name">priority</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">url</span>&gt;</span><br>  <span class="hljs-comment">&lt;!-- 更多頁面 --&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">urlset</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h5 id="常見-XML-sitemap-生成工具"><a href="#常見-XML-sitemap-生成工具" class="headerlink" title="常見 XML sitemap 生成工具"></a>常見 XML sitemap 生成工具</h5><p>• <a target="_blank" rel="noopener" href="https://www.xml-sitemaps.com/">XML-sitemaps.com</a><br>• <a target="_blank" rel="noopener" href="https://www.screamingfrog.co.uk/seo-spider/">Screaming Frog SEO Spider</a></p>
+<h4 id="3-測試-robots-txt、sitemap-xml"><a href="#3-測試-robots-txt、sitemap-xml" class="headerlink" title="(3) 測試 robots.txt、sitemap.xml"></a>(3) 測試 robots.txt、sitemap.xml</h4><h5 id="方法一：使用-Google-Search-Console-的「robots-txt-測試工具」"><a href="#方法一：使用-Google-Search-Console-的「robots-txt-測試工具」" class="headerlink" title="方法一：使用 Google Search Console 的「robots.txt 測試工具」"></a>方法一：使用 Google Search Console 的「robots.txt 測試工具」</h5><p>Google Search Console 提供了一個內建的工具來測試 robots.txt 的配置：</p>
+<ul>
+<li>登入 <a target="_blank" rel="noopener" href="https://search.google.com/search-console">Google Search Console</a></li>
+<li>選擇希望測試的網站</li>
+<li>在左側選單中找到「設定」&gt;「robots.txt 測試工具」</li>
+<li>輸入想測試的 URL（例如 &#x2F;login&#x2F;），並檢查 Googlebot 是否可以抓取該頁面</li>
+<li>這個工具會顯示哪些頁面被允許或拒絕抓取，確保 robots.txt 設置正確</li>
+</ul>
+<h5 id="方法二：使用第三方工具「-Robots-txt-Checker」檢查"><a href="#方法二：使用第三方工具「-Robots-txt-Checker」檢查" class="headerlink" title="方法二：使用第三方工具「 Robots.txt Checker」檢查"></a>方法二：使用第三方工具「 Robots.txt Checker」檢查</h5><p>• <a target="_blank" rel="noopener" href="https://www.mcanerin.com/robots-txt-checker/">Robots.txt Checker</a>。</p>
+<p>這個工具可以幫助確認 robots.txt 文件的語法正確，並檢查是否存在配置錯誤。</p>
+<hr>
+<h5 id="方法一：使用-Google-Search-Console-的「sitemap-測試工具」"><a href="#方法一：使用-Google-Search-Console-的「sitemap-測試工具」" class="headerlink" title="方法一：使用 Google Search Console 的「sitemap 測試工具」"></a>方法一：使用 Google Search Console 的「sitemap 測試工具」</h5><p>Google Search Console 也有一個專門用來提交和測試 sitemap.xml 的功能：</p>
+<ul>
+<li>登入 <a target="_blank" rel="noopener" href="https://search.google.com/search-console">Google Search Console</a></li>
+<li>選擇希望測試的網站。</li>
+<li>在左側選單中選擇「索引」&gt;「網站地圖」</li>
+<li>點擊右上角的「新增&#x2F;測試網站地圖」</li>
+<li>輸入 sitemap.xml 文件的 URL（例如 <a target="_blank" rel="noopener" href="https://www.example.com/sitemap.xml">https://www.example.com/sitemap.xml</a> )，然後點擊「提交」， Google Search Console 會顯示提交狀態、抓取的結果，以及可能的錯誤。</li>
+</ul>
+<h5 id="方法二：使用第三方工具檢查"><a href="#方法二：使用第三方工具檢查" class="headerlink" title="方法二：使用第三方工具檢查"></a>方法二：使用第三方工具檢查</h5><p>有許多第三方工具可以檢查 sitemap.xml 是否有效，並確保網站地圖的語法正確：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://www.xml-sitemaps.com/validate-xml-sitemap.html">XML Sitemap Validator</a>：這個工具可以幫助你檢查 XML 地圖文件的有效性。</li>
+<li><a target="_blank" rel="noopener" href="https://www.screamingfrog.co.uk/seo-spider/">Screaming Frog SEO Spider</a>：這是一個強大的 SEO 工具，可以抓取網站並生成 sitemap.xml，還能夠檢查 URL 是否符合 SEO 最佳實踐。</li>
+</ul>
+<h3 id="4-準備靜態檔案，進行-Prerender"><a href="#4-準備靜態檔案，進行-Prerender" class="headerlink" title="4. 準備靜態檔案，進行 Prerender"></a>4. 準備靜態檔案，進行 Prerender</h3><h4 id="1-提供靜態內容"><a href="#1-提供靜態內容" class="headerlink" title="(1) 提供靜態內容"></a>(1) 提供靜態內容</h4><p>在專案的 <code>src/assets</code> 資料夾中準備靜態內容，因為 Angular CLI 會預設就會將這些內容當作是靜態資源，之後再透過 API 抓取這些內容顯示。</p>
+<p>例如：將以下 JSON 檔案命名為 posts.json，用於存放文章的基本資訊（metadata）</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-comment">// src/assets/blog/posts.json</span><br><span class="hljs-punctuation">[</span><br>  <span class="hljs-punctuation">&#123;</span> <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;文章 01&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;file&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post-1.md&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;slug&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post-1&quot;</span> <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-punctuation">&#123;</span> <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;文章 02&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;file&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post-2.md&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;slug&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post-2&quot;</span> <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-punctuation">&#123;</span> <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;文章 03&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;file&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post-3.md&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;slug&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post-3&quot;</span> <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-punctuation">&#123;</span> <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;文章 04&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;file&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post-4.md&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;slug&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post-4&quot;</span> <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">]</span><br></code></pre></td></tr></table></figure>
+
+<p>在同一目錄下，準備對應的文章檔案，如 post-1.md：</p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs md"><span class="hljs-section"># 文章標題</span><br>這是一篇範例文章。<br></code></pre></td></tr></table></figure>
+
+<p>要特別注意：</p>
+<ol>
+<li>在執行 Prerender 時，需要執行一個伺服器來提供這些靜態檔案</li>
+<li>抓不到資料時，要做出適當的錯誤處理</li>
+</ol>
+<p>針對顯示靜態內容的部分，可以使用 lite-server 幫我們快速達成</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">npx lite-server --baseDir=./src<br></code></pre></td></tr></table></figure>
+
+<p>之後抓資料時必須指定完整的網址才能正常抓到資料：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-comment">// 要看實際上 lite-server 開啟後的 port</span><br>posts$ = <span class="hljs-variable language_">this</span>.<span class="hljs-property">httpClient</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;http://localhost:3000/assets/blog/posts.json&#x27;</span>);<br></code></pre></td></tr></table></figure>
+
+<h4 id="2-進行環境設定調整"><a href="#2-進行環境設定調整" class="headerlink" title="(2) 進行環境設定調整"></a>(2) 進行環境設定調整</h4><p>實際上線時，除了進入該頁時本來就會有靜態內容之外，其餘的過程還是會走 Angular 本身的處理，當透過路由機制切換到其他頁面時，就不可能像 Prerender 時指定一個本地端的位置，因此要把 prerender 的環境也切出來。</p>
+<p>我們可以建立一個 <code>environment.ssr.ts</code> 來處理伺服器端地抓檔問題，並指定靜態檔案的來源：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> environment = &#123;<br>  <span class="hljs-attr">production</span>: <span class="hljs-literal">true</span>,<br>  <span class="hljs-attr">assetsUrl</span>: <span class="hljs-string">&#x27;http://localhost:3000/&#x27;</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>其他的 <code>environment.ts</code> 和 <code>environment.prod.ts</code> 則可以加上 <code>assetUrl: &#39;&#39;</code> 設定，來抓取相對路徑的資源，使用 HttpClient 的寫法就會改成：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">import</span> &#123; environment &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../environment&#x27;</span>;<br><br>...<br><br>posts$ = <span class="hljs-variable language_">this</span>.<span class="hljs-property">httpClient</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">`<span class="hljs-subst">$&#123;environment.assetsUrl&#125;</span>assets/blog/posts.json`</span>)<br></code></pre></td></tr></table></figure>
+
+<p> <code>angular.json</code> 內的設定也需要調整，讓我們在 prerender 時能換掉 <code>environment.ts</code>。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  ...<br>  <span class="hljs-attr">&quot;projects&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;kimi-seo-demo&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      ...<br>      <span class="hljs-attr">&quot;architect&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        ...<br>        <span class="hljs-attr">&quot;server&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>          ...<br>          <span class="hljs-attr">&quot;configurations&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;production&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span> ... <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;development&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span> ... <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;ssr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span> <span class="hljs-comment">// 設定 ssr 取代檔案</span><br>              <span class="hljs-attr">&quot;outputHashing&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;media&quot;</span><span class="hljs-punctuation">,</span><br>              <span class="hljs-attr">&quot;fileReplacements&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>                <span class="hljs-punctuation">&#123;</span><br>                  <span class="hljs-attr">&quot;replace&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;src/environments/environment.ts&quot;</span><span class="hljs-punctuation">,</span><br>                  <span class="hljs-attr">&quot;with&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;src/environments/environment.ssr.ts&quot;</span><br>                <span class="hljs-punctuation">&#125;</span><br>              <span class="hljs-punctuation">]</span><br>            <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>          <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>          <span class="hljs-attr">&quot;defaultConfiguration&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;production&quot;</span><br>        <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>        ...<br>        <span class="hljs-attr">&quot;prerender&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>          ...<br>          <span class="hljs-attr">&quot;configurations&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;production&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span> ... <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;development&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span> ... <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;ssr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span> <span class="hljs-comment">// 設定 ssr 在 server 模式取代檔案</span><br>              <span class="hljs-attr">&quot;browserTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:build:production&quot;</span><span class="hljs-punctuation">,</span><br>              <span class="hljs-attr">&quot;serverTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:server:ssr&quot;</span><br>            <span class="hljs-punctuation">&#125;</span><br>          <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>          <span class="hljs-attr">&quot;defaultConfiguration&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;production&quot;</span><br>        <span class="hljs-punctuation">&#125;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;defaultProject&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>然後在 prerender 前先用 lite-server 把靜態伺服器打開後，執行 prerender 即可，當然也要記得改用 <code>ssr</code> 的相關設定 (或去改 <code>angular.json</code> 的 <code>defaultConfiguration</code> 也行)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">npm run prerender -- --configuration ssr --routes-file post-routes.txt<br></code></pre></td></tr></table></figure>
+
+<h4 id="3-撰寫-Resolver-來抓取資料"><a href="#3-撰寫-Resolver-來抓取資料" class="headerlink" title="(3) 撰寫 Resolver 來抓取資料"></a>(3) 撰寫 Resolver 來抓取資料</h4><p><strong>a. 文章列表 Resolver</strong></p>
+<p>負責抓取 posts.json 的資料，並傳遞給文章列表頁面：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-comment">// PostsResolver</span><br><span class="hljs-meta">@Injectable</span>(&#123; <span class="hljs-attr">providedIn</span>: <span class="hljs-string">&#x27;root&#x27;</span> &#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PostsResolver</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Resolve</span>&lt;<span class="hljs-built_in">any</span>[]&gt; &#123;<br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> httpClient: HttpClient</span>) &#123;&#125;<br><br>  <span class="hljs-title function_">resolve</span>(): <span class="hljs-title class_">Observable</span>&lt;<span class="hljs-built_in">any</span>[]&gt; &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">httpClient</span><br>      .<span class="hljs-property">get</span>&lt;<span class="hljs-built_in">any</span>[]&gt;(<span class="hljs-string">`<span class="hljs-subst">$&#123;environment.assetsUrl&#125;</span>assets/blog/posts.json`</span>)<br>      .<span class="hljs-title function_">pipe</span>(<span class="hljs-title function_">catchError</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">of</span>([]))); <span class="hljs-comment">// 若抓取失敗，回傳空陣列</span><br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>b. 單篇文章 Resolver</strong></p>
+<p>負責抓取對應文章的 Markdown 檔案，並轉換為 HTML：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-comment">// PostResolver</span><br><span class="hljs-keyword">import</span> markdownIt <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;markdown-it&#x27;</span>;<br><br><span class="hljs-meta">@Injectable</span>(&#123; <span class="hljs-attr">providedIn</span>: <span class="hljs-string">&#x27;root&#x27;</span> &#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PostResolver</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Resolve</span>&lt;<span class="hljs-built_in">string</span>&gt; &#123;<br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> httpClient: HttpClient</span>) &#123;&#125;<br><br>  <span class="hljs-title function_">resolve</span>(<span class="hljs-attr">route</span>: <span class="hljs-title class_">ActivatedRouteSnapshot</span>): <span class="hljs-title class_">Observable</span>&lt;<span class="hljs-built_in">string</span>&gt; &#123;<br>    <span class="hljs-keyword">const</span> slug = route.<span class="hljs-property">paramMap</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;slug&#x27;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">httpClient</span><br>      .<span class="hljs-title function_">get</span>(<span class="hljs-string">`<span class="hljs-subst">$&#123;environment.assetsUrl&#125;</span>assets/blog/<span class="hljs-subst">$&#123;slug&#125;</span>.md`</span>, &#123; <span class="hljs-attr">responseType</span>: <span class="hljs-string">&#x27;text&#x27;</span> &#125;)<br>      .<span class="hljs-title function_">pipe</span>(<br>        <span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">markdown</span>) =&gt;</span> <span class="hljs-title function_">markdownIt</span>().<span class="hljs-title function_">render</span>(markdown)), <span class="hljs-comment">// 將 Markdown 轉為 HTML</span><br>        <span class="hljs-title function_">catchError</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">of</span>(<span class="hljs-string">&#x27;文章不存在&#x27;</span>))<br>      );<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="4-配置路由"><a href="#4-配置路由" class="headerlink" title="(4) 配置路由"></a>(4) 配置路由</h4><p>設定路由以載入 Resolver 提供的資料</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">const</span> <span class="hljs-attr">routes</span>: <span class="hljs-title class_">Routes</span> = [<br>  &#123;<br>    <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;&#x27;</span>,<br>    <span class="hljs-attr">resolve</span>: &#123; <span class="hljs-attr">posts</span>: <span class="hljs-title class_">PostsResolver</span> &#125;,<br>    <span class="hljs-attr">component</span>: <span class="hljs-title class_">PostsComponent</span><br>  &#125;,<br>  &#123;<br>    <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;post/:slug&#x27;</span>,<br>    <span class="hljs-attr">resolve</span>: &#123; <span class="hljs-attr">post</span>: <span class="hljs-title class_">PostResolver</span> &#125;,<br>    <span class="hljs-attr">component</span>: <span class="hljs-title class_">PostComponent</span><br>  &#125;<br>];<br><br><span class="hljs-meta">@NgModule</span>(&#123;<br>  <span class="hljs-attr">imports</span>: [<span class="hljs-title class_">RouterModule</span>.<span class="hljs-title function_">forRoot</span>(routes)],<br>  <span class="hljs-attr">exports</span>: [<span class="hljs-title class_">RouterModule</span>]<br>&#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AppRoutingModule</span> &#123;&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="5-在元件中顯示資料"><a href="#5-在元件中顯示資料" class="headerlink" title="(5) 在元件中顯示資料"></a>(5) 在元件中顯示資料</h4><p><strong>a. 文章列表頁面</strong></p>
+<p>從 Resolver 中取得文章清單，並在頁面中顯示：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-comment">// 在元件內，可以訂閱 ActivatedRoute.data 來拿到資料</span><br><span class="hljs-meta">@Component</span>(&#123; ... &#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PostsComponent</span> &#123;<br>  posts$ = <span class="hljs-variable language_">this</span>.<span class="hljs-property">route</span>.<span class="hljs-property">data</span>.<span class="hljs-title function_">pipe</span>(<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> data.<span class="hljs-property">posts</span>));<br><br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> route: ActivatedRoute</span>) &#123;&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>接著在 html 內顯示取得的資料：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> *<span class="hljs-attr">ngFor</span>=<span class="hljs-string">&quot;let post of posts$ | async&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> [<span class="hljs-attr">routerLink</span>]=<span class="hljs-string">&quot;&#x27;/post/&#x27; + post.slug&quot;</span>&gt;</span>&#123;&#123; post.title &#125;&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>b. 單篇文章頁面</strong></p>
+<p>從 Resolver 中取得文章內容，並轉換為安全的 HTML 顯示：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-meta">@Component</span>(&#123; ... &#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PostComponent</span> &#123;<br>  content$ = <span class="hljs-variable language_">this</span>.<span class="hljs-property">route</span>.<span class="hljs-property">data</span>.<span class="hljs-title function_">pipe</span>(<br>    <span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">domSanitizer</span>.<span class="hljs-title function_">bypassSecurityTrustHtml</span>(data.<span class="hljs-property">post</span>))<br>  );<br><br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> route: ActivatedRoute, <span class="hljs-keyword">private</span> domSanitizer: DomSanitizer</span>) &#123;&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> [<span class="hljs-attr">innerHTML</span>]=<span class="hljs-string">&quot;content$ | async&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="6-執行-Prerender，預覽結果"><a href="#6-執行-Prerender，預覽結果" class="headerlink" title="(6) 執行 Prerender，預覽結果"></a>(6) 執行 Prerender，預覽結果</h4><p><strong>a. 產生靜態路由</strong></p>
+<p>準備一個包含需要 Prerender 的路由檔案，例如 post-routes.txt：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs txt">/<br>post/post-1<br>post/post-2<br>post/post-3<br></code></pre></td></tr></table></figure>
+
+<p><strong>b. 執行 Prerender</strong></p>
+<p>啟動靜態伺服器，並執行 Prerender：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">npx lite-server --baseDir=./src<br>npm run prerender -- --configuration ssr --routes-file post-routes.txt<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h5><p>前面我們用了 lite-server 來跑模擬的伺服器，不過 lite-server 在目錄網址時不會提供裡面的 <code>index.html</code> 當作內容，因此我們可以自己建立一個伺服器來解決這個問題。</p>
+<p><strong>a. 使用模擬伺服器</strong></p>
+<p>先安裝一些套件：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">npm i -D ts-node connect serve-static @types/node @types/connect @types/serve-static<br></code></pre></td></tr></table></figure>
+
+<p>接著建立一支伺服器程式 <code>ssr-preview.ts</code>：</p>
+<figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> connect <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;connect&#x27;</span>;<br><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> serveStatic <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;serve-static&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; join &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;path&#x27;</span>;<br><span class="hljs-comment">// 靜態檔案路徑，請自行修改</span><br><span class="hljs-keyword">const</span> distFolder = <span class="hljs-title function_">join</span>(process.<span class="hljs-title function_">cwd</span>(), <span class="hljs-string">&#x27;dist&#x27;</span>, <span class="hljs-string">&#x27;ngx-universal-prerender-demo&#x27;</span>, <span class="hljs-string">&#x27;browser&#x27;</span>);<br><span class="hljs-title function_">connect</span>()<br>  .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">serveStatic</span>(distFolder))<br>  .<span class="hljs-title function_">listen</span>(<span class="hljs-number">4001</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Server running on 4001...&#x27;</span>));<br></code></pre></td></tr></table></figure>
+
+<p>和要給它使用的 <code>tsconfig.ssr-preview.json</code>：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;extends&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;./get-page-posts.ts&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;compilerOptions&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;module&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;commonjs&quot;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>啟動伺服器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">npx ts-node --project .\tsconfig.ssr-preview.json .\ssr-preview.ts<br></code></pre></td></tr></table></figure>
+
+<p>接著可以隨意瀏覽任一個頁面的原始碼，內容都會是被靜態產生的，這樣就算是完成了！</p>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>依照上述步驟執行，就可以在現行專案導入修改支援 SEO 了。</p>
+<hr>
+<h3 id="附錄：參考連結"><a href="#附錄：參考連結" class="headerlink" title="附錄：參考連結"></a>附錄：參考連結</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://fullstackladder.dev/blog/2021/10/16/static-site-generator-using-angular-universal-prerender/">Mike｜Angular Universal - 使用 Prerender 建立自己的 Static Site Generator</a></li>
+<li><a target="_blank" rel="noopener" href="https://fullstackladder.dev/blog/2021/10/31/angular-universal-transfer-state/">Mike｜Angular Universal - 使用 TransferState 解決畫面閃爍問題</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.dotblogs.com.tw/Leo_CodeSpace/2020/07/24/161101">Angular Universal教學-將現有專案導入Server Side Render</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.miniasp.com/post/2017/06/18/How-to-setup-Angular-Universal-in-an-Angular-CLI-project">保哥｜如何在 Angular CLI 建立的專案加入 Angular Universal 伺服器渲染功能</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="../../../../categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" class="category-chain-item">技術筆記</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="../../../../tags/SEO/" class="print-no-link">#SEO</a>
+      
+        <a href="../../../../tags/Angular/" class="print-no-link">#Angular</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="../../27/angular-textarea-character-counter/" title="Angular Reactive Forms：textarea 顯示目前字數與上限">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Angular Reactive Forms：textarea 顯示目前字數與上限</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="../../../10/11/angular-prettier-husky/" title="Angular 專案整合 Prettier、Husky 與 lint-staged">
+                        <span class="hidden-mobile">Angular 專案整合 Prettier、Husky 與 lint-staged</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目錄</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜尋</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">關鍵字</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <span>Kimi 2026</span> <i class="iconfont icon-love"></i> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo </span></a> <span>Theme </span> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="../../../../js/events.js" ></script>
+<script  src="../../../../js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="../../../../js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="../../../../js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="../../../../js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允許 JavaScript 運行的環境下瀏覽效果更佳</div>
+  </noscript>
+</body>
+</html>

@@ -1,0 +1,1431 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>TailwindCSS 逐步上手</title>
+    <url>/2022/01/19/Tailwind/</url>
+    <content><![CDATA[<p>正好想學，在研究之餘，順便寫個教學留個紀錄。</p>
+<h2 id="Tailwind-安裝流程-（使用-npm）"><a href="#Tailwind-安裝流程-（使用-npm）" class="headerlink" title="Tailwind 安裝流程 （使用 npm）"></a>Tailwind 安裝流程 （使用 npm）</h2><p>依照 <a href="https://tailwindcss.com/docs/installation">Tailwind 的官網</a>，安裝有兩種方式：</p>
+<ul>
+<li>使用 CDN</li>
+<li>使用 npm</li>
+</ul>
+<p>而今天主要是以 npm 的方式來展示。</p>
+<p>因為 Tailwind 若是靠 CDN 的方式，會導致很多強大的功能沒有全開，我們這邊就簡單舉例幾個：</p>
+<ul>
+<li>基本的，就是無法 <strong>新增自訂顏色</strong> 跟 <strong>支援深色模式</strong>。</li>
+<li>再進階一點，就是無法使用 <strong><code>`@apply`</code></strong> 指令將語法整理起來。</li>
+<li>最嚴重的，就是 <strong>無法壓縮檔案</strong>，CDN 版大小約 2.79MB。 （完整版約 3.7MB~4MB）</li>
+</ul>
+<p>所以如果只是為了 <strong>玩玩、體驗 Tailwind 的特性及帶來的方便性</strong>，完全可以<strong>使用 CDN</strong> 的方式就好，但如果是想要做公司產品／成品上線，這個沒壓縮的大小很有可能讓你被火了XDDD</p>
+<h2 id="前置作業-安裝-node-js"><a href="#前置作業-安裝-node-js" class="headerlink" title="前置作業 - 安裝 node.js"></a>前置作業 - 安裝 node.js</h2><p>首先，如果你會用 linux 類系統，這個你肯定用過。<br>不過新手們的話就別跳過，還是都跑一遍吧，以免你有指令沒跑到或東西沒裝到。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo apt update<br></code></pre></td></tr></table></figure>
+
+<p>接著，這個很重要，要安裝 curl。 因為等一下就要靠他了。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo apt-get install curl<br></code></pre></td></tr></table></figure>
+
+<p>再來，使用到剛剛安裝的 curl，把 node.js 12版的安裝腳本下載下來。請注意，這邊一定要抓12版或更新的！</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -<br></code></pre></td></tr></table></figure>
+
+<p>這下，就可以放心的把 node.js 安裝下去了~</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo apt-get install nodejs<br></code></pre></td></tr></table></figure>
+
+<h2 id="安裝-Tailwind"><a href="#安裝-Tailwind" class="headerlink" title="安裝 Tailwind"></a>安裝 Tailwind</h2><blockquote>
+<p>注意：Tailwind CSS 需要 Node.js 版本在 12.13.0 以上</p>
+</blockquote>
+<ol>
+<li>首先，因為 Thailwind 有 node.js 的版本限制，可以先執行以下的指令檢查 node.js 的版本。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">node --version<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>如果檢查完，確定 node 是 12 版以上，那就可以放心地執行下面這行指令了。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npm init<br></code></pre></td></tr></table></figure>
+
+<p>在打入 <code>NPM init</code> 後，會被要求輸入幾個欄位</p>
+<blockquote>
+<p><code>package name</code>: 你這個 Project 要叫什麼名字<br><code>version</code>: 你決定這個 Project 現在該是第幾版<br><code>description</code>: Project 基本介紹<br><code>entry point</code>: 進入點，如果要跑你的 Project 應該要執行哪個檔案<br><code>author</code>: 作者（自己）<br><code>license</code>: 你這個 Project 是採用什麼授權的<br><code>test command</code>: 這個不太重要，待會會說明</p>
+</blockquote>
+<p>基本上結束後，你可以看到這個資料夾底下，新增了一個 <code>Package.json</code></p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript">&#123;<br>  <span class="hljs-string">&quot;name&quot;</span>: <span class="hljs-string">&quot;my-project&quot;</span>,<br>  <span class="hljs-string">&quot;version&quot;</span>: <span class="hljs-string">&quot;1.0.0&quot;</span>,<br>  <span class="hljs-string">&quot;description&quot;</span>: <span class="hljs-string">&quot;this is my project&quot;</span>,<br>  <span class="hljs-string">&quot;main&quot;</span>: <span class="hljs-string">&quot;app.js&quot;</span>,<br>  <span class="hljs-string">&quot;scripts&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;test&quot;</span>: <span class="hljs-string">&quot;echo \&quot;Error: no test specified\&quot; &amp;&amp; exit 1&quot;</span><br>  &#125;,<br>  <span class="hljs-string">&quot;author&quot;</span>: <span class="hljs-string">&quot;Kimi&quot;</span>,<br>  <span class="hljs-string">&quot;license&quot;</span>: <span class="hljs-string">&quot;ISC&quot;</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>基本上使用 NPM 來創建的 Project，他會連一些專案的資訊都幫你做管理。</p>
+<blockquote>
+<p><strong>Optional Info</strong>：<br>如果你覺得上面要一直輸入很冗，可以使用  <code>npm init -y</code> 。<br>他跟  <code>npm init</code>  幾乎一樣，只是它會幫你把預設選項全部跳過，產生一個空白的 <code>package.json</code> （懶人專用）</p>
+</blockquote>
+<ol start="3">
+<li>接著， 依照官方教學，需安裝 Tailwind CSS、PostCSS，還有 autoprefixer 這三個檔案；因為 Tailwind 不會自動加上瀏覽器前缀詞到產生的 CSS 中，所以瀏覽器無法讀取 CSS，要加上 autoprefixer 這個套件去處理此問題。<br>我們使用一行指令就三個安裝好了，輕鬆愉快。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npm install tailwindcss@latest postcss@latest autoprefixer@latest<br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>再來，為了以防萬一，我們執行一次 <code>`npm install`</code> 來更新和安裝其他依賴套件的狀態。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npm install<br></code></pre></td></tr></table></figure>
+
+<p>那這樣就算安裝完了，只是距離使用，中間還有一些東西需要設定。<br>如果你還會透過 postCSS 安裝其他插件、或是像官方的推薦使用 autoprefixer的話，可以看一下下方的 **安裝 PostCSS 套件。</p>
+<h3 id="Optional-Info"><a href="#Optional-Info" class="headerlink" title="Optional Info"></a>Optional Info</h3><p>如果在安裝過程中，有遇到以下錯誤，那可能是 <strong>將 Tailwind 與舊版本的 PostCSS 混合使用</strong> 所導致的結果， v2.0 版本的 Tailwind 依賴於 PostCSS 8。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">Error: PostCSS plugin tailwindcss requires PostCSS 8.<br></code></pre></td></tr></table></figure>
+
+<p>這時請安裝 <a href="https://www.tailwindcss.cn/docs/installation#post-css-7">PostCSS 7</a> 版本，才能兼容。</p>
+<hr>
+
+<h4 id="安裝-PostCSS-7"><a href="#安裝-PostCSS-7" class="headerlink" title="安裝 PostCSS 7"></a>安裝 PostCSS 7</h4><figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npm uninstall tailwindcss<br>npm install tailwindcss@npm:@tailwindcss/postcss7-compat<br></code></pre></td></tr></table></figure>
+
+<hr>
+
+<h4 id="安裝-PostCSS-套件"><a href="#安裝-PostCSS-套件" class="headerlink" title="安裝 PostCSS 套件"></a>安裝 PostCSS 套件</h4><figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npm install tailwindcss autoprefixer postcss postcss-cli<br></code></pre></td></tr></table></figure>
+
+<p>上面這個指令，就是幫你的專案透過 npm 安裝 tailwindcss、postcss、autoprefixer，及 postcss-cli 這四個東西。<br>那如果有看過官方教學，對前三個東西應該不陌生，只是最後一個也是必須的，算是幫官方安裝過程的補充。</p>
+<p>在前面的步驟產生完 Tailwind 設定檔之後，我們要來產生 PostCSS 的設定檔，不然 PostCSS 不會幫我們載入 tailwind 和 autoprefixer。</p>
+<ul>
+<li><strong>Windows用戶</strong></li>
+</ul>
+<figure class="highlight clean"><table><tr><td class="code"><pre><code class="hljs clean">在專案目錄下新增檔案 -&gt; 檔名為 <span class="hljs-string">&quot;postcss.config.js&quot;</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>Linux、Ubuntu、MacOS 類用戶</strong>，直接下指令即可（ 在專案目錄下）</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">touch postcss.config.js<br></code></pre></td></tr></table></figure>
+
+<p>新增完 <code>`postcss.config.js`</code>，我們要在檔案中加入下面的內容：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// postcss.config.js</span><br><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = &#123;<br>  <span class="hljs-attr">plugins</span>: [<br>    <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;tailwindcss&#x27;</span>),<br>    <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;autoprefixer&#x27;</span>),<br>  ]<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>或是用官方給的格式也可以~</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-comment">// postcss.config.js</span><br><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = &#123;<br>  <span class="hljs-attr">plugins</span>: &#123;<br>    <span class="hljs-attr">tailwindcss</span>: &#123;&#125;,<br>    <span class="hljs-attr">autoprefixer</span>: &#123;&#125;,<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>最後的最後，只要把前面設定執行的地方，改成</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-attr">scripts</span>:[<br>    <span class="hljs-comment">/* ... 前面是你其它的設定值，略 .... */</span><br>    <span class="hljs-string">&quot;&#123; 你的執行名稱 &#125;&quot;</span>: <span class="hljs-string">&quot;postcss &#123;你 css 檔擺放的路徑&#125;/&#123;要寫樣式的css檔名稱&#125; -o &#123;你 css 檔擺放的路徑&#125;/&#123;頁面要掛載的css檔名稱&#125;&quot;</span><br>],<br></code></pre></td></tr></table></figure>
+
+<p>剩下的步驟，都跟上面 tailwind 的教學一樣囉~</p>
+<h2 id="設定-Tailwind"><a href="#設定-Tailwind" class="headerlink" title="設定 Tailwind"></a>設定 Tailwind</h2><ol>
+<li>依照上方的流程，安裝完 Tailwind 應該會看到 <code>package.json</code> 中有新增後來安裝的 Tailwind CSS、PostCSS 和 autoprefixer。</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// package.json</span><br>&#123;<br>  <span class="hljs-string">&quot;dependencies&quot;</span>: &#123;<br>    <span class="hljs-string">&quot;autoprefixer&quot;</span>: <span class="hljs-string">&quot;^10.2.6&quot;</span>,<br>    <span class="hljs-string">&quot;postcss&quot;</span>: <span class="hljs-string">&quot;^8.3.0&quot;</span>,<br>    <span class="hljs-string">&quot;tailwindcss&quot;</span>: <span class="hljs-string">&quot;^2.1.4&quot;</span><br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>在使用 Tailwind CSS 之前，我們得產生 tailwind 必要的設定檔，這也是要達到 tailwind 客製化前最重要的一步。</li>
+</ol>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npx tailwindcss init<br></code></pre></td></tr></table></figure>
+
+<p>執行上方的指令後，在專案目錄下應該會多出一個叫做 <code>`tailwind.config.js`</code> 的檔案。</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = &#123;<br>  <span class="hljs-attr">purge</span>: [],<br>  <span class="hljs-attr">darkMode</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// or &#x27;media&#x27; or &#x27;class&#x27;</span><br>  <span class="hljs-attr">theme</span>: &#123;<br>    <span class="hljs-attr">extend</span>: &#123;&#125;,<br>  &#125;,<br>  <span class="hljs-attr">variants</span>: &#123;<br>    <span class="hljs-attr">extend</span>: &#123;&#125;,<br>  &#125;,<br>  <span class="hljs-attr">plugins</span>: [],<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>這麼一來，就可以自訂專屬於你的 Tailwind 設定了！</p>
+<h2 id="新增-Tailwind-到-CSS-中"><a href="#新增-Tailwind-到-CSS-中" class="headerlink" title="新增 Tailwind 到 CSS 中"></a>新增 Tailwind 到 CSS 中</h2><p>現在需要在你存放 CSS 樣式檔的資料夾裡，建立兩個 CSS 檔：</p>
+<ul>
+<li>一個是你頁面要掛載的 <code>style.css</code> （名稱可自訂）</li>
+<li>一個是用來寫 CSS 樣式的 <code>tailwind.css</code> （名稱也可自訂）</li>
+</ul>
+<p>這樣講可能有點抽象，拿我的專案目錄來舉例好了。</p>
+<p><img src="https://i.imgur.com/SLrk4vo.png"></p>
+<p>在我的專案下，擺放 CSS 檔的路徑是 <code>/public/css</code> ，那就在這個資料夾底下產生兩個 CSS檔，名稱自訂，我這邊是把要掛載的叫做 <code>app.css</code>，要寫樣式內容的叫做 <code>tailwind.css</code>。</p>
+<p>建立完之後，我們在要用來寫樣式的 CSS 檔 （我這邊叫做 <code>tailwind.css</code> ）裡面貼上下面的 CSS 語法。</p>
+<figure class="highlight css"><table><tr><td class="code"><pre><code class="hljs css"><span class="hljs-comment">/* 貼在用來寫樣式的css檔，範例這邊是 tailwind.css */</span><br><br><span class="hljs-keyword">@tailwind</span> base; <br><span class="hljs-keyword">@tailwind</span> components; <br><span class="hljs-keyword">@tailwind</span> utilities;<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p>我們要掛載的 CSS 檔 (這邊叫做 <code>app.css</code>) 保持空白就好，以後所有要補充的樣式都寫在另一個 CSS 檔（<code>tailwind.css</code>）裡。<br>因為如果接下來 <strong>進行編譯</strong>， 要掛載的 CSS 檔 (<code>app.css</code>) 的 <strong>內容會被覆蓋掉</strong>。</p>
+</blockquote>
+<h2 id="編譯"><a href="#編譯" class="headerlink" title="編譯"></a>編譯</h2><p>終於進入最後一步了。<br>開啟剛剛 <code>`npm init`</code> 執行後產生的 <code>package.json</code>，在 scripts 裡面加一行：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-attr">scripts</span>:[<br>    <span class="hljs-comment">/* ... 前面是你其它的設定值，略 .... */</span><br>    <span class="hljs-string">&quot;&#123; 你的執行名稱 &#125;&quot;</span>: <span class="hljs-string">&quot;tailwind build &#123;你 css 檔擺放的路徑&#125;/&#123;要寫樣式的css檔名稱&#125; -o &#123;你 css 檔擺放的路徑&#125;/&#123;頁面要掛載的css檔名稱&#125;&quot;</span><br>],<br></code></pre></td></tr></table></figure>
+
+<p>如果把上述的名稱都取代完之後，在我這邊的範例，會長的像下面這樣：</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><code class="hljs js"><span class="hljs-attr">scripts</span>:[<br>    <span class="hljs-comment">/* ... 前面是你其它的設定值，略 .... */</span><br>    <span class="hljs-string">&quot;build-css&quot;</span>: <span class="hljs-string">&quot;tailwind build public/css/tailwind.css -o public/css/app.css&quot;</span><br>],<br></code></pre></td></tr></table></figure>
+
+<p>最後，我們只要執行 <code>npm run &#123;你的執行名稱&#125;</code>，那他就會開始進行編譯了！</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npm run build-css<br></code></pre></td></tr></table></figure>
+
+<p>編譯完成後，應該會在命令列 (終端機) 看到下面的訊息：</p>
+<p><img src="https://i.imgur.com/vYO0NIn.png"></p>
+<p>這樣就算編譯完成了，現在只要你在頁面掛上要掛載的 CSS 檔，並用上 Tailwind 語法，就會有效果囉！</p>
+<h2 id="使用-Tailwind-CSS"><a href="#使用-Tailwind-CSS" class="headerlink" title="使用 Tailwind CSS"></a>使用 Tailwind CSS</h2><p>在你網頁中插入的 CSS 檔路徑要改成剛剛上面說過的，用來掛載在頁面上的 CSS 檔。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-comment">&lt;!-- 你專案中要使用 Tailwind CSS 的頁面 --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>        <span class="hljs-comment">&lt;!-- 前略 --&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;./&#123;你CSS檔的路徑&#125;/&#123;要掛載在頁面的CSS檔名稱&#125;&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>        <span class="hljs-comment">&lt;!-- 略 --&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>底下這邊是我依照我專案所改寫後的。</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-comment">&lt;!-- 這範例是我專案中的 index.html --&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">html</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">head</span>&gt;</span><br>        <span class="hljs-comment">&lt;!-- 前略 --&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">link</span> <span class="hljs-attr">rel</span>=<span class="hljs-string">&quot;stylesheet&quot;</span> <span class="hljs-attr">href</span>=<span class="hljs-string">&quot;./css/app.css&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">head</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">body</span>&gt;</span><br>        <span class="hljs-comment">&lt;!-- 馬上用 Tailwind 寫一個熱騰騰的黃綠藍三色漸層 Hello World 方塊 --&gt;</span><br>        <span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;m-3 p-10 bg-gradient-to-r from-yellow-400 via-green-400 to-blue-400 text-white&quot;</span>&gt;</span><br>          Hello World ! I&#x27;m using Tailwind CSS Now ~<br>        <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br>    <span class="hljs-tag">&lt;/<span class="hljs-name">body</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">html</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p>這樣就把 Tailwind CSS 安裝完了，這樣你就可以盡情地使用 Tailwind 寫出一堆美美的介面了啦！</p>
+<h2 id="Optional：幫-CSS-瘦身"><a href="#Optional：幫-CSS-瘦身" class="headerlink" title="Optional：幫 CSS 瘦身"></a>Optional：幫 CSS 瘦身</h2><p>Tailwind 因為是 Utility 的關係，會把整包檔案匯入，如果整包檔案要選染於網頁，效能就會低落。</p>
+<p>Tailwind 官方文件有提供可以瘦身的方法：</p>
+<ol>
+<li>選到 <code>tailwind.config.js</code> 檔案，將我可能會使用到的內容寫在  <code>purge</code> 屬性內</li>
+</ol>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">//tailwind.config.js</span><br><br><span class="hljs-variable language_">module</span>.<span class="hljs-property">exports</span> = &#123;<br>  <span class="hljs-attr">purge</span>: &#123;<br>    <span class="hljs-attr">enabled</span>: <span class="hljs-literal">true</span>,<br>    <span class="hljs-attr">content</span>: [<span class="hljs-string">&quot;./**/*.html&quot;</span>],<br>  &#125;,<br>  <span class="hljs-attr">darkMode</span>: <span class="hljs-literal">false</span>, <span class="hljs-comment">// or &#x27;media&#x27; or &#x27;class&#x27;</span><br>  <span class="hljs-attr">theme</span>: &#123;<br>    <span class="hljs-attr">extend</span>: &#123;&#125;,<br>  &#125;,<br>  <span class="hljs-attr">variants</span>: &#123;<br>    <span class="hljs-attr">extend</span>: &#123;&#125;,<br>  &#125;,<br>  <span class="hljs-attr">plugins</span>: [],<br>&#125;;<br><br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>這樣程式執行時，就會去監聽我哪支檔案有使用到，只會編譯使用的檔案，真的很方便！</li>
+</ol>
+]]></content>
+      <categories>
+        <category>技術筆記</category>
+      </categories>
+      <tags>
+        <tag>教學</tag>
+        <tag>技術文件</tag>
+        <tag>TailwindCSS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【心得分享】寫在活動之後</title>
+    <url>/2021/09/30/pm361_activity/</url>
+    <content><![CDATA[<p>身為活動的 PO，很高興能夠邀請到硬體業 PM Eva 和軟體業 PM Rafeni 來和大家分享他們的經歷。</p>
+<p><img src="https://miro.medium.com/max/1400/1*oEIRVqvHSzxU-h9ugsPSKQ.png"></p>
+<p style="text-align:center"><i>活動 ：PM 相談室《新手篇》</i></p>
+
+<h2 id="前情提要"><a href="#前情提要" class="headerlink" title="前情提要"></a>前情提要</h2><blockquote>
+<p>筆者隸屬於 PM361 社群，近期於 2021&#x2F;09 月時舉辦了「PM 相談室《新手篇》」活動，主要的 TA 為那些想要轉職 PM 或剛入行的新手 PM 們。<br>我們希望能夠透過有經驗者的分享，來幫助他們解決一些常見的疑惑、瞭解 PM 的工作職務，因而對 PM 的認知有個基礎的架構。</p>
+</blockquote>
+<p><br>因為在活動中的身份不太一樣，此篇文章主要會以「籌劃者」的角度來回顧活動，而非分享活動心得體驗，大綱可分為以下幾個部分：</p>
+<ul>
+<li>活動的初衷</li>
+<li>主題挑選與聚焦</li>
+<li>活動檢討與回饋</li>
+</ul>
+<h2 id="活動的初衷"><a href="#活動的初衷" class="headerlink" title="活動的初衷"></a>活動的初衷</h2><p>說到 PM 361 社群 ，社團成立的衷旨為<em><strong>「期許 PM 們擁有 360 ° 的全方位視野，加上 1° 自己的觀點」</strong></em>，讓同為 PM 的這群同溫層有個平台可以互相交流、成長。</p>
+<p>而在我加入社群後，也一直為著這個目標努力著，和成員們除了透過每月舉辦的活動，分享 PM 相關知識與議題，也不斷在關注著社團內的需求與動向。</p>
+<p>在分析社團成員的組成與面向後，我們發現主要的 TA 大多為：</p>
+<ul>
+<li>對 PM 有興趣、欲轉職為 PM 者（本身非 PM 或為新鮮人）</li>
+<li>0 - 3 年的新手 PM</li>
+</ul>
+<p>其分別的痛點大致如下：</p>
+<h3 id="對-PM-有興趣、欲轉職為-PM-者"><a href="#對-PM-有興趣、欲轉職為-PM-者" class="headerlink" title="對 PM 有興趣、欲轉職為 PM 者"></a>對 PM 有興趣、欲轉職為 PM 者</h3><ul>
+<li>不清楚 PM 的工作職能</li>
+<li>找不到 PM 前輩可以請教</li>
+<li>不知道自己是否適合、能否勝任這個職位</li>
+<li>不知道特定產業的 PM 差別</li>
+<li>有薪資上的需求（高薪）</li>
+</ul>
+<h3 id="0-3-年的新手-PM"><a href="#0-3-年的新手-PM" class="headerlink" title="0 - 3 年的新手 PM"></a>0 - 3 年的新手 PM</h3><ul>
+<li>對產品策略與規劃不熟悉，沒有好的思考框架</li>
+<li>溝通問題（向上管理、跨部門協作）</li>
+<li>無系統化學習（學習管道、專業技能）</li>
+<li>不知道如何提升工作效率（工具、方法模型的使用）</li>
+<li>職涯規劃（履歷、面試技巧）</li>
+</ul>
+<p>為了滿足上述的需求，才規劃了此次的活動。</p>
+<h2 id="主題挑選與聚焦"><a href="#主題挑選與聚焦" class="headerlink" title="主題挑選與聚焦"></a>主題挑選與聚焦</h2><p>在確定了活動的 TA 與大方向後，我首先針對「產業別」來挑選適合的講師，最終鎖定「硬體業」和「軟體業」。<br>除了希望能對比做出差異化之外，這兩個也算是市場普遍的兩大產業。（當然未來有機會的話，也可以瞄準電商、醫療等領域）</p>
+<p>起初設定的分享內容會相對深一點，適合有一些基礎的對象參與，不過在瀏覽報名者的回饋與疑惑後，發現普遍都對 PM 沒概念，才調整以「知識普及」、「觀念建立」、「框架分享」為導向，列出幾個關鍵標籤：</p>
+<ul>
+<li>轉職／求職</li>
+<li>PM 工作職能介紹</li>
+<li>溝通與協作</li>
+</ul>
+<p>也就是大家現在看到的版本，而過程中也和講師們協調過多次，最終才定稿。<br>P.S. 真的特別感謝講師們的配合，花了很多時間討論與修改內容，真的是人美又心善，辛苦了！！</p>
+<h2 id="活動檢討與回饋"><a href="#活動檢討與回饋" class="headerlink" title="活動檢討與回饋"></a>活動檢討與回饋</h2><p>接著來談談活動後，回顧整場活動：</p>
+<h3 id="1-參與度"><a href="#1-參與度" class="headerlink" title="1. 參與度"></a>1. 參與度</h3><p>從出席率和活動過程來看，與會者的參與度還算高，都蠻認真的在聽講師分享，不過因爲此場活動沒有開放「現場互動」，而是採用「單方面文字回饋」，無法反應「活躍度」與「互動率」，這點確實蠻可惜的。</p>
+<h3 id="2-控場與節奏"><a href="#2-控場與節奏" class="headerlink" title="2. 控場與節奏"></a>2. 控場與節奏</h3><p>身為 PO 兼主持人，我必須先承認在節奏與氛圍上，有很多地方需要再改進，流程、平台工具、主持切換、背景音樂等部分都有優化的空間，之後會再重點留意。</p>
+<h3 id="3-參與者回饋"><a href="#3-參與者回饋" class="headerlink" title="3. 參與者回饋"></a>3. 參與者回饋</h3><p>根據參與者填答的回饋內容，針對「框架」、「心法」、「案例分享」等內容頗受好評，也有不少人反映後續可以延續此次活動主題，多邀請不同產業的 PM 來做經驗分享，這方面我們會納入考慮，作為下次活動的備選清單。</p>
+<hr>
+<p>綜上所述，為我個人對此次活動的淺見，希望有參與活動的大家都有所收穫！<br>如果有任何建議與指正，也歡迎留言告訴我！</p>
+]]></content>
+      <categories>
+        <category>活動後記</category>
+      </categories>
+      <tags>
+        <tag>PM</tag>
+        <tag>心得</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux 裸機安裝 Nginx 部署前端筆記</title>
+    <url>/2025/02/26/linux-nginx-setup/</url>
+    <content><![CDATA[<p>紀錄一下在 Linux 裸機環境從零安裝 Nginx、部署前端靜態網站，到設定 HTTPS 的完整流程。</p>
+<span id="more"></span>
+
+<h2 id="1-安裝-Nginx"><a href="#1-安裝-Nginx" class="headerlink" title="1. 安裝 Nginx"></a>1. 安裝 Nginx</h2><p>首先，安裝 Nginx：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo apt update<br>sudo apt install nginx<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-建立目錄"><a href="#2-建立目錄" class="headerlink" title="2. 建立目錄"></a>2. 建立目錄</h2><p>接著，建立你所需要的目錄 <code>/var/www/html/front</code>，並確保 Nginx 有權限讀取該目錄：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo mkdir -p /var/www/html/front<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-設定目錄權限"><a href="#3-設定目錄權限" class="headerlink" title="3. 設定目錄權限"></a>3. 設定目錄權限</h2><p>確保 Nginx 能夠讀取該目錄，將權限設置為 Nginx 的執行使用者（默認是 www-data）：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo chown -R www-data:www-data /var/www/html<br>sudo chmod -R 755 /var/www/html<br></code></pre></td></tr></table></figure>
+
+<h2 id="4-修改-Nginx-設定"><a href="#4-修改-Nginx-設定" class="headerlink" title="4. 修改 Nginx 設定"></a>4. 修改 Nginx 設定</h2><p>打開 Nginx 設定檔（<code>/etc/nginx/sites-available/default</code>），修改 root 設定，使其指向你創建的目錄 <code>/var/www/html/front</code>：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo vim /etc/nginx/sites-available/default<br></code></pre></td></tr></table></figure>
+
+<p>修改 server 區塊中的 root 設定為：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts">server &#123;<br>    listen <span class="hljs-number">80</span> default_server;<br>    listen [::]:<span class="hljs-number">80</span> default_server;<br><br>    root /<span class="hljs-keyword">var</span>/www/html/front;<br>    index index.<span class="hljs-property">html</span>;<br><br>    server_name _;<br><br>    location / &#123;<br>        try_files $uri $uri/ =<span class="hljs-number">404</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="5-測試-Nginx-設定"><a href="#5-測試-Nginx-設定" class="headerlink" title="5. 測試 Nginx 設定"></a>5. 測試 Nginx 設定</h2><p>在重新啟動 Nginx 之前，先檢查 Nginx 配置是否正確：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo nginx -t<br></code></pre></td></tr></table></figure>
+
+<p>如果沒有錯誤，將顯示 syntax is okay 和 test is successful。</p>
+<h2 id="6-重新啟動-Nginx"><a href="#6-重新啟動-Nginx" class="headerlink" title="6. 重新啟動 Nginx"></a>6. 重新啟動 Nginx</h2><p>如果配置沒有問題，重新啟動 Nginx 使設定生效：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo systemctl restart nginx<br></code></pre></td></tr></table></figure>
+
+<h2 id="7-上傳前端檔案"><a href="#7-上傳前端檔案" class="headerlink" title="7. 上傳前端檔案"></a>7. 上傳前端檔案</h2><p>將你的前端 build 檔案（通常在 dist 或 build 資料夾內）複製到 <code>/var/www/html/front</code> 目錄：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">scp -r ./dist/* user@your_server:/var/www/html/front/<br></code></pre></td></tr></table></figure>
+
+<p>或者如果你在伺服器內操作，直接複製：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">cp -r ./dist/* /var/www/html/front/<br></code></pre></td></tr></table></figure>
+
+<hr>
+<p>若是發生 scp 時，permission denied，則可以授權登入的帳號擁有該目錄，然後再重新執行一次 scp。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo chown -R your_user:your_user /var/www/html/front<br></code></pre></td></tr></table></figure>
+
+<hr>
+<p>若想刪除，可以使用：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo rm -rf /var/www/html/front/*<br></code></pre></td></tr></table></figure>
+
+<h2 id="8-測試前端佈署"><a href="#8-測試前端佈署" class="headerlink" title="8. 測試前端佈署"></a>8. 測試前端佈署</h2><p>完成後，先確認 Nginx 是否有在運行：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo systemctl status nginx<br></code></pre></td></tr></table></figure>
+
+<p>如果看到 <strong>“active (running)”</strong>，代表 Nginx 正在運行。<br>如果沒有運行，可以啟動：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo systemctl start nginx<br></code></pre></td></tr></table></figure>
+
+<p>再來，確認 Nginx 監聽的 Port</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo netstat -tulnp | grep nginx<br></code></pre></td></tr></table></figure>
+
+<p>會看到類似</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">tcp   LISTEN  0  128  0.0.0.0:80   0.0.0.0:*   users:((&quot;nginx&quot;,pid=1234,fd=6))<br></code></pre></td></tr></table></figure>
+
+<p>這表示 Nginx 監聽 80 Port<br>可以在瀏覽器中輸入 server IP:port 來檢查前端是否正確顯示，例如：</p>
+<figure class="highlight md"><table><tr><td class="code"><pre><code class="hljs md">http://your<span class="hljs-emphasis">_server_</span>IP:port<br></code></pre></td></tr></table></figure>
+
+<h2 id="補充一：調整-Nginx-設定檔"><a href="#補充一：調整-Nginx-設定檔" class="headerlink" title="補充一：調整 Nginx 設定檔"></a>補充一：調整 Nginx 設定檔</h2><p>預設安裝，通常 Nginx 會監聽 80。<br>但你可以檢查設定：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo vim /etc/nginx/sites-available/default<br><br>// 若有多個站台，也會各自有一份設定檔<br>sudo vim /etc/nginx/sites-available/example.com<br></code></pre></td></tr></table></figure>
+
+<p>看看 server 區塊：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts">server &#123;<br>    listen <span class="hljs-number">80</span>;<br>    server_name <span class="hljs-variable constant_">YOUR_SERVER_IP</span>;<br><br>    root /<span class="hljs-keyword">var</span>/www/html/front;<br>    index index.<span class="hljs-property">html</span>;<br><br>    location / &#123;<br>        try_files $uri /index.<span class="hljs-property">html</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>listen 80; → 代表 Nginx 監聽 80 Port</li>
+<li>root &#x2F;var&#x2F;www&#x2F;html&#x2F;front; → 你的前端 build 檔案應該在這個目錄</li>
+<li>index index.html; → 預設加載 index.html</li>
+</ul>
+<p>如果修改了設定，記得重新啟動 Nginx：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo systemctl restart nginx<br></code></pre></td></tr></table></figure>
+
+<p>這樣就完成了！</p>
+<h2 id="補充二：修改-Nginx-樣式"><a href="#補充二：修改-Nginx-樣式" class="headerlink" title="補充二：修改 Nginx 樣式"></a>補充二：修改 Nginx 樣式</h2><p>若是發現 assets、css style 有讀不到問題，可以至 nginx.conf 調整：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo vim  /etc/nginx/nginx.conf<br></code></pre></td></tr></table></figure>
+
+<p>完成配置修改後，檢查 Nginx 配置是否正確：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo nginx -t<br></code></pre></td></tr></table></figure>
+
+<p>如果配置文件沒有錯誤，重新啟動 Nginx 使更改生效：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo systemctl restart nginx<br></code></pre></td></tr></table></figure>
+
+<p>這樣就完成了！</p>
+<h2 id="補充三：查看錯誤-Log"><a href="#補充三：查看錯誤-Log" class="headerlink" title="補充三：查看錯誤 Log"></a>補充三：查看錯誤 Log</h2><p>可以執行以下指令來觀看：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">// 錯誤 LOG<br>sudo tail -f /var/log/nginx/error.log<br><br>// 執行 API LOG<br>sudo cat /var/log/nginx/access.log<br></code></pre></td></tr></table></figure>
+
+<h2 id="補充四：預設讓-http（80-port）-都導轉至-https（443-port）"><a href="#補充四：預設讓-http（80-port）-都導轉至-https（443-port）" class="headerlink" title="補充四：預設讓 http（80 port） 都導轉至 https（443 port）"></a>補充四：預設讓 http（80 port） 都導轉至 https（443 port）</h2><blockquote>
+<p>參考文章：</p>
+<ul>
+<li><a href="https://hackmd.io/@warrenpig/create-self-signed-https-nginx-app">用Nginx架設local端https應用</a></li>
+<li><a href="https://blog.gtwang.org/linux/nginx-create-and-install-ssl-certificate-on-ubuntu-linux/">NGINX 設定 HTTPS 網頁加密連線，建立自行簽署的 SSL 憑證</a></li>
+</ul>
+</blockquote>
+<h3 id="建立一個放置憑證的目錄"><a href="#建立一個放置憑證的目錄" class="headerlink" title="建立一個放置憑證的目錄"></a>建立一個放置憑證的目錄</h3><p>目錄的路徑可以自由選擇，放在哪裡都可以，而考量到這個憑證是 NGINX 專用的，所以跟 NGINX 的設定檔放在一起可能會比較好管理。</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo mkdir /etc/nginx/ssl<br></code></pre></td></tr></table></figure>
+
+<h3 id="產生自行簽署的-SSL-憑證"><a href="#產生自行簽署的-SSL-憑證" class="headerlink" title="產生自行簽署的 SSL 憑證"></a>產生自行簽署的 SSL 憑證</h3><p>使用 <code>openssl</code> 產生自行簽署的 SSL 憑證，並且將憑證的存放路徑設成剛剛上面建立的目錄：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt<br></code></pre></td></tr></table></figure>
+
+<p>若是要 .p12 檔 轉成 .crt 跟 .key，可以使用：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo openssl pkcs12 -in /etc/ssl/private/your_cert.p12 -clcerts -nokeys -out /etc/ssl/private/your_cert.crt -legacy<br><br>sudo openssl pkcs12 -in /etc/ssl/private/your_cert.p12 -nocerts -nodes -out /etc/ssl/private/your_cert.key -legacy<br></code></pre></td></tr></table></figure>
+
+<p>以下是這裡使用到的參數與簡略說明：</p>
+<ul>
+<li><code>req</code>：使用 X.509 Certificate Signing Request（CSR） Management 產生憑證。</li>
+<li><code>-x509</code>：建立自行簽署的憑證。</li>
+<li><code>-nodes</code>：不要使用密碼保護，因為這個憑證是 NGINX 伺服器要使用的，如果設定密碼的話，會讓伺服器每次在啟動時都需要輸入密碼。</li>
+<li><code>-days 365</code>：設定憑證的使用期限，單位是天，如果不想時常重新產生憑證，可以設長一點。</li>
+<li><code>-newkey rsa:2048</code>：同時產生新的 RSA 2048 位元的金鑰。</li>
+<li><code>-keyout</code>：設定金鑰儲存的位置。</li>
+<li><code>-out</code>：設定憑證儲存的位置。</li>
+</ul>
+<p>這裡我們會同時建立憑證與金鑰，建立的過程中會需要填寫一些基本的資料：</p>
+<ul>
+<li>Country Name：TW</li>
+<li>State or Province Name (full name)：Taiwan</li>
+<li>Locality Name (eg, city)：Taipei</li>
+<li>Organization Name (eg, company)：My Company</li>
+<li>Organizational Unit Name (eg, section)：My Unit</li>
+<li>Common Name (e.g. server FQDN or YOUR name)：example.com</li>
+<li>Email Address：<a href="mailto:&#x79;&#x6f;&#117;&#64;&#x65;&#x78;&#x61;&#109;&#x70;&#108;&#x65;&#x2e;&#x63;&#x6f;&#x6d;">&#x79;&#x6f;&#117;&#64;&#x65;&#x78;&#x61;&#109;&#x70;&#108;&#x65;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
+</ul>
+<ol>
+<li>國家代碼，台灣就填 <code>TW</code>。</li>
+<li>州或省，台灣就填 <code>Taiwan</code>。</li>
+<li>城市，例如台北就填 <code>Taipei</code>。</li>
+<li>公司名稱。</li>
+<li>部門名稱。</li>
+<li>伺服器的 FQDN，這個一定要填寫正確，如果沒有申請網域名稱的話，也可以用 IP 位址替代。</li>
+<li>E-mail 信箱。</li>
+</ol>
+<p>填寫完成之後，憑證與金鑰的建立就完成了，而存放位置就在 <code>/etc/nginx/ssl</code> 目錄中。</p>
+<h3 id="設定-NGINX-伺服器"><a href="#設定-NGINX-伺服器" class="headerlink" title="設定 NGINX 伺服器"></a>設定 NGINX 伺服器</h3><p>在原本的設定檔中</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo vim /etc/nginx/sites-available/default<br></code></pre></td></tr></table></figure>
+
+<p>加上 SSL 的設定，並且設定憑證與金鑰的路徑：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json">server <span class="hljs-punctuation">&#123;</span><br>    listen <span class="hljs-number">80</span> default_server;<br>    listen <span class="hljs-punctuation">[</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">:</span><span class="hljs-number">80</span> default_server;<br><br>    # 導向至 HTTPS<br>    rewrite ^(.*) https<span class="hljs-punctuation">:</span><span class="hljs-comment">//$host$1 permanent;</span><br><span class="hljs-punctuation">&#125;</span><br><br>server <span class="hljs-punctuation">&#123;</span><br>    # 加入 SSL 設定<br>    listen <span class="hljs-number">443</span> ssl default_server;<br>    listen <span class="hljs-punctuation">[</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">:</span><span class="hljs-number">443</span> ssl default_server;<br><br>    # 憑證與金鑰的路徑<br>    ssl_certificate /etc/nginx/ssl/nginx.crt;<br>    ssl_certificate_key /etc/nginx/ssl/nginx.key;    <br><br>    root /var/www/html/front;<br>    index index.html index.htm index.nginx-debian.html;<br>    server_name _;<br>    <br>    location / <span class="hljs-punctuation">&#123;</span><br>        # First attempt to serve request as file<span class="hljs-punctuation">,</span> then<br>        # as directory<span class="hljs-punctuation">,</span> then fall back to displaying a <span class="hljs-number">404.</span><br>        try_files $uri $uri/ =<span class="hljs-number">404</span>;<br>    <span class="hljs-punctuation">&#125;</span><br><br>    # 反向代理後端 API 的範例<br>    location /api/ <span class="hljs-punctuation">&#123;</span><br>        proxy_pass https<span class="hljs-punctuation">:</span><span class="hljs-comment">//127.0.0.1:5001/api/;</span><br>        proxy_set_header Host $host;<br>        proxy_set_header X-Real-IP $remote_addr;<br>        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;<br>        proxy_set_header X-Forwarded-Proto $scheme;  # 設置轉發的協議為 HTTPS<br>    <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>接著重新啟動 NGINX 伺服器：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">sudo service nginx restart<br></code></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>技術筆記</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Nginx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>利用 Hexo 與 GitPage 建置個人 Blog</title>
+    <url>/2021/09/09/teach-hexo/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本文主要介紹如何使用 Hexo 來製作個人 Blog，並利用 GitPage 進行自動更新部署，讓沒接觸過新手小白也能輕鬆上手。</p>
+<h2 id="環境建置"><a href="#環境建置" class="headerlink" title="環境建置"></a>環境建置</h2><p>在開始之前，須先：</p>
+<ul>
+<li>安裝 <a href="https://nodejs.org/en/">Node.js</a></li>
+<li>安裝 <a href="https://git-scm.com/">Git</a></li>
+<li>註冊 <a href="https://github.com/">GitHub</a> 帳號</li>
+<li>瞭解 cmd 或 bash 指令（下文中所有以 ‘$’ 為開頭的，皆為 bash 指令）</li>
+</ul>
+<h2 id="建置-Hexo"><a href="#建置-Hexo" class="headerlink" title="建置 Hexo"></a>建置 Hexo</h2><h3 id="安裝-Hexo"><a href="#安裝-Hexo" class="headerlink" title="安裝 Hexo"></a>安裝 Hexo</h3><p>使用 npm 來安裝 hexo （須先安裝 Node.js）</p>
+<figure class="highlight avrasm"><table><tr><td class="code"><pre><code class="hljs avrasm">$ npm install -g hexo-<span class="hljs-keyword">cli</span><br></code></pre></td></tr></table></figure>
+
+<p>安裝成功後，輸入以下指令可查看版本。</p>
+<figure class="highlight applescript"><table><tr><td class="code"><pre><code class="hljs applescript">$ hexo <span class="hljs-built_in">version</span><br></code></pre></td></tr></table></figure>
+
+<p><img src="https://miro.medium.com/max/1400/1*OUtcy0m_9ASKBBHJS__9jg.png"></p>
+<h3 id="安裝-Hexo-Git"><a href="#安裝-Hexo-Git" class="headerlink" title="安裝 Hexo Git"></a>安裝 Hexo Git</h3><figure class="highlight ada"><table><tr><td class="code"><pre><code class="hljs ada">$ npm install hexo-deployer-git <span class="hljs-comment">--save</span><br></code></pre></td></tr></table></figure>
+
+<p>接下來即可初始化我們的部落格了。</p>
+<p>執行下方指令，Hexo 就會在指定資料夾 <folder> 新增所需的檔案。</folder></p>
+<figure class="highlight gherkin"><table><tr><td class="code"><pre><code class="hljs gherkin">hexo init <span class="hljs-variable">&lt;folder&gt;</span>   <span class="hljs-comment"># 初始化 blog 資料夾（自己命名）</span><br>cd <span class="hljs-variable">&lt;folder&gt;</span>          <span class="hljs-comment"># 移動到剛創建的 blog 資料夾裡</span><br>npm install          <span class="hljs-comment"># 安裝相關套件</span><br></code></pre></td></tr></table></figure>
+
+<p>安裝完成之後，docs 的目錄結構如下：</p>
+<ul>
+<li><code>_config.yml</code> 網站 全域配置 檔案，可以在此設置大部分的設定，其設定是用 yaml 格式編寫。</li>
+<li><code>package.json</code> Node.js 的套件版本控制。</li>
+<li><code>scaffolds</code> Hexo 釋出文章的時候使用，建立新文章時，會根據 scaffold 來建立檔案。</li>
+<li><code>source</code> MarkDown 和各種原始檔，放置內容的地方。</li>
+<li><code>themes</code> Hexo 的主題資料夾，會根據主題來產生靜態檔案。</li>
+</ul>
+<h3 id="本地端啟動"><a href="#本地端啟動" class="headerlink" title="本地端啟動"></a>本地端啟動</h3><figure class="highlight verilog"><table><tr><td class="code"><pre><code class="hljs verilog">$ hexo <span class="hljs-keyword">generate</span><br></code></pre></td></tr></table></figure>
+
+<p>亦可用 <code>hexo g</code>，產生靜態檔案，會在目錄下產生 public 資料夾。</p>
+<figure class="highlight axapta"><table><tr><td class="code"><pre><code class="hljs axapta">$ hexo <span class="hljs-keyword">server</span><br></code></pre></td></tr></table></figure>
+
+<p>亦可用 <code>hexo s</code>，啟動伺服器，預設是 <code>http://localhost:4000/</code></p>
+<figure class="highlight crystal"><table><tr><td class="code"><pre><code class="hljs crystal"><span class="hljs-variable">$ </span>hexo deploy<br></code></pre></td></tr></table></figure>
+
+<p>亦可用 <code>hexo d</code>，部署網站。（ 如：github、heroku 等 ）</p>
+<p>完成上述步驟後，在瀏覽器中即可看到本地端啟動的個人網頁了。</p>
+<h2 id="部署到-GitHub"><a href="#部署到-GitHub" class="headerlink" title="部署到 GitHub"></a>部署到 GitHub</h2><h3 id="新建-GitHub-Repository"><a href="#新建-GitHub-Repository" class="headerlink" title="新建 GitHub Repository"></a>新建 GitHub Repository</h3><p>接著，我們可以在 Github 的主分支上來建立我們的文件了。有兩種方式可以達成：</p>
+<ul>
+<li>在一個已存在的專案中建立文件</li>
+<li>建立一個新的專案 <a href="https://github.com/new">Create a new repository</a></li>
+</ul>
+<p>簡單起見，假設我們新建立了一個名為 <code>yourname.github.io</code> 的倉庫（repository），當然你也可以用一個已經存在的專案繼續下面的操作。</p>
+<p><img src="https://miro.medium.com/max/1400/1*-mmXEsYov4s11mpPSvu0yA.png"></p>
+<p style="text-align:center"><i>請將上面的 yourname 替換成你 GitHub 的帳號名稱</i></p>
+
+<p><img src="https://miro.medium.com/max/1400/1*cOqn6zvl5jWSGLqinnhuAw.png"></p>
+<p style="text-align:center"><i>創建完新 repo 的畫面</i></p>
+
+<p>再來，到已創立的指定資料夾 <folder>中找一個 <code>_config.yml</code> 的檔案。</folder></p>
+<figure class="highlight dts"><table><tr><td class="code"><pre><code class="hljs dts"><span class="hljs-meta"># Site</span><br><span class="hljs-symbol">title:</span> /標題(會顯示在網頁標題與頁首)/<br><span class="hljs-symbol">subtitle:</span> /子標題(顯示在頁首)/<br><span class="hljs-symbol">description:</span> /內容描述(給搜尋引擎看的)/<br><span class="hljs-symbol">author:</span> /作者(顯示在頁尾)/<br><span class="hljs-symbol">language:</span> /網站預設語言(台灣:zh-tw)/<br><span class="hljs-symbol">timezone:</span> /時區(預設使用你電腦的時區)/<br><br><span class="hljs-meta"># URL</span><br><span class="hljs-symbol">url:</span> /網站的網域位址/<br><span class="hljs-symbol">root:</span> /網站根目錄/<br><span class="hljs-symbol">permalink:</span> /文章目錄(預設使用 YYYY\MM\DD\文章名稱)/<br><br><span class="hljs-meta"># Extensions</span><br><span class="hljs-symbol">theme:</span> /網站的佈景主題/<span class="hljs-meta"># Deployment</span><br><span class="hljs-symbol">deploy:</span><br><span class="hljs-symbol"> type:</span> /發佈型態/ <br><span class="hljs-symbol"> repository:</span> /部署位置/ <br><span class="hljs-symbol"> branch:</span> /分支/<br><span class="hljs-symbol"> message:</span> /部署訊息/<br></code></pre></td></tr></table></figure>
+
+<p>開啟之後，拉到檔案最底部，可以看到</p>
+<figure class="highlight dts"><table><tr><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">deploy:</span><br><span class="hljs-symbol"> type:</span><br></code></pre></td></tr></table></figure>
+
+<p>將以下資訊對應輸入</p>
+<figure class="highlight dts"><table><tr><td class="code"><pre><code class="hljs dts"><span class="hljs-symbol">deploy:</span><br><span class="hljs-symbol"> type:</span> git<br><span class="hljs-symbol"> repository:</span> http:<span class="hljs-comment">//github.com/yourname/yourname.github.io.git</span><br><span class="hljs-symbol"> branch:</span> master<br></code></pre></td></tr></table></figure>
+
+<blockquote>
+<p><b>注意：</b><br>設定中的 : 後一定要有一個空格<br>將上面的 yourname 改成你的 GitHub 帳號名稱</p>
+</blockquote>
+<h3 id="連線上傳-GitHub"><a href="#連線上傳-GitHub" class="headerlink" title="連線上傳 GitHub"></a>連線上傳 GitHub</h3><blockquote>
+<p>過程中，可能會需要輸入GitHub的帳號、密碼做授權。</p>
+</blockquote>
+<p>使用下方的命令在本地 clone 專案：</p>
+<figure class="highlight crmsh"><table><tr><td class="code"><pre><code class="hljs crmsh">$ git <span class="hljs-keyword">clone</span> <span class="hljs-title">http</span>://github.com/yourname/yourname.github.io.git<br></code></pre></td></tr></table></figure>
+
+<p>將 <code>USERNAME</code> 替換為你的使用者名稱，<code>REPOSITORY</code> 替換為你的專案名稱。</p>
+<figure class="highlight routeros"><table><tr><td class="code"><pre><code class="hljs routeros">$ git <span class="hljs-built_in">add</span> .<br></code></pre></td></tr></table></figure>
+
+<p>為 commit 留註解。</p>
+<figure class="highlight sql"><table><tr><td class="code"><pre><code class="hljs sql">$ git <span class="hljs-keyword">commit</span> <span class="hljs-operator">-</span>m “<span class="hljs-keyword">first</span> <span class="hljs-keyword">commit</span>”<br></code></pre></td></tr></table></figure>
+
+<p>手動新增 GitHub 遠端 branch 名稱、連結</p>
+<figure class="highlight awk"><table><tr><td class="code"><pre><code class="hljs awk">$ git remote origin  http:<span class="hljs-regexp">//gi</span>thub.com<span class="hljs-regexp">/yourname/y</span>ourname.github.io.git<br></code></pre></td></tr></table></figure>
+
+<p>推到你的 GitHub master。</p>
+<figure class="highlight maxima"><table><tr><td class="code"><pre><code class="hljs maxima">$ git <span class="hljs-built_in">push</span> <span class="hljs-built_in">origin</span> master<br># 只有第一次 <span class="hljs-built_in">push</span> 需要全打，第二次以後執行 git <span class="hljs-built_in">push</span> 即可<br></code></pre></td></tr></table></figure>
+
+<p>這樣就把本地的檔案上傳到 GitHub 囉！</p>
+<h3 id="設定-GitPage"><a href="#設定-GitPage" class="headerlink" title="設定 GitPage"></a>設定 GitPage</h3><p>打開 GitHub 專案的 Setting，下面有個 GitHub Page 的地方，將其勾選設定，接著就可以在你個人的 <a href="https://yourname.github.io/">https://yourname.github.io/</a> 看到畫面了。</p>
+<p><img src="https://miro.medium.com/max/1400/1*fbLuA1K6Vik-ezAiUbAuJA.jpeg"></p>
+<h2 id="設定專屬個人-Domain"><a href="#設定專屬個人-Domain" class="headerlink" title="設定專屬個人 Domain"></a>設定專屬個人 Domain</h2><p>有了個人的 GitHub Page 後，若想把網址換成專屬網域名稱，提供以下兩個網站可供參考：</p>
+<ol>
+<li>Gandi.net</li>
+<li>Godaddy</li>
+</ol>
+<p>進去網站後，挑選並確定了自己想購買的網址後，在購物車結帳頁面可以選擇自己想要購買的年限，至少要買一年，若一年後還要再使用可以自行續約。</p>
+<p>以 Gandi.net 為例，購買後，到 域名－區域檔紀錄－新增</p>
+<p><img src="https://miro.medium.com/max/1400/1*Yjbd4zMuUMw2n56nJysL-Q.png"></p>
+<p style="text-align:center"><i>新增紅框中的四筆 DNS</i></p>
+
+<p>新增 DNS 紀錄 （可參考 <a href="https://docs.github.com/en/github/working-with-github-pages/managing-a-custom-domain-for-your-github-pages-site">GitHub Page 官方說明文件</a></p>
+<figure class="highlight accesslog"><table><tr><td class="code"><pre><code class="hljs accesslog">類型： A<br>TTL： <span class="hljs-number">1800</span><br>IPv4： <br><span class="hljs-number">185.199.108.153</span><br><span class="hljs-number">185.199.109.153</span><br><span class="hljs-number">185.199.110.153</span><br><span class="hljs-number">185.199.111.153</span><br></code></pre></td></tr></table></figure>
+
+<p>再來，到 GitHub 的 Setting，Custom Domain 欄位輸入購買的網址，按儲存就設定完成了。</p>
+<blockquote>
+<p>小建議，下方的 HTTPS 也一同勾選。</p>
+</blockquote>
+<p><img src="https://miro.medium.com/max/1400/1*895UBYgeMPzh1OjOyQlgRA.png"></p>
+<p>稍待一陣子，就可以用新購買的網址進入個人網站囉。</p>
+<h2 id="更換主題"><a href="#更換主題" class="headerlink" title="更換主題"></a>更換主題</h2><p>Hexo 預設的主題是 <a href="https://github.com/hexojs/hexo-theme-landscape">landscape</a>，而我們可以到 <a href="https://hexo.io/themes/">Hexo主題庫</a> 來挑選我們欲安裝的主題，以下以 <a href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a> 為例。</p>
+<h3 id="安裝-Ocean"><a href="#安裝-Ocean" class="headerlink" title="安裝 Ocean"></a>安裝 Ocean</h3><p>安裝 Ocean</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell"><span class="hljs-meta prompt_">$ </span><span class="language-bash">git <span class="hljs-built_in">clone</span> https://github.com/zhwangart/hexo-theme-ocean.git themes/ocean</span><br></code></pre></td></tr></table></figure>
+
+<p>修改網站設定 <code>&lt;folder&gt;/ _config.yml</code></p>
+<figure class="highlight avrasm"><table><tr><td class="code"><pre><code class="hljs avrasm"><span class="hljs-symbol">theme:</span> ocean<br></code></pre></td></tr></table></figure>
+
+<p>在 <code>&lt;folder&gt;/theme/ocean/</code> 裡面的 <code>_config.yml</code> 也可以自己設定</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><code class="hljs yaml"><span class="hljs-comment"># Menu</span><br><span class="hljs-attr">menu:</span><br>  <span class="hljs-attr">Home:</span> <span class="hljs-string">/</span><br>  <span class="hljs-attr">Archives:</span> <span class="hljs-string">/archives</span><br>  <span class="hljs-attr">Gallery:</span> <span class="hljs-string">/gallery</span><br>  <span class="hljs-attr">About:</span> <span class="hljs-string">/about</span><br>  <span class="hljs-attr">Links:</span> <span class="hljs-string">/links</span><br><span class="hljs-attr">rss:</span> <span class="hljs-string">/atom.xml</span><br><br><span class="hljs-comment"># Miscellaneous</span><br><span class="hljs-attr">favicon:</span> <span class="hljs-string">/favicon.ico</span><br><span class="hljs-attr">brand:</span> <span class="hljs-string">/images/hexo.svg</span><br><br><span class="hljs-comment"># Ocean Video</span><br><span class="hljs-comment"># Because I put videos in multiple formats on the same path, I just labeled the path here.</span><br><span class="hljs-attr">ocean:</span><br>  <span class="hljs-attr">overlay:</span> <span class="hljs-literal">true</span><br>  <span class="hljs-attr">path:</span> <span class="hljs-string">images/ocean/</span>      <span class="hljs-comment"># Video storage path, formats: mp4/ogg/webm</span><br>  <span class="hljs-attr">brand:</span> <span class="hljs-string">/images/hexo-inverted.svg</span>      <span class="hljs-comment"># Optional, a small logo</span><br><br><span class="hljs-comment"># Content</span><br><span class="hljs-attr">excerpt_link:</span> <span class="hljs-string">Read</span> <span class="hljs-string">More...</span><br><br><span class="hljs-comment"># fancybox</span><br><span class="hljs-attr">fancybox:</span> <span class="hljs-literal">true</span><br><br><span class="hljs-comment"># Local search</span><br><span class="hljs-attr">search_text:</span> <span class="hljs-string">Search</span><br><br><span class="hljs-comment"># Gitalk</span><br><span class="hljs-attr">gitalk:</span><br>  <span class="hljs-attr">enable:</span> <span class="hljs-literal">true</span><br>  <span class="hljs-attr">clientID:</span> <span class="hljs-comment"># GitHub Application Client ID</span><br>  <span class="hljs-attr">clientSecret:</span> <span class="hljs-comment"># Client Secret</span><br>  <span class="hljs-attr">repo:</span> <span class="hljs-comment"># Repository name</span><br>  <span class="hljs-attr">owner:</span> <span class="hljs-comment"># GitHub ID</span><br>  <span class="hljs-attr">admin:</span> <span class="hljs-comment"># GitHub ID</span><br><br><span class="hljs-comment"># Valine</span><br><span class="hljs-attr">valine:</span><br>  <span class="hljs-attr">enable:</span> <span class="hljs-literal">false</span>    <span class="hljs-comment"># Default: false.</span><br>  <span class="hljs-attr">el:</span> <span class="hljs-string">&#x27;vcomments&#x27;</span>    <span class="hljs-comment"># The DOM element to be mounted on initialization.</span><br>  <span class="hljs-attr">appId:</span>    <span class="hljs-comment"># Application appId from Leancloud.</span><br>  <span class="hljs-attr">appKey:</span>    <span class="hljs-comment"># Application appKey from Leancloud.</span><br>  <span class="hljs-attr">notify:</span> <span class="hljs-literal">false</span>    <span class="hljs-comment"># Mail notifier, Default: false.</span><br>  <span class="hljs-attr">verify:</span> <span class="hljs-literal">true</span>    <span class="hljs-comment"># Validation code, Default: true.</span><br>  <span class="hljs-attr">avatar:</span> <span class="hljs-string">&#x27;mp&#x27;</span>    <span class="hljs-comment"># Gravatar type.</span><br>  <span class="hljs-attr">pageSize:</span> <span class="hljs-string">&#x27;10&#x27;</span>    <span class="hljs-comment"># Number of pages per page.</span><br>  <span class="hljs-attr">placeholder:</span> <span class="hljs-string">&#x27;請輸入...&#x27;</span>    <span class="hljs-comment">#</span><br></code></pre></td></tr></table></figure>
+
+<p>重新啟動 server</p>
+<figure class="highlight axapta"><table><tr><td class="code"><pre><code class="hljs axapta">$ hexo <span class="hljs-keyword">server</span><br></code></pre></td></tr></table></figure>
+
+<p>這樣就更改成功了！</p>
+<p><img src="https://miro.medium.com/max/1400/1*0Ji-3ir8nokLgZGvtzKVIw.png"></p>
+<p style="text-align:center"><i>修改後的 Ocean 主題</i></p>
+
+<h2 id="發佈文章"><a href="#發佈文章" class="headerlink" title="發佈文章"></a>發佈文章</h2><figure class="highlight gauss"><table><tr><td class="code"><pre><code class="hljs gauss">$ hexo <span class="hljs-keyword">new</span> [layout] &lt;<span class="hljs-built_in">title</span>&gt;<br></code></pre></td></tr></table></figure>
+
+<p>你可以在指令中指定文章的佈局（layout），預設為 post ，也可以透過修改 <code>_config.yml</code> 中的 <code>default_layout</code> 設定來指定預設佈局。</p>
+<h3 id="佈局（Layout）"><a href="#佈局（Layout）" class="headerlink" title="佈局（Layout）"></a>佈局（Layout）</h3><p>Hexo 有三種預設佈局：post、page 和 draft，它們分別對應不同的路徑，而你所自定的其他佈局和 post 相同，都儲存至 source&#x2F;_posts 資料夾。</p>
+<p><img src="https://miro.medium.com/max/824/1*eFVpwYyoIyZZ2x19f8r8Pw.png"></p>
+<figure class="highlight haxe"><table><tr><td class="code"><pre><code class="hljs haxe">$ hexo <span class="hljs-keyword">new</span> <span class="hljs-type"></span>“postName”         <span class="hljs-meta"># 新建文章</span><br>$ hexo <span class="hljs-keyword">new</span> <span class="hljs-type">page</span> “pageName”    <span class="hljs-meta"># 新建頁面</span><br>$ hexo publish “draftName”    <span class="hljs-meta"># 新建草稿</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="刪除文章"><a href="#刪除文章" class="headerlink" title="刪除文章"></a>刪除文章</h3><p>首先進入到 <code>source /_post</code> 資料夾中，找到 <code>helloworld.md</code>，在本地直接執行刪除。</p>
+<p><img src="https://miro.medium.com/max/1400/0*q6PVwd41rT6-e47s.png"></p>
+<p>執行以下操作，一段時間後就會發現文章已刪除。</p>
+<figure class="highlight verilog"><table><tr><td class="code"><pre><code class="hljs verilog">$ hexo clean       # 清除快取檔案和已產生的靜態檔案。<br>$ hexo d -g        # d = deploy, g = <span class="hljs-keyword">generate</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="其他指令"><a href="#其他指令" class="headerlink" title="其他指令"></a>其他指令</h3><figure class="highlight axapta"><table><tr><td class="code"><pre><code class="hljs axapta">$ hexo <span class="hljs-keyword">server</span> -p <span class="hljs-number">5000</span><br><span class="hljs-meta"># 如果 port:4000 被佔用，可以用這個$ hexo render &lt;file1&gt; [file2] </span><br><span class="hljs-meta"># 將文件渲染成靜態頁面</span><br></code></pre></td></tr></table></figure>
+
+<p>附錄：<a href="https://hexo.io/docs/">Hexo 官方參考文件</a></p>
+]]></content>
+      <categories>
+        <category>技術筆記</category>
+      </categories>
+      <tags>
+        <tag>教學</tag>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>【SEO 導入】指南</title>
+    <url>/2024/12/06/seo-angular-guide/</url>
+    <content><![CDATA[<p>紀錄一下如何為 Angular 專案導入 SEO，從觀念到實際改造成 SSR／預渲染的步驟。</p>
+<span id="more"></span>
+
+<h2 id="SEO-是什麼？"><a href="#SEO-是什麼？" class="headerlink" title="SEO 是什麼？"></a>SEO 是什麼？</h2><p>通過優化網站內容和結構，讓網站在搜索引擎（例如 Google ）的自然搜索結果中排名更高，從而吸引更多的訪客。</p>
+<h2 id="SEO-與-Angular-的關係"><a href="#SEO-與-Angular-的關係" class="headerlink" title="SEO 與 Angular 的關係"></a>SEO 與 Angular 的關係</h2><h3 id="1、Angular-預設使用-CSR"><a href="#1、Angular-預設使用-CSR" class="headerlink" title="1、Angular 預設使用 CSR"></a>1、Angular 預設使用 CSR</h3><p>Angular 預設使用 **Client-Side Rendering (CSR)**，這意味著網頁內容是在瀏覽器上動態生成的。</p>
+<p>這樣不符合 SEO，因爲：</p>
+<ul>
+<li>搜索引擎的爬蟲可能無法執行 JavaScript，導致無法看到完整的內容。</li>
+<li>內容加載時間可能延遲，降低搜索引擎的抓取效率。</li>
+</ul>
+<h3 id="2、使用-SSR-改善-SEO"><a href="#2、使用-SSR-改善-SEO" class="headerlink" title="2、使用 SSR 改善 SEO"></a>2、使用 SSR 改善 SEO</h3><p><strong>Server-Side Rendering (SSR)</strong> 是 Angular 的解決方案，可以在伺服器上生成完整的 HTML，直接發送給瀏覽器。</p>
+<p>這樣：</p>
+<ul>
+<li>搜索引擎可以直接抓取完整的內容。</li>
+<li>網頁的首次加載速度更快。</li>
+<li>提高低功率設備的性能。</li>
+</ul>
+<h2 id="哪些頁面需要改成支援-SEO？"><a href="#哪些頁面需要改成支援-SEO？" class="headerlink" title="哪些頁面需要改成支援 SEO？"></a>哪些頁面需要改成支援 SEO？</h2><p>並非所有頁面都需要支援 SEO，特別是功能性頁面（例如登入、表單提交）通常不會被搜索引擎索引。</p>
+<p>以下是判斷哪些頁面需要 SEO 的標準：</p>
+<h3 id="需要-SEO-支援的頁面："><a href="#需要-SEO-支援的頁面：" class="headerlink" title="需要 SEO 支援的頁面："></a>需要 SEO 支援的頁面：</h3><ol>
+<li><strong>公開頁面</strong>：不需要登入即可訪問的內容，例如：<ul>
+<li>平台介紹、關於我們、聯繫我們。</li>
+<li>部落格文章、新聞、公告等資訊頁。</li>
+<li>特定產品頁、功能說明頁。</li>
+</ul>
+</li>
+<li><strong>需要高排名的頁面</strong>：希望通過 Google 或其他搜索引擎吸引用戶的頁面。</li>
+<li><strong>內容類型頁面</strong>：<ul>
+<li>包含描述性內容的頁面，例如文案、列表、圖片等。</li>
+<li>需要分享的頁面（社群平台上的連結預覽需要正確的標題、圖片和描述）。</li>
+</ul>
+</li>
+<li><strong>多語系頁面</strong>：國際化網站，SEO 可幫助不同地區的搜索引擎更好地理解頁面語言版本。</li>
+</ol>
+<h3 id="不需要-SEO-支援的頁面："><a href="#不需要-SEO-支援的頁面：" class="headerlink" title="不需要 SEO 支援的頁面："></a>不需要 SEO 支援的頁面：</h3><ol>
+<li><strong>私有頁面</strong>：如登入頁、用戶中心、個人資料設定等，通常不對搜索引擎公開。</li>
+<li><strong>動態工具型頁面</strong>：如查詢頁、表單提交頁、即時交互性工具。</li>
+<li><strong>API 呼叫依賴頁面</strong>：需要大量客戶端渲染，或數據全部來自後端 API 的頁面。</li>
+</ol>
+<h2 id="改成-SSR-的影響與注意事項"><a href="#改成-SSR-的影響與注意事項" class="headerlink" title="改成 SSR 的影響與注意事項"></a>改成 SSR 的影響與注意事項</h2><h3 id="正面影響："><a href="#正面影響：" class="headerlink" title="正面影響："></a>正面影響：</h3><ol>
+<li><strong>更快的渲染時間</strong>：伺服器端生成的 HTML 能直接返回完整的內容，提升用戶體驗。</li>
+<li><strong>更好的 SEO 表現</strong>：搜尋引擎能夠讀取完整的 HTML 結構，進一步改善頁面的可見性。</li>
+<li><strong>預加載內容</strong>：減少客戶端 API 請求數量。</li>
+</ol>
+<h3 id="潛在挑戰："><a href="#潛在挑戰：" class="headerlink" title="潛在挑戰："></a>潛在挑戰：</h3><ol>
+<li><strong>伺服器負擔加重</strong>：SSR 需要在伺服器端生成完整的 HTML，對伺服器的性能有額外需求。</li>
+<li><strong>開發複雜性增加</strong>：需要區分伺服器和客戶端的行為，例如 window 或 document 等 API 不能直接使用。</li>
+<li><strong>安全性問題</strong>：伺服器端渲染的數據可能需要額外處理以避免敏感資訊泄露。</li>
+<li><strong>驗證碼、表單等動態功能的限制</strong>：這些功能可能需要額外調整以在 SSR 環境下正常運行。</li>
+</ol>
+<h2 id="如何改造支援-SEO？"><a href="#如何改造支援-SEO？" class="headerlink" title="如何改造支援 SEO？"></a>如何改造支援 SEO？</h2><p>以下我將以 kimi-seo-demo 專案為例，跟著操作時，請將 kimi-seo-demo 置換成你所使用的專案名稱。</p>
+<h3 id="1-確定使用-SSR-或預渲染（Prerendering）"><a href="#1-確定使用-SSR-或預渲染（Prerendering）" class="headerlink" title="1. 確定使用 SSR 或預渲染（Prerendering）"></a>1. 確定使用 SSR 或預渲染（Prerendering）</h3><p>在開始之前，要先確認哪些頁面要改成支援 SSR 和預渲染，哪些維持舊有的 CSR。</p>
+<ul>
+<li><strong>SSR</strong>：適合需要即時渲染或依賴動態內容的頁面，例如多語系、需要數據 API 的頁面。</li>
+<li><strong>預渲染</strong>：適合靜態內容固定的頁面（不需要動態生成內容），如平台介紹、FAQ、隱私政策等。</li>
+</ul>
+<blockquote>
+<p>Angular 中可使用  <a href="https://angular.io/guide/universal"><strong>Angular Universal</strong></a> <strong>實現 SSR 或 Prerendering。</strong></p>
+</blockquote>
+<h3 id="2-Angular-Universal-詳細步驟"><a href="#2-Angular-Universal-詳細步驟" class="headerlink" title="2. Angular Universal 詳細步驟"></a>2. Angular Universal 詳細步驟</h3><h4 id="1-設定-Angular-Universal"><a href="#1-設定-Angular-Universal" class="headerlink" title="(1) 設定 Angular Universal"></a>(1) 設定 Angular Universal</h4><p>在 Angular 專案中加入 SSR 支援：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">ng add @nguniversal/express-engine<br></code></pre></td></tr></table></figure>
+
+<p>這個指令會自動：</p>
+<p>• 安裝 Angular Universal 的相關套件<br>• 設定 SSR 的 Express 伺服器<br>• 生成一個 <code>server.ts</code> 文件，更新你的 <code>angular.json</code> 和 <code>package.json</code></p>
+<h4 id="2-檢查並確認-angular-json-設定檔"><a href="#2-檢查並確認-angular-json-設定檔" class="headerlink" title="(2) 檢查並確認 angular.json 設定檔"></a>(2) 檢查並確認 angular.json 設定檔</h4><p>確認  projects.architect 內有包含以下配置（若無，請將以下內容加入 angular.json）：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;serve-ssr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;builder&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;@nguniversal/builders:ssr-dev-server&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;configurations&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>	<span class="hljs-attr">&quot;development&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>	  <span class="hljs-attr">&quot;browserTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:build:dev&quot;</span><span class="hljs-punctuation">,</span><br>	  <span class="hljs-attr">&quot;serverTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:server:dev&quot;</span><br>	<span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>	<span class="hljs-attr">&quot;production&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>	  <span class="hljs-attr">&quot;browserTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:build:production&quot;</span><span class="hljs-punctuation">,</span><br>	  <span class="hljs-attr">&quot;serverTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:server:production&quot;</span><br>	<span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;defaultConfiguration&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;development&quot;</span><br><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br><span class="hljs-attr">&quot;prerender&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;builder&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;@nguniversal/builders:prerender&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;options&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>	<span class="hljs-attr">&quot;routes&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>	  <span class="hljs-string">&quot;/&quot;</span><br>	<span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;configurations&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>	<span class="hljs-attr">&quot;production&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>	  <span class="hljs-attr">&quot;browserTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:build:production&quot;</span><span class="hljs-punctuation">,</span><br>	  <span class="hljs-attr">&quot;serverTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:server:production&quot;</span><br>	<span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>	<span class="hljs-attr">&quot;development&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>	  <span class="hljs-attr">&quot;browserTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:build:development&quot;</span><span class="hljs-punctuation">,</span><br>	  <span class="hljs-attr">&quot;serverTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:server:development&quot;</span><br>	<span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>	<span class="hljs-attr">&quot;ssr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>	  <span class="hljs-attr">&quot;browserTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:build:production&quot;</span><span class="hljs-punctuation">,</span><br>	  <span class="hljs-attr">&quot;serverTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:build:server:ssr&quot;</span><br>	<span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;defaultConfiguration&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;production&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="3-確認更新-package-json-設定"><a href="#3-確認更新-package-json-設定" class="headerlink" title="(3) 確認更新 package.json 設定"></a>(3) 確認更新 package.json 設定</h4><p>在你的 package.json 中，設置應該如下：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json"><span class="hljs-attr">&quot;dev:ssr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;ng run kimi-seo-demo:serve-ssr:development&quot;</span><span class="hljs-punctuation">,</span><br><span class="hljs-attr">&quot;serve:ssr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;node dist/kimi-seo-demo/server/main.js&quot;</span><span class="hljs-punctuation">,</span><br><span class="hljs-attr">&quot;build:ssr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;ng build &amp;&amp; ng run kimi-seo-demo:server:production&quot;</span><span class="hljs-punctuation">,</span><br><span class="hljs-attr">&quot;prerender&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;ng run kimi-seo-demo:prerender&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="4-確認-main-server-ts-檔案-import-路徑位置是否正確"><a href="#4-確認-main-server-ts-檔案-import-路徑位置是否正確" class="headerlink" title="(4) 確認 main.server.ts 檔案 import 路徑位置是否正確"></a>(4) 確認 main.server.ts 檔案 import 路徑位置是否正確</h4><p>在安裝 Angular Universal 後，會自動在 src 下生成 <code>main.server.ts</code> ，請確認 <code>tsconfig.server.json</code> 中指定該檔案的路徑位置是否正確。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json"><span class="hljs-comment">//tsconfig.server.json</span><br><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;extends&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;./tsconfig.app.json&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;compilerOptions&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;outDir&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;../out-tsc/server&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;types&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>      <span class="hljs-string">&quot;node&quot;</span><br>    <span class="hljs-punctuation">]</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;files&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>    <span class="hljs-string">&quot;./main.server.ts&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-string">&quot;../server.ts&quot;</span><br>  <span class="hljs-punctuation">]</span><br><span class="hljs-punctuation">&#125;</span><br><br></code></pre></td></tr></table></figure>
+<h4 id="5-修改應用邏輯"><a href="#5-修改應用邏輯" class="headerlink" title="(5) 修改應用邏輯"></a>(5) 修改應用邏輯</h4><h5 id="要特別注意："><a href="#要特別注意：" class="headerlink" title="要特別注意："></a>要特別注意：</h5><blockquote>
+<p>由於 SSR 是透過 nodejs 預先將頁面進行編譯以及載入，因此是不支援 windows 或是 localStorage等其他在 Web 上的功能。需要額外加上判斷，透過瀏覽器去運行才不會報錯。</p>
+</blockquote>
+<p>在每個組件中，可以根據 PLATFORM_ID 和 isPlatformServer 或 isPlatformBrowser 來判斷當前的渲染模式，由不同的渲染方式來決定資料抓取的策略。</p>
+<p><strong>環境判斷：</strong></p>
+<ul>
+<li>使用 isPlatformBrowser 判斷客戶端行為。</li>
+<li>使用 isPlatformServer 判斷伺服器行為。</li>
+</ul>
+<h5 id="範例"><a href="#範例" class="headerlink" title="範例"></a>範例</h5><figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; isPlatformBrowser, isPlatformServer &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/common&#x27;</span>;<br><br><span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-meta">@Inject</span>(PLATFORM_ID) <span class="hljs-keyword">private</span> platformId: <span class="hljs-built_in">any</span></span>) &#123; &#125;<br><br><span class="hljs-keyword">if</span> (<span class="hljs-title function_">isPlatformBrowser</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">platformId</span>)) &#123;<br>  <span class="hljs-comment">// CSR 渲染，客戶端邏輯</span><br>&#125; <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-title function_">isPlatformServer</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">platformId</span>)) &#123;<br>  <span class="hljs-comment">// SSR 渲染，伺服器端邏輯</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>localStorage 可以改成這樣的寫法</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-comment">// 讓 node.js 讀懂的語法</span><br><span class="hljs-keyword">import</span> <span class="hljs-string">&#x27;localStorage-polyfill&#x27;</span>;<br><br><span class="hljs-variable language_">global</span>[<span class="hljs-string">&#x27;localStorage&#x27;</span>] = <span class="hljs-variable language_">localStorage</span>;<br></code></pre></td></tr></table></figure>
+
+<p>如果需要操作 DOM（與瀏覽器相關的 API，包含 window、document、 jQuery、牽涉到畫面甚至是動畫效果的），可以參考下面的方式來處理。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Inject</span>, <span class="hljs-variable constant_">PLATFORM_ID</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-variable constant_">DOCUMENT</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/common&#x27;</span>;<br><br><span class="hljs-title function_">constructor</span>(<span class="hljs-params"></span><br><span class="hljs-params">	<span class="hljs-meta">@Inject</span>(PLATFORM_ID) <span class="hljs-keyword">private</span> platformId</span><br><span class="hljs-params">	<span class="hljs-meta">@Inject</span>(DOCUMENT) <span class="hljs-keyword">private</span> <span class="hljs-variable language_">document</span>: Document,</span><br><span class="hljs-params"></span>) &#123;<br>	<span class="hljs-variable language_">this</span>.<span class="hljs-property">isBrowser</span> = <span class="hljs-title function_">isPlatformBrowser</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">platformId</span>);<br>	<span class="hljs-keyword">if</span> (<span class="hljs-variable language_">this</span>.<span class="hljs-property">isBrowser</span>) <span class="hljs-variable language_">window</span>.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;scroll&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">e</span>) =&gt;</span> <span class="hljs-variable language_">this</span>.<span class="hljs-title function_">onWindowScroll</span>(e));<br>&#125;<br><br><span class="hljs-title function_">onWindowScroll</span>(<span class="hljs-params">e</span>) &#123;<br>		<span class="hljs-keyword">if</span> (<span class="hljs-variable language_">window</span>.<span class="hljs-property">scrollY</span> &gt; <span class="hljs-number">30</span>) &#123;<br>			<span class="hljs-keyword">const</span> element = <span class="hljs-variable language_">this</span>.<span class="hljs-property">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;navbar-top&#x27;</span>);<br>			<span class="hljs-keyword">if</span> (element) &#123;<br>				element?.<span class="hljs-property">classList</span>.<span class="hljs-title function_">remove</span>(<span class="hljs-string">&#x27;navbar-transparent&#x27;</span>);<br>				element?.<span class="hljs-property">classList</span>.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;bg-blue&#x27;</span>);<br>			&#125;<br>		&#125; <span class="hljs-keyword">else</span> &#123;<br>			<span class="hljs-keyword">const</span> element = <span class="hljs-variable language_">this</span>.<span class="hljs-property">document</span>.<span class="hljs-title function_">getElementById</span>(<span class="hljs-string">&#x27;navbar-top&#x27;</span>);<br>			<span class="hljs-keyword">if</span> (element) &#123;<br>				element?.<span class="hljs-property">classList</span>.<span class="hljs-title function_">add</span>(<span class="hljs-string">&#x27;navbar-transparent&#x27;</span>);<br>				element?.<span class="hljs-property">classList</span>.<span class="hljs-title function_">remove</span>(<span class="hljs-string">&#x27;bg-blue&#x27;</span>);<br>			&#125;<br>		&#125;<br>	&#125;<br></code></pre></td></tr></table></figure>
+
+<p>透過類似像這樣的方式來判斷當前執行此段程式碼是否為 Browser；若是在 SSR 編譯時期，則該段程式就不會被運行。</p>
+<h4 id="6-減少伺服器端-API-請求"><a href="#6-減少伺服器端-API-請求" class="headerlink" title="(6) 減少伺服器端 API 請求"></a>(6) 減少伺服器端 API 請求</h4><p>對於需要 CSR 渲染的頁面，可以使用 TransferState 來延遲資料的抓取，這樣就能避免在 SSR 渲染過程中抓取資料。</p>
+<ol>
+<li><strong>安裝</strong> @angular&#x2F;platform-browser ，以便使用 TransferState。</li>
+<li><strong>在 SSR 渲染時先傳遞資料到客戶端</strong>，然後在客戶端渲染時使用這些資料。</li>
+</ol>
+<p>例如，對於 CSR 頁面，你可以在伺服器端不發出 API 請求，而是讓客戶端控制資料的更新。</p>
+<h5 id="使用-TransferState"><a href="#使用-TransferState" class="headerlink" title="使用 TransferState"></a>使用 TransferState</h5><figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Injectable</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">TransferState</span>, makeStateKey &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/platform-browser&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">HttpClient</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/common/http&#x27;</span>;<br><br><span class="hljs-keyword">const</span> <span class="hljs-variable constant_">DATA_KEY</span> = makeStateKey&lt;<span class="hljs-built_in">string</span>&gt;(<span class="hljs-string">&#x27;data&#x27;</span>);<br><br><span class="hljs-meta">@Injectable</span>(&#123;<br>  <span class="hljs-attr">providedIn</span>: <span class="hljs-string">&#x27;root&#x27;</span><br>&#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">DataService</span> &#123;<br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> http: HttpClient, <span class="hljs-keyword">private</span> transferState: TransferState</span>) &#123;&#125;<br><br>  <span class="hljs-title function_">getData</span>(<span class="hljs-params"></span>) &#123;<br>    <span class="hljs-keyword">const</span> savedData = <span class="hljs-variable language_">this</span>.<span class="hljs-property">transferState</span>.<span class="hljs-title function_">get</span>(<span class="hljs-variable constant_">DATA_KEY</span>, <span class="hljs-literal">null</span>);<br>    <span class="hljs-keyword">if</span> (savedData) &#123;<br>      <span class="hljs-keyword">return</span> savedData;  <span class="hljs-comment">// 使用 TransferState 傳遞的資料</span><br>    &#125; <span class="hljs-keyword">else</span> &#123;<br>      <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">http</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;https://api.example.com/data&#x27;</span>);<br>    &#125;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="7-測試-SSR"><a href="#7-測試-SSR" class="headerlink" title="(7) 測試 SSR"></a>(7) 測試 SSR</h4><p>執行：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npm run build:ssr // 部署<br>npm run dev:ssr  // 執行 ssr<br></code></pre></td></tr></table></figure>
+
+<p>就可以開啟瀏覽器到 <a href="http://localhost:4200/">http://localhost:4200</a> 確認 Web 是否正常執行。</p>
+<h3 id="3-加入基本的-SEO-設定"><a href="#3-加入基本的-SEO-設定" class="headerlink" title="3. 加入基本的 SEO 設定"></a>3. 加入基本的 SEO 設定</h3><h4 id="1-增加-SEO-Metadata"><a href="#1-增加-SEO-Metadata" class="headerlink" title="(1) 增加 SEO Metadata"></a>(1) 增加 SEO Metadata</h4><p>建立 html meta tag，讓網路爬蟲看懂你的網站。<br>在 angular 中，已有定義好 Meta class，我們可以在每頁的 ngOnInit 階段去定義每頁的 mega tag。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Title</span>, <span class="hljs-title class_">Meta</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/platform-browser&#x27;</span>;<br><br><span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> title: Title, <span class="hljs-keyword">private</span> meta: Meta</span>) &#123;&#125;<br><br><span class="hljs-title function_">ngOnInit</span>(<span class="hljs-params"></span>) &#123;<br>  <span class="hljs-variable language_">this</span>.<span class="hljs-property">title</span>.<span class="hljs-title function_">setTitle</span>(<span class="hljs-string">&#x27;kimi SEO demo&#x27;</span>);<br>  <span class="hljs-variable language_">this</span>.<span class="hljs-property">meta</span>.<span class="hljs-title function_">addTags</span>([<br>    &#123; <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;description&#x27;</span>, <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;Page description&#x27;</span> &#125;,<br>    &#123; <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;keywords&#x27;</span>, <span class="hljs-attr">content</span>: <span class="hljs-string">&#x27;SEO, Angular, Universal&#x27;</span> &#125;,<br>  ]);<br><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="2-建立-robots-txt、sitemap-xml"><a href="#2-建立-robots-txt、sitemap-xml" class="headerlink" title="(2) 建立 robots.txt、sitemap.xml"></a>(2) 建立 robots.txt、sitemap.xml</h4><blockquote>
+<p>robots.txt <strong>文件</strong>：</p>
+</blockquote>
+<p>• <strong>控制搜索引擎爬蟲的行為</strong>：robots.txt 是一個用來告訴搜索引擎爬蟲（如 Googlebot）哪些頁面或資料夾不應該被抓取或索引的文件。這對於保護網站的某些私密內容、減少爬蟲負擔、或對 SEO 進行策略性管理非常重要。<br>• <strong>防止敏感內容被抓取</strong>：可以指定不想被爬蟲抓取的頁面，例如登入頁面或管理頁面。<br>• <strong>節省伺服器資源</strong>：有時候，某些頁面不需要被搜索引擎索引（例如登錄頁面或資料夾），設置 robots.txt 可以防止這些頁面被爬蟲掃描，減少伺服器的負擔。</p>
+<blockquote>
+<p>sitemap.xml <strong>文件</strong>：</p>
+</blockquote>
+<p>• <strong>告訴搜索引擎網站的結構</strong>：sitemap.xml 是一個用來告訴搜索引擎網站內所有頁面的檔案。它幫助搜索引擎快速了解網站的頁面結構，並有效地抓取網站內容。<br>• <strong>提高索引效率</strong>：對於大型網站，sitemap.xml 可以提高頁面的抓取效率，特別是當網站有很多頁面或是頁面經常更新的時候。<br>• <strong>標示重要頁面</strong>：可以在 sitemap.xml 中指定某些頁面的優先級，告訴搜索引擎哪些頁面應該被優先索引。</p>
+<hr>
+<p>在專案根目錄下，新增  robots.txt 文件</p>
+<h5 id="範例-1"><a href="#範例-1" class="headerlink" title="範例"></a>範例</h5><figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-comment">//robots.txt</span><br><span class="hljs-title class_">User</span>-<span class="hljs-attr">agent</span>: *        <span class="hljs-comment">// 這告訴所有爬蟲（*表示所有爬蟲）</span><br><span class="hljs-title class_">Disallow</span>: <span class="hljs-regexp">/login/</span>    <span class="hljs-comment">// 這告訴爬蟲不要抓取網站上的 /login/ 路徑</span><br><span class="hljs-title class_">Disallow</span>: <span class="hljs-regexp">/admin/</span><br><span class="hljs-title class_">Allow</span>: <span class="hljs-regexp">/public/</span>      <span class="hljs-comment">// 這告訴爬蟲可以抓取 /public/ 資料夾中的內容</span><br><span class="hljs-title class_">Sitemap</span>: <span class="hljs-attr">https</span>:<span class="hljs-comment">//www.kunyoutech.com.tw/sitemap.xml       // 這告訴爬蟲你的網站的 URL</span><br></code></pre></td></tr></table></figure>
+
+<p>在專案根目錄下，新增 sitemap.xml 文件</p>
+<h5 id="範例-2"><a href="#範例-2" class="headerlink" title="範例"></a>範例</h5><figure class="highlight xml"><table><tr><td class="code"><pre><code class="hljs xml"><span class="hljs-meta">&lt;?xml version=<span class="hljs-string">&quot;1.0&quot;</span> encoding=<span class="hljs-string">&quot;UTF-8&quot;</span>?&gt;</span><br><span class="hljs-tag">&lt;<span class="hljs-name">urlset</span> <span class="hljs-attr">xmlns</span>=<span class="hljs-string">&quot;http://www.sitemaps.org/schemas/sitemap/0.9&quot;</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">url</span>&gt;</span><br>	<span class="hljs-comment">&lt;!-- loc: 指定 URL 位置 --&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">loc</span>&gt;</span>https://www.example.com/<span class="hljs-tag">&lt;/<span class="hljs-name">loc</span>&gt;</span><br>    <span class="hljs-comment">&lt;!-- lastmod：指定頁面最後一次更新的日期 --&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">lastmod</span>&gt;</span>2024-12-06<span class="hljs-tag">&lt;/<span class="hljs-name">lastmod</span>&gt;</span><br>    <span class="hljs-comment">&lt;!-- changefreq：告訴爬蟲該頁面更新的頻率（如 daily、weekly、monthly） --&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">changefreq</span>&gt;</span>daily<span class="hljs-tag">&lt;/<span class="hljs-name">changefreq</span>&gt;</span><br>    <span class="hljs-comment">&lt;!-- priority：指定該頁面的優先級（0.0 到 1.0），1.0 代表最高優先級 --&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">priority</span>&gt;</span>1.0<span class="hljs-tag">&lt;/<span class="hljs-name">priority</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">url</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">url</span>&gt;</span><br><br>    <span class="hljs-tag">&lt;<span class="hljs-name">loc</span>&gt;</span>https://www.example.com/about<span class="hljs-tag">&lt;/<span class="hljs-name">loc</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">lastmod</span>&gt;</span>2024-12-06<span class="hljs-tag">&lt;/<span class="hljs-name">lastmod</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">changefreq</span>&gt;</span>monthly<span class="hljs-tag">&lt;/<span class="hljs-name">changefreq</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">priority</span>&gt;</span>0.8<span class="hljs-tag">&lt;/<span class="hljs-name">priority</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">url</span>&gt;</span><br>  <span class="hljs-comment">&lt;!-- 更多頁面 --&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">urlset</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h5 id="常見-XML-sitemap-生成工具"><a href="#常見-XML-sitemap-生成工具" class="headerlink" title="常見 XML sitemap 生成工具"></a>常見 XML sitemap 生成工具</h5><p>• <a href="https://www.xml-sitemaps.com/">XML-sitemaps.com</a><br>• <a href="https://www.screamingfrog.co.uk/seo-spider/">Screaming Frog SEO Spider</a></p>
+<h4 id="3-測試-robots-txt、sitemap-xml"><a href="#3-測試-robots-txt、sitemap-xml" class="headerlink" title="(3) 測試 robots.txt、sitemap.xml"></a>(3) 測試 robots.txt、sitemap.xml</h4><h5 id="方法一：使用-Google-Search-Console-的「robots-txt-測試工具」"><a href="#方法一：使用-Google-Search-Console-的「robots-txt-測試工具」" class="headerlink" title="方法一：使用 Google Search Console 的「robots.txt 測試工具」"></a>方法一：使用 Google Search Console 的「robots.txt 測試工具」</h5><p>Google Search Console 提供了一個內建的工具來測試 robots.txt 的配置：</p>
+<ul>
+<li>登入 <a href="https://search.google.com/search-console">Google Search Console</a></li>
+<li>選擇希望測試的網站</li>
+<li>在左側選單中找到「設定」&gt;「robots.txt 測試工具」</li>
+<li>輸入想測試的 URL（例如 &#x2F;login&#x2F;），並檢查 Googlebot 是否可以抓取該頁面</li>
+<li>這個工具會顯示哪些頁面被允許或拒絕抓取，確保 robots.txt 設置正確</li>
+</ul>
+<h5 id="方法二：使用第三方工具「-Robots-txt-Checker」檢查"><a href="#方法二：使用第三方工具「-Robots-txt-Checker」檢查" class="headerlink" title="方法二：使用第三方工具「 Robots.txt Checker」檢查"></a>方法二：使用第三方工具「 Robots.txt Checker」檢查</h5><p>• <a href="https://www.mcanerin.com/robots-txt-checker/">Robots.txt Checker</a>。</p>
+<p>這個工具可以幫助確認 robots.txt 文件的語法正確，並檢查是否存在配置錯誤。</p>
+<hr>
+<h5 id="方法一：使用-Google-Search-Console-的「sitemap-測試工具」"><a href="#方法一：使用-Google-Search-Console-的「sitemap-測試工具」" class="headerlink" title="方法一：使用 Google Search Console 的「sitemap 測試工具」"></a>方法一：使用 Google Search Console 的「sitemap 測試工具」</h5><p>Google Search Console 也有一個專門用來提交和測試 sitemap.xml 的功能：</p>
+<ul>
+<li>登入 <a href="https://search.google.com/search-console">Google Search Console</a></li>
+<li>選擇希望測試的網站。</li>
+<li>在左側選單中選擇「索引」&gt;「網站地圖」</li>
+<li>點擊右上角的「新增&#x2F;測試網站地圖」</li>
+<li>輸入 sitemap.xml 文件的 URL（例如 <a href="https://www.example.com/sitemap.xml">https://www.example.com/sitemap.xml</a> )，然後點擊「提交」， Google Search Console 會顯示提交狀態、抓取的結果，以及可能的錯誤。</li>
+</ul>
+<h5 id="方法二：使用第三方工具檢查"><a href="#方法二：使用第三方工具檢查" class="headerlink" title="方法二：使用第三方工具檢查"></a>方法二：使用第三方工具檢查</h5><p>有許多第三方工具可以檢查 sitemap.xml 是否有效，並確保網站地圖的語法正確：</p>
+<ul>
+<li><a href="https://www.xml-sitemaps.com/validate-xml-sitemap.html">XML Sitemap Validator</a>：這個工具可以幫助你檢查 XML 地圖文件的有效性。</li>
+<li><a href="https://www.screamingfrog.co.uk/seo-spider/">Screaming Frog SEO Spider</a>：這是一個強大的 SEO 工具，可以抓取網站並生成 sitemap.xml，還能夠檢查 URL 是否符合 SEO 最佳實踐。</li>
+</ul>
+<h3 id="4-準備靜態檔案，進行-Prerender"><a href="#4-準備靜態檔案，進行-Prerender" class="headerlink" title="4. 準備靜態檔案，進行 Prerender"></a>4. 準備靜態檔案，進行 Prerender</h3><h4 id="1-提供靜態內容"><a href="#1-提供靜態內容" class="headerlink" title="(1) 提供靜態內容"></a>(1) 提供靜態內容</h4><p>在專案的 <code>src/assets</code> 資料夾中準備靜態內容，因為 Angular CLI 會預設就會將這些內容當作是靜態資源，之後再透過 API 抓取這些內容顯示。</p>
+<p>例如：將以下 JSON 檔案命名為 posts.json，用於存放文章的基本資訊（metadata）</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json"><span class="hljs-comment">// src/assets/blog/posts.json</span><br><span class="hljs-punctuation">[</span><br>  <span class="hljs-punctuation">&#123;</span> <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;文章 01&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;file&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post-1.md&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;slug&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post-1&quot;</span> <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-punctuation">&#123;</span> <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;文章 02&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;file&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post-2.md&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;slug&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post-2&quot;</span> <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-punctuation">&#123;</span> <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;文章 03&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;file&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post-3.md&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;slug&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post-3&quot;</span> <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-punctuation">&#123;</span> <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;文章 04&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;file&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post-4.md&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;slug&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;post-4&quot;</span> <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">]</span><br></code></pre></td></tr></table></figure>
+
+<p>在同一目錄下，準備對應的文章檔案，如 post-1.md：</p>
+<figure class="highlight md"><table><tr><td class="code"><pre><code class="hljs md"><span class="hljs-section"># 文章標題</span><br>這是一篇範例文章。<br></code></pre></td></tr></table></figure>
+
+<p>要特別注意：</p>
+<ol>
+<li>在執行 Prerender 時，需要執行一個伺服器來提供這些靜態檔案</li>
+<li>抓不到資料時，要做出適當的錯誤處理</li>
+</ol>
+<p>針對顯示靜態內容的部分，可以使用 lite-server 幫我們快速達成</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npx lite-server --baseDir=./src<br></code></pre></td></tr></table></figure>
+
+<p>之後抓資料時必須指定完整的網址才能正常抓到資料：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><code class="hljs typescript"><span class="hljs-comment">// 要看實際上 lite-server 開啟後的 port</span><br>posts$ = <span class="hljs-variable language_">this</span>.<span class="hljs-property">httpClient</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;http://localhost:3000/assets/blog/posts.json&#x27;</span>);<br></code></pre></td></tr></table></figure>
+
+<h4 id="2-進行環境設定調整"><a href="#2-進行環境設定調整" class="headerlink" title="(2) 進行環境設定調整"></a>(2) 進行環境設定調整</h4><p>實際上線時，除了進入該頁時本來就會有靜態內容之外，其餘的過程還是會走 Angular 本身的處理，當透過路由機制切換到其他頁面時，就不可能像 Prerender 時指定一個本地端的位置，因此要把 prerender 的環境也切出來。</p>
+<p>我們可以建立一個 <code>environment.ssr.ts</code> 來處理伺服器端地抓檔問題，並指定靜態檔案的來源：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> environment = &#123;<br>  <span class="hljs-attr">production</span>: <span class="hljs-literal">true</span>,<br>  <span class="hljs-attr">assetsUrl</span>: <span class="hljs-string">&#x27;http://localhost:3000/&#x27;</span><br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>其他的 <code>environment.ts</code> 和 <code>environment.prod.ts</code> 則可以加上 <code>assetUrl: &#39;&#39;</code> 設定，來抓取相對路徑的資源，使用 HttpClient 的寫法就會改成：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">import</span> &#123; environment &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../../environment&#x27;</span>;<br><br>...<br><br>posts$ = <span class="hljs-variable language_">this</span>.<span class="hljs-property">httpClient</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">`<span class="hljs-subst">$&#123;environment.assetsUrl&#125;</span>assets/blog/posts.json`</span>)<br></code></pre></td></tr></table></figure>
+
+<p> <code>angular.json</code> 內的設定也需要調整，讓我們在 prerender 時能換掉 <code>environment.ts</code>。</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  ...<br>  <span class="hljs-attr">&quot;projects&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;kimi-seo-demo&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      ...<br>      <span class="hljs-attr">&quot;architect&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        ...<br>        <span class="hljs-attr">&quot;server&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>          ...<br>          <span class="hljs-attr">&quot;configurations&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;production&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span> ... <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;development&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span> ... <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;ssr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span> <span class="hljs-comment">// 設定 ssr 取代檔案</span><br>              <span class="hljs-attr">&quot;outputHashing&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;media&quot;</span><span class="hljs-punctuation">,</span><br>              <span class="hljs-attr">&quot;fileReplacements&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><br>                <span class="hljs-punctuation">&#123;</span><br>                  <span class="hljs-attr">&quot;replace&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;src/environments/environment.ts&quot;</span><span class="hljs-punctuation">,</span><br>                  <span class="hljs-attr">&quot;with&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;src/environments/environment.ssr.ts&quot;</span><br>                <span class="hljs-punctuation">&#125;</span><br>              <span class="hljs-punctuation">]</span><br>            <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>          <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>          <span class="hljs-attr">&quot;defaultConfiguration&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;production&quot;</span><br>        <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>        ...<br>        <span class="hljs-attr">&quot;prerender&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>          ...<br>          <span class="hljs-attr">&quot;configurations&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;production&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span> ... <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;development&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span> ... <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>            <span class="hljs-attr">&quot;ssr&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span> <span class="hljs-comment">// 設定 ssr 在 server 模式取代檔案</span><br>              <span class="hljs-attr">&quot;browserTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:build:production&quot;</span><span class="hljs-punctuation">,</span><br>              <span class="hljs-attr">&quot;serverTarget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo:server:ssr&quot;</span><br>            <span class="hljs-punctuation">&#125;</span><br>          <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>          <span class="hljs-attr">&quot;defaultConfiguration&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;production&quot;</span><br>        <span class="hljs-punctuation">&#125;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;defaultProject&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kimi-seo-demo&quot;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>然後在 prerender 前先用 lite-server 把靜態伺服器打開後，執行 prerender 即可，當然也要記得改用 <code>ssr</code> 的相關設定 (或去改 <code>angular.json</code> 的 <code>defaultConfiguration</code> 也行)</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npm run prerender -- --configuration ssr --routes-file post-routes.txt<br></code></pre></td></tr></table></figure>
+
+<h4 id="3-撰寫-Resolver-來抓取資料"><a href="#3-撰寫-Resolver-來抓取資料" class="headerlink" title="(3) 撰寫 Resolver 來抓取資料"></a>(3) 撰寫 Resolver 來抓取資料</h4><p><strong>a. 文章列表 Resolver</strong></p>
+<p>負責抓取 posts.json 的資料，並傳遞給文章列表頁面：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><code class="hljs typescript"><span class="hljs-comment">// PostsResolver</span><br><span class="hljs-meta">@Injectable</span>(&#123; <span class="hljs-attr">providedIn</span>: <span class="hljs-string">&#x27;root&#x27;</span> &#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PostsResolver</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Resolve</span>&lt;<span class="hljs-built_in">any</span>[]&gt; &#123;<br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> httpClient: HttpClient</span>) &#123;&#125;<br><br>  <span class="hljs-title function_">resolve</span>(): <span class="hljs-title class_">Observable</span>&lt;<span class="hljs-built_in">any</span>[]&gt; &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">httpClient</span><br>      .<span class="hljs-property">get</span>&lt;<span class="hljs-built_in">any</span>[]&gt;(<span class="hljs-string">`<span class="hljs-subst">$&#123;environment.assetsUrl&#125;</span>assets/blog/posts.json`</span>)<br>      .<span class="hljs-title function_">pipe</span>(<span class="hljs-title function_">catchError</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">of</span>([]))); <span class="hljs-comment">// 若抓取失敗，回傳空陣列</span><br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>b. 單篇文章 Resolver</strong></p>
+<p>負責抓取對應文章的 Markdown 檔案，並轉換為 HTML：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><code class="hljs typescript"><span class="hljs-comment">// PostResolver</span><br><span class="hljs-keyword">import</span> markdownIt <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;markdown-it&#x27;</span>;<br><br><span class="hljs-meta">@Injectable</span>(&#123; <span class="hljs-attr">providedIn</span>: <span class="hljs-string">&#x27;root&#x27;</span> &#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PostResolver</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">Resolve</span>&lt;<span class="hljs-built_in">string</span>&gt; &#123;<br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> httpClient: HttpClient</span>) &#123;&#125;<br><br>  <span class="hljs-title function_">resolve</span>(<span class="hljs-attr">route</span>: <span class="hljs-title class_">ActivatedRouteSnapshot</span>): <span class="hljs-title class_">Observable</span>&lt;<span class="hljs-built_in">string</span>&gt; &#123;<br>    <span class="hljs-keyword">const</span> slug = route.<span class="hljs-property">paramMap</span>.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;slug&#x27;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">httpClient</span><br>      .<span class="hljs-title function_">get</span>(<span class="hljs-string">`<span class="hljs-subst">$&#123;environment.assetsUrl&#125;</span>assets/blog/<span class="hljs-subst">$&#123;slug&#125;</span>.md`</span>, &#123; <span class="hljs-attr">responseType</span>: <span class="hljs-string">&#x27;text&#x27;</span> &#125;)<br>      .<span class="hljs-title function_">pipe</span>(<br>        <span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">markdown</span>) =&gt;</span> <span class="hljs-title function_">markdownIt</span>().<span class="hljs-title function_">render</span>(markdown)), <span class="hljs-comment">// 將 Markdown 轉為 HTML</span><br>        <span class="hljs-title function_">catchError</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">of</span>(<span class="hljs-string">&#x27;文章不存在&#x27;</span>))<br>      );<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="4-配置路由"><a href="#4-配置路由" class="headerlink" title="(4) 配置路由"></a>(4) 配置路由</h4><p>設定路由以載入 Resolver 提供的資料</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">const</span> <span class="hljs-attr">routes</span>: <span class="hljs-title class_">Routes</span> = [<br>  &#123;<br>    <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;&#x27;</span>,<br>    <span class="hljs-attr">resolve</span>: &#123; <span class="hljs-attr">posts</span>: <span class="hljs-title class_">PostsResolver</span> &#125;,<br>    <span class="hljs-attr">component</span>: <span class="hljs-title class_">PostsComponent</span><br>  &#125;,<br>  &#123;<br>    <span class="hljs-attr">path</span>: <span class="hljs-string">&#x27;post/:slug&#x27;</span>,<br>    <span class="hljs-attr">resolve</span>: &#123; <span class="hljs-attr">post</span>: <span class="hljs-title class_">PostResolver</span> &#125;,<br>    <span class="hljs-attr">component</span>: <span class="hljs-title class_">PostComponent</span><br>  &#125;<br>];<br><br><span class="hljs-meta">@NgModule</span>(&#123;<br>  <span class="hljs-attr">imports</span>: [<span class="hljs-title class_">RouterModule</span>.<span class="hljs-title function_">forRoot</span>(routes)],<br>  <span class="hljs-attr">exports</span>: [<span class="hljs-title class_">RouterModule</span>]<br>&#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">AppRoutingModule</span> &#123;&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="5-在元件中顯示資料"><a href="#5-在元件中顯示資料" class="headerlink" title="(5) 在元件中顯示資料"></a>(5) 在元件中顯示資料</h4><p><strong>a. 文章列表頁面</strong></p>
+<p>從 Resolver 中取得文章清單，並在頁面中顯示：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><code class="hljs typescript"><span class="hljs-comment">// 在元件內，可以訂閱 ActivatedRoute.data 來拿到資料</span><br><span class="hljs-meta">@Component</span>(&#123; ... &#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PostsComponent</span> &#123;<br>  posts$ = <span class="hljs-variable language_">this</span>.<span class="hljs-property">route</span>.<span class="hljs-property">data</span>.<span class="hljs-title function_">pipe</span>(<span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> data.<span class="hljs-property">posts</span>));<br><br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> route: ActivatedRoute</span>) &#123;&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>接著在 html 內顯示取得的資料：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">ul</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">li</span> *<span class="hljs-attr">ngFor</span>=<span class="hljs-string">&quot;let post of posts$ | async&quot;</span>&gt;</span><br>    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> [<span class="hljs-attr">routerLink</span>]=<span class="hljs-string">&quot;&#x27;/post/&#x27; + post.slug&quot;</span>&gt;</span>&#123;&#123; post.title &#125;&#125;<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span><br>  <span class="hljs-tag">&lt;/<span class="hljs-name">li</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">ul</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>b. 單篇文章頁面</strong></p>
+<p>從 Resolver 中取得文章內容，並轉換為安全的 HTML 顯示：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-meta">@Component</span>(&#123; ... &#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">PostComponent</span> &#123;<br>  content$ = <span class="hljs-variable language_">this</span>.<span class="hljs-property">route</span>.<span class="hljs-property">data</span>.<span class="hljs-title function_">pipe</span>(<br>    <span class="hljs-title function_">map</span>(<span class="hljs-function">(<span class="hljs-params">data</span>) =&gt;</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">domSanitizer</span>.<span class="hljs-title function_">bypassSecurityTrustHtml</span>(data.<span class="hljs-property">post</span>))<br>  );<br><br>  <span class="hljs-title function_">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> route: ActivatedRoute, <span class="hljs-keyword">private</span> domSanitizer: DomSanitizer</span>) &#123;&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> [<span class="hljs-attr">innerHTML</span>]=<span class="hljs-string">&quot;content$ | async&quot;</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="6-執行-Prerender，預覽結果"><a href="#6-執行-Prerender，預覽結果" class="headerlink" title="(6) 執行 Prerender，預覽結果"></a>(6) 執行 Prerender，預覽結果</h4><p><strong>a. 產生靜態路由</strong></p>
+<p>準備一個包含需要 Prerender 的路由檔案，例如 post-routes.txt：</p>
+<figure class="highlight txt"><table><tr><td class="code"><pre><code class="hljs txt">/<br>post/post-1<br>post/post-2<br>post/post-3<br></code></pre></td></tr></table></figure>
+
+<p><strong>b. 執行 Prerender</strong></p>
+<p>啟動靜態伺服器，並執行 Prerender：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npx lite-server --baseDir=./src<br>npm run prerender -- --configuration ssr --routes-file post-routes.txt<br></code></pre></td></tr></table></figure>
+
+<hr>
+<h5 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h5><p>前面我們用了 lite-server 來跑模擬的伺服器，不過 lite-server 在目錄網址時不會提供裡面的 <code>index.html</code> 當作內容，因此我們可以自己建立一個伺服器來解決這個問題。</p>
+<p><strong>a. 使用模擬伺服器</strong></p>
+<p>先安裝一些套件：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npm i -D ts-node connect serve-static @types/node @types/connect @types/serve-static<br></code></pre></td></tr></table></figure>
+
+<p>接著建立一支伺服器程式 <code>ssr-preview.ts</code>：</p>
+<figure class="highlight typescript"><table><tr><td class="code"><pre><code class="hljs typescript"><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> connect <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;connect&#x27;</span>;<br><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> serveStatic <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;serve-static&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; join &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;path&#x27;</span>;<br><span class="hljs-comment">// 靜態檔案路徑，請自行修改</span><br><span class="hljs-keyword">const</span> distFolder = <span class="hljs-title function_">join</span>(process.<span class="hljs-title function_">cwd</span>(), <span class="hljs-string">&#x27;dist&#x27;</span>, <span class="hljs-string">&#x27;ngx-universal-prerender-demo&#x27;</span>, <span class="hljs-string">&#x27;browser&#x27;</span>);<br><span class="hljs-title function_">connect</span>()<br>  .<span class="hljs-title function_">use</span>(<span class="hljs-title function_">serveStatic</span>(distFolder))<br>  .<span class="hljs-title function_">listen</span>(<span class="hljs-number">4001</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Server running on 4001...&#x27;</span>));<br></code></pre></td></tr></table></figure>
+
+<p>和要給它使用的 <code>tsconfig.ssr-preview.json</code>：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;extends&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;./get-page-posts.ts&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;compilerOptions&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;module&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;commonjs&quot;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>啟動伺服器：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npx ts-node --project .\tsconfig.ssr-preview.json .\ssr-preview.ts<br></code></pre></td></tr></table></figure>
+
+<p>接著可以隨意瀏覽任一個頁面的原始碼，內容都會是被靜態產生的，這樣就算是完成了！</p>
+<h2 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h2><p>依照上述步驟執行，就可以在現行專案導入修改支援 SEO 了。</p>
+<hr>
+<h3 id="附錄：參考連結"><a href="#附錄：參考連結" class="headerlink" title="附錄：參考連結"></a>附錄：參考連結</h3><ul>
+<li><a href="https://fullstackladder.dev/blog/2021/10/16/static-site-generator-using-angular-universal-prerender/">Mike｜Angular Universal - 使用 Prerender 建立自己的 Static Site Generator</a></li>
+<li><a href="https://fullstackladder.dev/blog/2021/10/31/angular-universal-transfer-state/">Mike｜Angular Universal - 使用 TransferState 解決畫面閃爍問題</a></li>
+<li><a href="https://www.dotblogs.com.tw/Leo_CodeSpace/2020/07/24/161101">Angular Universal教學-將現有專案導入Server Side Render</a></li>
+<li><a href="https://blog.miniasp.com/post/2017/06/18/How-to-setup-Angular-Universal-in-an-Angular-CLI-project">保哥｜如何在 Angular CLI 建立的專案加入 Angular Universal 伺服器渲染功能</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術筆記</category>
+      </categories>
+      <tags>
+        <tag>SEO</tag>
+        <tag>Angular</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>WebSocket 介紹與使用</title>
+    <url>/2023/08/22/webSocket/</url>
+    <content><![CDATA[<p>在介紹 WebSocket 之前，先來了解幾個 HTTP 的連線方式。</p>
+<h2 id="HTTP-的連線方式"><a href="#HTTP-的連線方式" class="headerlink" title="HTTP 的連線方式"></a>HTTP 的連線方式</h2><h3 id="Polling"><a href="#Polling" class="headerlink" title="Polling"></a>Polling</h3><p>這種方式是早期透過 Javascript 定時（<code>setInterval</code>、<code>setTimeout</code>）來向後端請求最新資料並呈現於頁面之上， 這麼做的好處是容易實現， 但我們並不知曉 Server 端何時會更新， 只能<strong>傻傻的定時獲取</strong>， 造成的影響就是<U>頻寬的浪費及資料呈現不即時</U>。</p>
+<p><img src="https://miro.medium.com/v2/resize:fit:1382/1*HJww54OsxD5D3Cn5YyJunQ.png"></p>
+<h3 id="Long-Polling（長時間輪詢）"><a href="#Long-Polling（長時間輪詢）" class="headerlink" title="Long-Polling（長時間輪詢）"></a>Long-Polling（長時間輪詢）</h3><p>這種方式就是收到前端請求後，Server 端會等待， 若這段時間有資料就會將最新資料回傳給前端， 因此等待的這段期間 Client 什麼事情也不用做，等待資料回傳後再發送下一個請求， 雖然長時間的連接解決了 Polling 開銷的問題，<u>但如果在更新資料很頻繁的狀況下，也會造成連續的 Polling 的動作產生，<strong>效能未必較佳</strong></u>。</p>
+<p><img src="https://miro.medium.com/v2/resize:fit:1204/1*kseayTfoDyTzI8uFSen9Cg.png"></p>
+<h3 id="Server-Sent-Events"><a href="#Server-Sent-Events" class="headerlink" title="Server Sent Events"></a>Server Sent Events</h3><p>簡單來說就是 <u><strong>伺服端單向的推送資料給瀏覽器</strong></u>，實作起來相對容易。<br>但這種方式較少被使用，  因為 SSE 能做的功能 Websocket 也能完成， 差別只是雙向溝通還是單向溝通而已。<br>不過在某些應用上，瀏覽器不太需要主動發送資料給 Server 端（例：股市行情、即時新聞…），只需要接收 Server 端的最新資料即可，就適合使用。</p>
+<p><img src="https://miro.medium.com/v2/resize:fit:1400/1*9akWJheWpyJuTvo6AfoEow.png"></p>
+<h3 id="Websocket"><a href="#Websocket" class="headerlink" title="Websocket"></a>Websocket</h3><p>以上幾個方式的共同點就是都基於 HTTP 進行傳輸，而我們也知道 HTTP 的傳輸為了確保正確性會帶有較多的標頭…等資訊；而 <strong>Websocket 只有一開始確定連線時會走 HTTP 以外，之後的傳輸都不是基於 HTTP</strong>，在傳輸上會來的更有效率，且提供了<strong>雙向溝通</strong>的功能，避免延遲，因此需要即時互動的應用就非常適合使用 Websocket 的方式來進行實作。</p>
+<p><img src="https://miro.medium.com/v2/resize:fit:1106/1*xPnOxyaKv5NleFy_13kCqg.png"></p>
+<h2 id="WebSocket-和-HTTP-的差異"><a href="#WebSocket-和-HTTP-的差異" class="headerlink" title="WebSocket 和 HTTP 的差異"></a>WebSocket 和 HTTP 的差異</h2><p>和 <code>HTTP</code> 最大的差別是，<u><code>WebScoket</code> 在建立連線之後，可以實現 client 與 server 的雙向溝通機制</u>，也就是說，雙方可以即時的交換資訊，<u>不用再等待 client 發出請求，或使用佔用資源的輪詢方式來實現</u>。</p>
+<p>另一方面，在建立連線之後就會持續保持著連線狀態，所以每次通訊時所發出的 message，就可以省略掉 headers 當中一些關於連線狀態的資訊，因而效率高了不少。</p>
+<h3 id="WebSocket-與-HTTP-："><a href="#WebSocket-與-HTTP-：" class="headerlink" title="WebSocket 與 HTTP ："></a>WebSocket 與 HTTP ：</h3><ul>
+<li>同屬於應用層， 都是基於 TCP 來進行連線傳輸</li>
+<li>默認的 port 也是為 80 和 443，並透過同樣的 HTTP 3-way handshake 建立連線</li>
+<li>與 HTTP 一樣可以進行加密傳輸， HTTP 的部份為 <code>https</code>， WebSocket 則為 <code>wss</code>。</li>
+<li>但 WebSocket 真正傳輸資料時就不必經過 HTTP 的方式（要進行像是 HTTPS 當中的 SSL&#x2F;TLS 的加密安全傳輸，有 <code>WebSocket Secure</code> 協議可以使用）</li>
+</ul>
+<p><img src="https://miro.medium.com/v2/resize:fit:696/format:webp/1*Aefa0WHo_VsgQMjvj9rPFg.png"></p>
+<h2 id="WebSocket-的使用"><a href="#WebSocket-的使用" class="headerlink" title="WebSocket 的使用"></a>WebSocket 的使用</h2><p>WebSocket 在使用上其實不難。<a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSocket">MDN</a> 上有關於 WebSocket API (client 端) 的範例。</p>
+<p>這裡我們來簡單建立一下連線：</p>
+<figure class="highlight javascript"><table><tr><td class="code"><pre><code class="hljs javascript"><span class="hljs-comment">// Create WebSocket connection.</span><br><span class="hljs-keyword">const</span> socket = <span class="hljs-keyword">new</span> <span class="hljs-title class_">WebSocket</span>(<span class="hljs-string">&quot;wss://echo.websocket.org&quot;</span>);<br><br><span class="hljs-comment">// Connection opened</span><br>socket.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;open&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">&#x27;Open connection&#x27;</span>)<br>    socket.<span class="hljs-title function_">send</span>(<span class="hljs-string">&#x27;Hello Server!&#x27;</span>);<br>&#125;);<br><br><span class="hljs-comment">// Listen for messages</span><br>socket.<span class="hljs-title function_">addEventListener</span>(<span class="hljs-string">&#x27;message&#x27;</span>, <span class="hljs-keyword">function</span> (<span class="hljs-params">event</span>) &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(<span class="hljs-string">`Message from server: <span class="hljs-subst">$&#123;event.data&#125;</span>`</span>);<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<p>如果把上面這段程式碼貼到 DevTool 的 console 當中，就可以看到其連線運作。</p>
+<p>內容其實相當簡單，首先建立 WebSocket 連線實例，接著，就可以監聽各種 events，像是</p>
+<ul>
+<li>open （連線開啟）</li>
+<li>close （連線關閉）</li>
+<li>error （連線錯誤）</li>
+<li>message （連線訊息）</li>
+</ul>
+<p>之後，再根據不同的 events 做出不同的對應方式，譬如在畫面上呈現連線訊息等。</p>
+<p>除了監聽事件之外，也可以透過 <code>socket.send()</code> 來送出資訊，以及 <code>send.close()</code> 來關閉連線。</p>
+<p>MDN 上介紹的 WebSocket API 其實就可以幫助我們快速建立 <code>WebSocket</code> 連線，不過如果我們想要在自己的專案當中進行更複雜的操作，也可以找到很完整的套件來幫助我們（例如： <a href="https://socket.io/">socket.io</a>），可以同時用在 client 端與 server 端。</p>
+<hr>
+<p>有了 <code>WebSocket</code> 讓我們的應用程式可以和使用者有更多的互動，除了「聊天室」的應用之外，還有其他的應用場景像是「訊息推播」、「即時訊息更新」、「共同編輯」等等，應用相當廣泛。</p>
+<h2 id="Ref"><a href="#Ref" class="headerlink" title="Ref"></a>Ref</h2><ul>
+<li><a href="https://en.wikipedia.org/wiki/WebSocket#History">WebSocket</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSocket">WebSocket (MDN)</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>技術筆記</category>
+      </categories>
+      <tags>
+        <tag>webpack</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>JS 宣告變數：var、let、const 差異與使用時機</title>
+    <url>/2021/10/10/var-const/</url>
+    <content><![CDATA[<p>JavaScript 可以用 <code>var</code>、<code>let</code>、<code>const</code> 宣告變數，但在現代 JavaScript 中，最實用的原則其實很簡單：<strong>預設使用 <code>const</code>；確定需要重新賦值時才用 <code>let</code>；新程式碼避免使用 <code>var</code>。</strong></p>
+<p>理解三者的作用域、提升與重複宣告差異後，就能知道這個原則從何而來。</p>
+<span id="more"></span>
+
+<h2 id="快速結論"><a href="#快速結論" class="headerlink" title="快速結論"></a>快速結論</h2><figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">const</span> apiUrl = <span class="hljs-string">&#x27;/api&#x27;</span>; <span class="hljs-comment">// 預設使用 const</span><br><br><span class="hljs-keyword">let</span> page = <span class="hljs-number">1</span>; <span class="hljs-comment">// 值需要重新賦值時使用 let</span><br>page += <span class="hljs-number">1</span>;<br><br><span class="hljs-keyword">var</span> legacyValue = <span class="hljs-string">&#x27;old code&#x27;</span>; <span class="hljs-comment">// 只在維護舊程式碼時遇到</span><br></code></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th><code>var</code></th>
+<th><code>let</code></th>
+<th><code>const</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>作用域</td>
+<td>函式作用域</td>
+<td>區塊作用域</td>
+<td>區塊作用域</td>
+</tr>
+<tr>
+<td>可重新賦值</td>
+<td>可以</td>
+<td>可以</td>
+<td>不可以</td>
+</tr>
+<tr>
+<td>可在同一作用域重複宣告</td>
+<td>可以</td>
+<td>不可以</td>
+<td>不可以</td>
+</tr>
+<tr>
+<td>宣告前存取</td>
+<td>得到 <code>undefined</code></td>
+<td>TDZ，拋出錯誤</td>
+<td>TDZ，拋出錯誤</td>
+</tr>
+<tr>
+<td>新程式碼建議</td>
+<td>不建議</td>
+<td>需要變動時使用</td>
+<td>預設使用</td>
+</tr>
+</tbody></table>
+<h2 id="1-作用域：var-是函式作用域，let-與-const-是區塊作用域"><a href="#1-作用域：var-是函式作用域，let-與-const-是區塊作用域" class="headerlink" title="1. 作用域：var 是函式作用域，let 與 const 是區塊作用域"></a>1. 作用域：<code>var</code> 是函式作用域，<code>let</code> 與 <code>const</code> 是區塊作用域</h2><p>區塊作用域指的是 <code>&#123;&#125;</code> 所包住的範圍，例如 <code>if</code>、<code>for</code>、<code>while</code> 或單純的大括號。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">if</span> (<span class="hljs-literal">true</span>) &#123;<br>  <span class="hljs-keyword">var</span> varMessage = <span class="hljs-string">&#x27;var 不受區塊限制&#x27;</span>;<br>  <span class="hljs-keyword">let</span> letMessage = <span class="hljs-string">&#x27;let 只存在於區塊內&#x27;</span>;<br>  <span class="hljs-keyword">const</span> constMessage = <span class="hljs-string">&#x27;const 只存在於區塊內&#x27;</span>;<br>&#125;<br><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(varMessage); <span class="hljs-comment">// &#x27;var 不受區塊限制&#x27;</span><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(letMessage); <span class="hljs-comment">// ReferenceError</span><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(constMessage); <span class="hljs-comment">// ReferenceError</span><br></code></pre></td></tr></table></figure>
+
+<p><code>var</code> 不會被 <code>if</code> 區塊限制，而是以最近的函式為範圍：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">getStatus</span>(<span class="hljs-params"></span>) &#123;<br>  <span class="hljs-keyword">if</span> (<span class="hljs-literal">true</span>) &#123;<br>    <span class="hljs-keyword">var</span> status = <span class="hljs-string">&#x27;ready&#x27;</span>;<br>  &#125;<br><br>  <span class="hljs-keyword">return</span> status; <span class="hljs-comment">// &#x27;ready&#x27;</span><br>&#125;<br><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(status); <span class="hljs-comment">// ReferenceError：函式外無法存取</span><br></code></pre></td></tr></table></figure>
+
+<p>區塊作用域可縮小變數可被存取與修改的範圍，因此更容易閱讀，也能降低同名變數互相影響的機率。</p>
+<h2 id="2-const-不能重新賦值，不代表物件完全不可變"><a href="#2-const-不能重新賦值，不代表物件完全不可變" class="headerlink" title="2. const 不能重新賦值，不代表物件完全不可變"></a>2. <code>const</code> 不能重新賦值，不代表物件完全不可變</h2><p><code>const</code> 限制的是「變數綁定」不能改指向另一個值：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">const</span> userName = <span class="hljs-string">&#x27;Kimi&#x27;</span>;<br>userName = <span class="hljs-string">&#x27;Alex&#x27;</span>; <span class="hljs-comment">// TypeError</span><br></code></pre></td></tr></table></figure>
+
+<p>若值是物件或陣列，仍可以修改其內部內容：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">const</span> user = &#123; <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Kimi&#x27;</span> &#125;;<br><br>user.<span class="hljs-property">name</span> = <span class="hljs-string">&#x27;Alex&#x27;</span>; <span class="hljs-comment">// 可以</span><br>user = &#123; <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Mina&#x27;</span> &#125;; <span class="hljs-comment">// TypeError：不能重新指派 user</span><br></code></pre></td></tr></table></figure>
+
+<p>因此，<code>const</code> 不等於 immutable。若需要不可變資料，仍要避免直接修改物件，或使用 <code>Object.freeze</code>、immutable update 等方式。</p>
+<h2 id="3-for-迴圈與非同步-callback"><a href="#3-for-迴圈與非同步-callback" class="headerlink" title="3. for 迴圈與非同步 callback"></a>3. <code>for</code> 迴圈與非同步 callback</h2><p>以下是 <code>var</code> 最常見的陷阱之一：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) &#123;<br>  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(i);<br>  &#125;, <span class="hljs-number">100</span>);<br>&#125;<br><br><span class="hljs-comment">// 3</span><br><span class="hljs-comment">// 3</span><br><span class="hljs-comment">// 3</span><br></code></pre></td></tr></table></figure>
+
+<p><code>setTimeout</code> 的 callback 會在迴圈結束後才執行，而三個 callback 讀到的是同一個 <code>i</code>。迴圈結束時，<code>i</code> 已經是 <code>3</code>。</p>
+<p>改用 <code>let</code> 後，JavaScript 會為每一次迭代建立各自的綁定：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) &#123;<br>  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(i);<br>  &#125;, <span class="hljs-number">100</span>);<br>&#125;<br><br><span class="hljs-comment">// 0</span><br><span class="hljs-comment">// 1</span><br><span class="hljs-comment">// 2</span><br></code></pre></td></tr></table></figure>
+
+<p>舊程式碼可用 IIFE 解決 <code>var</code> 的問題，但新程式碼直接使用 <code>let</code> 更清楚。</p>
+<h2 id="4-Hoisting-與暫時死區（TDZ）"><a href="#4-Hoisting-與暫時死區（TDZ）" class="headerlink" title="4. Hoisting 與暫時死區（TDZ）"></a>4. Hoisting 與暫時死區（TDZ）</h2><p><code>var</code>、<code>let</code> 與 <code>const</code> 的宣告都與 JavaScript 的執行階段建立流程有關，常被統稱為 hoisting。不過它們在宣告前被存取時，行為不同。</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(count); <span class="hljs-comment">// undefined</span><br><span class="hljs-keyword">var</span> count = <span class="hljs-number">1</span>;<br></code></pre></td></tr></table></figure>
+
+<p>上例可概念化為：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">var</span> count;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(count); <span class="hljs-comment">// undefined</span><br>count = <span class="hljs-number">1</span>;<br></code></pre></td></tr></table></figure>
+
+<p>這讓程式看起來像是「尚未宣告卻可使用」，容易隱藏錯誤。</p>
+<p><code>let</code> 與 <code>const</code> 也會在進入作用域時建立綁定，但在執行到宣告前不可存取；這段區間稱為暫時死區（Temporal Dead Zone，TDZ）：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(greeting); <span class="hljs-comment">// ReferenceError</span><br><span class="hljs-keyword">let</span> greeting = <span class="hljs-string">&#x27;hello&#x27;</span>;<br></code></pre></td></tr></table></figure>
+
+<p>TDZ 促使變數先宣告、後使用，讓控制流程更容易理解。實務上不需要刻意依賴任何一種 hoisting 行為，應將宣告放在使用位置之前。</p>
+<h2 id="5-重複宣告"><a href="#5-重複宣告" class="headerlink" title="5. 重複宣告"></a>5. 重複宣告</h2><p><code>var</code> 允許在同一作用域用相同名稱重複宣告：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">var</span> theme = <span class="hljs-string">&#x27;light&#x27;</span>;<br><span class="hljs-keyword">var</span> theme = <span class="hljs-string">&#x27;dark&#x27;</span>;<br><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(theme); <span class="hljs-comment">// &#x27;dark&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>這可能在大型檔案或多人協作時意外覆蓋變數。<code>let</code> 與 <code>const</code> 會直接阻止這類錯誤：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">const</span> theme = <span class="hljs-string">&#x27;light&#x27;</span>;<br><span class="hljs-keyword">const</span> theme = <span class="hljs-string">&#x27;dark&#x27;</span>; <span class="hljs-comment">// SyntaxError: Identifier &#x27;theme&#x27; has already been declared</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="實務使用準則"><a href="#實務使用準則" class="headerlink" title="實務使用準則"></a>實務使用準則</h2><p>可以按照下面順序選擇：</p>
+<ol>
+<li>先使用 <code>const</code>。</li>
+<li>如果變數在同一作用域內需要重新賦值，改為 <code>let</code>。</li>
+<li>不在新程式碼中使用 <code>var</code>；只有維護舊專案時才需要理解它的行為。</li>
+</ol>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">const</span> maxRetries = <span class="hljs-number">3</span>;<br><span class="hljs-keyword">let</span> retries = <span class="hljs-number">0</span>;<br><br><span class="hljs-keyword">while</span> (retries &lt; maxRetries) &#123;<br>  retries += <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>這個原則能讓「哪些值會變動」在閱讀程式碼時一目了然，也能避開 <code>var</code> 的函式作用域、重複宣告與非同步迴圈陷阱。</p>
+]]></content>
+      <categories>
+        <category>技術筆記</category>
+      </categories>
+      <tags>
+        <tag>JavaScript</tag>
+        <tag>Studies</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Angular 本機開發如何使用 HTTPS 啟動 ng serve</title>
+    <url>/2025/03/05/angular-localhost-https/</url>
+    <content><![CDATA[<p>當本機開發需要測試 HTTPS 限定的瀏覽器功能，例如 Secure Cookie、Web Crypto API 或第三方登入流程時，可以讓 Angular 開發伺服器透過 HTTPS 啟動。</p>
+<p>本篇整理憑證、<code>ng serve</code> 與 API Proxy 的基本設定方式。</p>
+<span id="more"></span>
+
+<h2 id="為什麼本機開發需要-HTTPS？"><a href="#為什麼本機開發需要-HTTPS？" class="headerlink" title="為什麼本機開發需要 HTTPS？"></a>為什麼本機開發需要 HTTPS？</h2><p>許多瀏覽器 API 與安全性設定只會在安全來源（secure context）中運作。若要模擬正式環境的 HTTPS 行為，便可在本機使用憑證啟動 Angular 開發伺服器。</p>
+<blockquote>
+<p>本文的憑證僅供本機開發使用，不應用於正式環境。</p>
+</blockquote>
+<h2 id="1-建立本機憑證"><a href="#1-建立本機憑證" class="headerlink" title="1. 建立本機憑證"></a>1. 建立本機憑證</h2><p>可使用 OpenSSL 建立自簽憑證。在專案根目錄建立僅供本機使用的資料夾後，執行下列指令：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">mkdir -p .cert<br>openssl req -x509 -newkey rsa:4096 -sha256 -nodes \<br>  -keyout .cert/localhost-key.pem \<br>  -out .cert/localhost-cert.pem \<br>  -days 365 \<br>  -subj &quot;/CN=localhost&quot; \<br>  -addext &quot;subjectAltName=DNS:localhost,IP:127.0.0.1&quot;<br></code></pre></td></tr></table></figure>
+
+<p>執行後會產生兩個檔案：</p>
+<ul>
+<li><code>localhost-key.pem</code>：私鑰，必須妥善保管。</li>
+<li><code>localhost-cert.pem</code>：本機使用的自簽憑證。</li>
+</ul>
+<blockquote>
+<p>若使用的 OpenSSL 版本不支援 <code>-addext</code>，可先移除該參數完成產生；或改用支援 Subject Alternative Name 的憑證工具。</p>
+</blockquote>
+<h2 id="2-使用-HTTPS-啟動-Angular"><a href="#2-使用-HTTPS-啟動-Angular" class="headerlink" title="2. 使用 HTTPS 啟動 Angular"></a>2. 使用 HTTPS 啟動 Angular</h2><p>Angular CLI 的 <code>ng serve</code> 提供 <code>--ssl</code>、<code>--ssl-key</code> 與 <code>--ssl-cert</code> 選項，可直接指定憑證檔案：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">ng serve --ssl \<br>  --ssl-key .cert/localhost-key.pem \<br>  --ssl-cert .cert/localhost-cert.pem<br></code></pre></td></tr></table></figure>
+
+<p>預設啟動後，可透過以下網址開啟應用程式：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">https://localhost:4200<br></code></pre></td></tr></table></figure>
+
+<p>自簽憑證不受作業系統或瀏覽器信任，因此初次開啟時可能出現憑證警告。這是本機測試的正常現象；若希望不出現警告，可改用能將本機開發憑證加入信任鏈的工具，例如 <code>mkcert</code>。</p>
+<h2 id="3-透過-Proxy-存取-HTTP-API"><a href="#3-透過-Proxy-存取-HTTP-API" class="headerlink" title="3. 透過 Proxy 存取 HTTP API"></a>3. 透過 Proxy 存取 HTTP API</h2><p>當前端改用 HTTPS、後端 API 仍使用 HTTP 時，瀏覽器會封鎖直接發出的 HTTP 請求，這就是混合內容（Mixed Content）問題。</p>
+<p>可將前端請求統一使用相對路徑，例如 <code>/api/users</code>，再由 Angular 開發伺服器代理至本機後端。</p>
+<p>建立 <code>proxy.conf.json</code>：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;/api/**&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;http://127.0.0.1:5000&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;secure&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;changeOrigin&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>接著啟動開發伺服器：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">ng serve --ssl \<br>  --ssl-key .cert/localhost-key.pem \<br>  --ssl-cert .cert/localhost-cert.pem \<br>  --proxy-config proxy.conf.json<br></code></pre></td></tr></table></figure>
+
+<p>前端呼叫 <code>/api/users</code> 時，瀏覽器只會看到對 <code>https://localhost:4200</code> 的請求；開發伺服器則會在內部將請求轉送到 <code>http://127.0.0.1:5000</code>。</p>
+<blockquote>
+<p>Proxy 設定修改後，需要重新啟動 <code>ng serve</code> 才會生效。新版 Angular 的 Vite 開發伺服器中，<code>/api/**</code> 可匹配所有 API 子路徑。</p>
+</blockquote>
+<h2 id="4-不要將私鑰提交至版本控制"><a href="#4-不要將私鑰提交至版本控制" class="headerlink" title="4. 不要將私鑰提交至版本控制"></a>4. 不要將私鑰提交至版本控制</h2><p>將本機憑證放在 <code>.cert</code> 資料夾後，請在 <code>.gitignore</code> 加入：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs gitignore"># Local development HTTPS certificates<br>.cert/<br>*.pem<br></code></pre></td></tr></table></figure>
+
+<p>私鑰一旦提交到遠端儲存庫，即使日後刪除，仍可能保留在 Git 歷史紀錄中。若不慎提交，應立即撤銷該憑證並重新建立新的私鑰。</p>
+<h2 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h2><p>透過自簽憑證與 Angular CLI 的 SSL 選項，可以在本機模擬 HTTPS 環境；若 API 尚未提供 HTTPS，則可搭配 Proxy 避免混合內容問題。這些設定只應限於開發環境，正式環境仍應使用由受信任憑證機構簽發的憑證。</p>
+]]></content>
+      <categories>
+        <category>技術筆記</category>
+      </categories>
+      <tags>
+        <tag>Angular</tag>
+        <tag>HTTPS</tag>
+        <tag>localhost</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Angular 本機開發遇到 CORS 問題：使用 Proxy 代理 API</title>
+    <url>/2025/02/20/angular-localhost-cors-proxy/</url>
+    <content><![CDATA[<blockquote>
+<p>在本機開發 Angular 應用程式時，前端通常運行於 <code>http://localhost:4200</code>，API 則可能位於另一個 port 或網域。若直接從瀏覽器呼叫 API，便可能遇到 CORS（Cross-Origin Resource Sharing，跨來源資源共用）錯誤。</p>
+</blockquote>
+<p>本篇以 Angular 開發伺服器的 Proxy 功能處理本機開發情境，讓瀏覽器以同源方式呼叫 API，而由開發伺服器在內部轉送請求。</p>
+<span id="more"></span>
+
+<h2 id="為什麼會出現-CORS-錯誤？"><a href="#為什麼會出現-CORS-錯誤？" class="headerlink" title="為什麼會出現 CORS 錯誤？"></a>為什麼會出現 CORS 錯誤？</h2><p>瀏覽器會以「協定、網域、Port」判斷兩個來源是否相同。</p>
+<p>以下兩個網址的埠號不同，因此屬於不同來源：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">http://localhost:4200<br>http://127.0.0.1:5000<br></code></pre></td></tr></table></figure>
+
+<p>當前端直接呼叫 <code>http://127.0.0.1:5000/api/users</code> 時，後端必須在回應中明確允許 <code>http://localhost:4200</code>，否則瀏覽器會阻擋程式讀取回應。</p>
+<p>正式解法仍應由後端正確設定 CORS。<br>若是在本機開發階段，則可使用 Angular Proxy，避免前端程式直接跨來源請求。</p>
+<h2 id="使用-Angular-Proxy-代理-API-請求"><a href="#使用-Angular-Proxy-代理-API-請求" class="headerlink" title="使用 Angular Proxy 代理 API 請求"></a>使用 Angular Proxy 代理 API 請求</h2><h3 id="1-建立-Proxy-設定檔"><a href="#1-建立-Proxy-設定檔" class="headerlink" title="1. 建立 Proxy 設定檔"></a>1. 建立 Proxy 設定檔</h3><p>在 Angular 專案根目錄建立 <code>proxy.conf.json</code>：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;/api/**&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;target&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;http://127.0.0.1:5000&quot;</span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;secure&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><span class="hljs-punctuation">,</span><br>    <span class="hljs-attr">&quot;changeOrigin&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>設定含義如下：</p>
+<ul>
+<li><code>&quot;/api/**&quot;</code>：攔截所有以 <code>/api/</code> 開頭的請求。</li>
+<li><code>target</code>：實際 API 伺服器的位置；此處為示範用的本機後端。</li>
+<li><code>secure: false</code>：Proxy 連線至使用自簽憑證的 HTTPS 後端時，不驗證其憑證。若後端是 HTTP，此設定通常不影響結果。</li>
+<li><code>changeOrigin: true</code>：轉送請求時調整 <code>Host</code> 標頭，部分後端服務需要此設定。</li>
+</ul>
+<h3 id="2-啟動開發伺服器"><a href="#2-啟動開發伺服器" class="headerlink" title="2. 啟動開發伺服器"></a>2. 啟動開發伺服器</h3><p>啟動 Angular 時傳入 Proxy 設定：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">ng serve --proxy-config proxy.conf.json<br></code></pre></td></tr></table></figure>
+
+<p>也可以將 <code>proxyConfig</code> 寫入 <code>angular.json</code> 的 <code>serve.options</code>，之後直接執行 <code>ng serve</code>：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;projects&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;my-app&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>      <span class="hljs-attr">&quot;architect&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>        <span class="hljs-attr">&quot;serve&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>          <span class="hljs-attr">&quot;options&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>            <span class="hljs-attr">&quot;proxyConfig&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;proxy.conf.json&quot;</span><br>          <span class="hljs-punctuation">&#125;</span><br>        <span class="hljs-punctuation">&#125;</span><br>      <span class="hljs-punctuation">&#125;</span><br>    <span class="hljs-punctuation">&#125;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>實際的專案設定可能還會包含 builder、build target 與 configurations；只需要在既有的 <code>serve.options</code> 加上 <code>proxyConfig</code> 即可。</p>
+<h3 id="3-前端改用相對路徑"><a href="#3-前端改用相對路徑" class="headerlink" title="3. 前端改用相對路徑"></a>3. 前端改用相對路徑</h3><p>前端不應再寫死後端的完整網址：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-comment">// 不建議：瀏覽器會直接對另一個來源發出請求</span><br><span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;http://127.0.0.1:5000/api/users&#x27;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>改為呼叫相對路徑：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-comment">// Angular 開發伺服器會將請求代理至 target</span><br><span class="hljs-title function_">fetch</span>(<span class="hljs-string">&#x27;/api/users&#x27;</span>);<br></code></pre></td></tr></table></figure>
+
+<p>瀏覽器看到的請求仍是 <code>http://localhost:4200/api/users</code>，因此不會觸發跨來源限制；Angular 開發伺服器再將它轉送到 <code>http://127.0.0.1:5000/api/users</code>。</p>
+<h2 id="常見問題"><a href="#常見問題" class="headerlink" title="常見問題"></a>常見問題</h2><h3 id="修改-Proxy-設定後沒有生效"><a href="#修改-Proxy-設定後沒有生效" class="headerlink" title="修改 Proxy 設定後沒有生效"></a>修改 Proxy 設定後沒有生效</h3><p>Proxy 設定檔不會自動更新。<br>修改 <code>proxy.conf.json</code> 後，請停止並重新執行 <code>ng serve</code>。</p>
+<h3 id="Proxy-無法連線至-localhost"><a href="#Proxy-無法連線至-localhost" class="headerlink" title="Proxy 無法連線至 localhost"></a>Proxy 無法連線至 <code>localhost</code></h3><p>部分 Node.js 與作業系統環境中，<code>localhost</code> 可能優先解析為 IPv6 位址 <code>::1</code>；若後端僅監聽 IPv4，就可能出現 <code>ECONNREFUSED</code>。此時可將 <code>target</code> 改成 <code>http://127.0.0.1:5000</code>。</p>
+<h3 id="是否應該停用瀏覽器的-CORS-安全性？"><a href="#是否應該停用瀏覽器的-CORS-安全性？" class="headerlink" title="是否應該停用瀏覽器的 CORS 安全性？"></a>是否應該停用瀏覽器的 CORS 安全性？</h3><p>不建議。<br>以停用瀏覽器安全性來測試，無法反映真實使用者環境，也可能讓其他分頁暴露在風險中。<br>開發時應優先使用 Proxy；部署環境則由後端設定明確、最小範圍的 CORS 規則。</p>
+<h2 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h2><p>Angular Proxy 是處理本機開發 CORS 問題的實用工具；前端以相對路徑呼叫 API，開發伺服器負責轉送請求。<br>不過它只解決開發環境的便利性，正式環境仍需由 API 伺服器妥善設定 CORS。</p>
+]]></content>
+      <categories>
+        <category>技術筆記</category>
+      </categories>
+      <tags>
+        <tag>Angular</tag>
+        <tag>localhost</tag>
+        <tag>CORS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Angular 前後台專案該選 Monorepo 還是雙 Repo？</title>
+    <url>/2026/06/16/angular-monorepo-strategy/</url>
+    <content><![CDATA[<p>當一個 Angular 前台系統即將新增後台管理介面時，團隊常會面臨架構選擇：前後台應放在同一個 Repository，還是拆成兩個獨立 Repository？</p>
+<p>這個選擇不只影響目錄結構，也會影響共用程式碼、CI&#x2F;CD 執行時間、權限控管與未來交付原始碼的方式。</p>
+<p>本文比較三種常見方案，並整理適合各自情境的判斷原則。</p>
+<span id="more"></span>
+
+<h2 id="常見情境"><a href="#常見情境" class="headerlink" title="常見情境"></a>常見情境</h2><p>假設團隊有以下需求：</p>
+<ul>
+<li>同一個團隊同時維護前台與後台。</li>
+<li>兩個應用程式會共用 API 型別、驗證邏輯或 UI 元件。</li>
+<li>專案已使用 CI&#x2F;CD，並希望避免不必要的建置與測試。</li>
+<li>未來可能加入程式碼品質掃描與架構規範。</li>
+</ul>
+<p>常見的選項可分成三種：Angular CLI Workspace、Nx Workspace 和 雙 Repository。</p>
+<h2 id="方案一：Angular-CLI-Workspace"><a href="#方案一：Angular-CLI-Workspace" class="headerlink" title="方案一：Angular CLI Workspace"></a>方案一：Angular CLI Workspace</h2><p>Angular CLI Workspace 可以在同一個 Repository 中管理多個應用程式。例如保留既有前台，再用 Angular CLI 建立後台應用程式，統一由 <code>angular.json</code> 管理。</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">workspace/<br>├── projects/<br>│   ├── frontend/<br>│   └── admin/<br>├── angular.json<br>├── package.json<br>└── tsconfig.json<br></code></pre></td></tr></table></figure>
+
+<h3 id="優點"><a href="#優點" class="headerlink" title="優點"></a>優點</h3><ul>
+<li>對 Angular 團隊來說學習成本低。</li>
+<li>不必額外導入 Monorepo 工具。</li>
+<li>前後台可共用 TypeScript path alias 與部分程式碼。</li>
+<li>適合應用程式數量少、架構仍單純的專案。</li>
+</ul>
+<h3 id="限制"><a href="#限制" class="headerlink" title="限制"></a>限制</h3><ul>
+<li>程式碼共用與依賴方向主要仰賴團隊約定，缺少明確的邊界約束。</li>
+<li>可自行設計 CI 規則只建置特定應用程式，但不具備以專案依賴圖為核心的 affected 工作流程。</li>
+<li>現代 Angular CLI 已具備 persistent disk cache，因此不應把「沒有快取」當成缺點；真正差異在於多專案任務編排、變更影響分析與架構治理能力。</li>
+</ul>
+<h3 id="適合情境"><a href="#適合情境" class="headerlink" title="適合情境"></a>適合情境</h3><ul>
+<li>應用程式數量少，且短期內不會快速成長。</li>
+<li>前後台共用程式碼不多。</li>
+<li>團隊優先追求簡單、低遷移成本的方案。</li>
+</ul>
+<h2 id="方案二：Nx-Workspace"><a href="#方案二：Nx-Workspace" class="headerlink" title="方案二：Nx Workspace"></a>方案二：Nx Workspace</h2><p>Nx 是以專案圖（project graph）管理多個應用程式與函式庫的工具。前台、後台與共用程式碼可被明確拆分，並由 Nx 管理它們的依賴關係。</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">workspace/<br>├── apps/<br>│   ├── frontend/<br>│   └── admin/<br>├── libs/<br>│   ├── shared-api/<br>│   ├── shared-ui/<br>│   └── shared-utils/<br>├── nx.json<br>├── package.json<br>└── tsconfig.base.json<br></code></pre></td></tr></table></figure>
+
+<h3 id="優點-1"><a href="#優點-1" class="headerlink" title="優點"></a>優點</h3><ul>
+<li>可用 <code>nx affected</code> 依變更範圍，只執行受影響專案的 lint、test 或 build。</li>
+<li>內建任務快取機制，可降低本機與 CI 重複執行相同任務的成本。</li>
+<li>可用 tags 與 ESLint 規則限制模組依賴方向，例如禁止 feature 直接引用另一個 feature。</li>
+<li>共用 API model、UI 元件與工具函式時，不需要額外發佈內部 npm 套件。</li>
+<li>適合隨專案數量成長而持續維護的架構。</li>
+</ul>
+<h3 id="限制-1"><a href="#限制-1" class="headerlink" title="限制"></a>限制</h3><ul>
+<li>團隊需要理解 project、target、task cache 與 dependency graph 等概念。</li>
+<li>設定與升級成本高於單純的 Angular CLI Workspace。</li>
+<li><code>libs/</code> 不代表所有程式碼都應共用；若沒有清楚的依賴規範，Monorepo 仍可能演變成難以維護的大型程式庫。</li>
+</ul>
+<h3 id="適合情境-1"><a href="#適合情境-1" class="headerlink" title="適合情境"></a>適合情境</h3><ul>
+<li>同一團隊長期維護多個應用程式。</li>
+<li>前後台共享 API 型別、設計系統或領域邏輯。</li>
+<li>CI&#x2F;CD 時間開始成為開發流程的瓶頸。</li>
+<li>需要以工具落實模組邊界與程式碼品質規範。</li>
+</ul>
+<h2 id="方案三：前後台拆成雙-Repository"><a href="#方案三：前後台拆成雙-Repository" class="headerlink" title="方案三：前後台拆成雙 Repository"></a>方案三：前後台拆成雙 Repository</h2><p>前台與後台各自維護獨立 Repository。<br>若需要共用程式碼，通常會把它抽成可版本化的 npm 套件，或改由 API schema 產生型別與 client。</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">frontend-repository/<br>├── src/<br>├── package.json<br>└── .gitlab-ci.yml<br><br>admin-repository/<br>├── src/<br>├── package.json<br>└── .gitlab-ci.yml<br></code></pre></td></tr></table></figure>
+
+<h3 id="優點-2"><a href="#優點-2" class="headerlink" title="優點"></a>優點</h3><ul>
+<li>專案、權限與部署流程天然隔離。</li>
+<li>可以獨立交付某一個應用程式的完整原始碼。</li>
+<li>前後台可以使用不同技術棧、不同發版節奏與不同維護團隊。</li>
+</ul>
+<h3 id="限制-2"><a href="#限制-2" class="headerlink" title="限制"></a>限制</h3><ul>
+<li>共用 API model 或元件需要發佈、安裝與升版流程。</li>
+<li>跨 Repository 的型別相容性與變更追蹤成本較高。</li>
+<li>CI&#x2F;CD、品質掃描與依賴管理通常需要維護兩份設定。</li>
+</ul>
+<h3 id="適合情境-2"><a href="#適合情境-2" class="headerlink" title="適合情境"></a>適合情境</h3><ul>
+<li>前後台由不同團隊維護，或存取權限必須隔離。</li>
+<li>合約或資安規範要求只交付其中一個應用程式的原始碼。</li>
+<li>兩個應用程式技術棧不同，或發版節奏完全無關。</li>
+</ul>
+<h2 id="三種方案比較"><a href="#三種方案比較" class="headerlink" title="三種方案比較"></a>三種方案比較</h2><table>
+<thead>
+<tr>
+<th>面向</th>
+<th>Angular CLI Workspace</th>
+<th>Nx Workspace</th>
+<th>雙 Repository</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>共用 API model／元件</td>
+<td>path alias 與團隊約定</td>
+<td>以 libraries 明確管理</td>
+<td>npm 套件或 schema 產生</td>
+</tr>
+<tr>
+<td>變更影響分析</td>
+<td>需自行設計 CI 規則</td>
+<td><code>nx affected</code></td>
+<td>各自獨立</td>
+</tr>
+<tr>
+<td>任務快取</td>
+<td>Angular CLI disk cache</td>
+<td>專案任務快取，可延伸至 CI</td>
+<td>各自管理</td>
+</tr>
+<tr>
+<td>模組邊界</td>
+<td>主要靠約定</td>
+<td>可由 lint 規則強制</td>
+<td>Repository 天然隔離</td>
+</tr>
+<tr>
+<td>部署獨立性</td>
+<td>需自行設定</td>
+<td>需自行設定</td>
+<td>天然獨立</td>
+</tr>
+<tr>
+<td>原始碼交付隔離</td>
+<td>較困難</td>
+<td>較困難</td>
+<td>容易</td>
+</tr>
+<tr>
+<td>初始導入成本</td>
+<td>低</td>
+<td>中</td>
+<td>低</td>
+</tr>
+<tr>
+<td>長期維護成本</td>
+<td>中</td>
+<td>視治理而定，通常較低</td>
+<td>共用程式碼多時較高</td>
+</tr>
+</tbody></table>
+<h2 id="原始碼交付與掃描需求會改變答案"><a href="#原始碼交付與掃描需求會改變答案" class="headerlink" title="原始碼交付與掃描需求會改變答案"></a>原始碼交付與掃描需求會改變答案</h2><p>技術便利性並不是唯一考量。如果必須只交付前台原始碼，而後台程式碼不得隨附，雙 Repository 往往比 Monorepo 更合適。</p>
+<p>雖然可以從 Monorepo 匯出某個應用程式目錄，例如：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">git archive HEAD:apps/frontend --output=frontend-source.zip<br></code></pre></td></tr></table></figure>
+
+<p>但這通常不是完整的交付品：前台依賴的 libraries、根目錄設定檔與 lock file 可能不在封包內。若要讓交付後的程式碼可獨立閱讀、建置與掃描，還需額外維護匯出規則與相依清單。</p>
+<p>相對地，動態掃描（DAST）著重於已部署站台的行為，與程式碼放在 Monorepo 或雙 Repository 沒有直接關係；靜態掃描（SAST）則兩種架構都能支援，差別主要在報告與品質門檻要統一管理或分開管理。</p>
+<h2 id="選擇-Nx-後，先訂好共用邊界"><a href="#選擇-Nx-後，先訂好共用邊界" class="headerlink" title="選擇 Nx 後，先訂好共用邊界"></a>選擇 Nx 後，先訂好共用邊界</h2><p>採用 Nx 時，最常見的問題不是工具設定，而是把所有東西都放進 <code>shared</code>。</p>
+<p>較健康的原則是：</p>
+<ul>
+<li><code>apps/</code> 放各應用程式專屬的頁面、feature 與流程。</li>
+<li><code>libs/</code> 只放真正跨應用程式共用、且有穩定介面的程式碼。</li>
+<li>依領域或用途區分 library，例如 <code>shared-api</code>、<code>shared-ui</code>、<code>shared-utils</code>。</li>
+<li>用 tags 搭配 <code>@nx/enforce-module-boundaries</code> 限制依賴方向。</li>
+</ul>
+<p>例如，<code>frontend</code> 與 <code>admin</code> 都可引用 <code>shared-api</code>，但 <code>frontend</code> 不應直接引用 <code>admin</code> 內的 feature。這樣才能保留程式碼共用的好處，同時避免應用程式彼此糾結。</p>
+<h2 id="結論"><a href="#結論" class="headerlink" title="結論"></a>結論</h2><p>如果前後台由同一團隊長期維護、共享程式碼比例高，而且 CI&#x2F;CD 效率與架構治理是重點，Nx Workspace 通常是最平衡的選擇。</p>
+<p>如果專案規模小、應用程式不多，Angular CLI Workspace 已能滿足需求，不必為了 Monorepo 而增加工具複雜度。</p>
+<p>如果有嚴格的原始碼隔離、不同維護團隊或不同技術棧，雙 Repository 會是更清楚且風險更低的選擇。架構沒有絕對答案；先釐清共用程度、交付邊界與團隊協作方式，才能選到適合長期維護的方案。</p>
+]]></content>
+      <categories>
+        <category>技術筆記</category>
+      </categories>
+      <tags>
+        <tag>Angular</tag>
+        <tag>Monorepo</tag>
+        <tag>Nx</tag>
+        <tag>CI/CD</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Angular 專案整合 Prettier、Husky 與 lint-staged</title>
+    <url>/2024/10/11/angular-prettier-husky/</url>
+    <content><![CDATA[<p>團隊協作時，程式格式若完全仰賴人工約定，通常很快就會出現不同的縮排、引號與換行風格。將 Prettier 放進 Git commit 前的流程，可以讓提交進版本庫的程式碼維持一致，同時避免每次格式化都改動整個專案。</p>
+<span id="more"></span>
+
+<h2 id="安裝套件"><a href="#安裝套件" class="headerlink" title="安裝套件"></a>安裝套件</h2><p>在 Angular 專案根目錄安裝 Prettier、Husky 與 lint-staged：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npm install --save-dev prettier husky lint-staged<br></code></pre></td></tr></table></figure>
+
+<p><code>lint-staged</code> 會只處理已加入 Git 暫存區的檔案，比在 pre-commit 執行 <code>prettier --write .</code> 更安全，也能避免一次產生大量與功能無關的格式化變更。</p>
+<h2 id="建立-Prettier-設定"><a href="#建立-Prettier-設定" class="headerlink" title="建立 Prettier 設定"></a>建立 Prettier 設定</h2><p>在專案根目錄建立 <code>.prettierrc.json</code>：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;singleQuote&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;semi&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;trailingComma&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;all&quot;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;printWidth&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">100</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;tabWidth&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">2</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;bracketSameLine&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">false</span></span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>Prettier 的預設值已適合大多數專案，設定檔應只保留團隊真正有共識的選項。舊版常見的 <code>jsxBracketSameLine</code> 已被 <code>bracketSameLine</code> 取代。</p>
+<p>再建立 <code>.prettierignore</code>，排除不需要格式化的輸出與依賴檔案：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><code class="hljs gitignore">node_modules/<br>dist/<br>coverage/<br>.angular/<br>package-lock.json<br></code></pre></td></tr></table></figure>
+
+<h2 id="設定-Git-Hook"><a href="#設定-Git-Hook" class="headerlink" title="設定 Git Hook"></a>設定 Git Hook</h2><p>初始化 Husky：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npx husky init<br></code></pre></td></tr></table></figure>
+
+<p>這會建立 <code>.husky/pre-commit</code>，並在 <code>package.json</code> 加入 <code>prepare</code> script。將 <code>.husky/pre-commit</code> 的內容改為：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">npx lint-staged<br></code></pre></td></tr></table></figure>
+
+<p>接著在 <code>package.json</code> 新增 lint-staged 設定：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;lint-staged&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;*.&#123;js,jsx,ts,tsx,html,css,scss,json,md,yml,yaml&#125;&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;prettier --write&quot;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>提交時，Hook 會格式化 staged files，並將修改後的內容放回暫存區。若格式化失敗，commit 會中止，開發者可先修正問題再重新提交。</p>
+<h2 id="VS-Code-儲存時自動格式化"><a href="#VS-Code-儲存時自動格式化" class="headerlink" title="VS Code 儲存時自動格式化"></a>VS Code 儲存時自動格式化</h2><p>安裝 Prettier VS Code 擴充功能後，可在 <code>.vscode/settings.json</code> 設定：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span><br>  <span class="hljs-attr">&quot;editor.formatOnSave&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;[typescript]&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;editor.defaultFormatter&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;esbenp.prettier-vscode&quot;</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;[html]&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;editor.defaultFormatter&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;esbenp.prettier-vscode&quot;</span><br>  <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span><br>  <span class="hljs-attr">&quot;[scss]&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">&#123;</span><br>    <span class="hljs-attr">&quot;editor.defaultFormatter&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;esbenp.prettier-vscode&quot;</span><br>  <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>儲存時格式化改善個人開發體驗；pre-commit Hook 則是團隊最後一道一致性保護。兩者並不衝突。</p>
+<h2 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h2><p>Prettier 負責統一格式，Husky 負責掛載 Git Hook，lint-staged 則確保只處理本次要提交的檔案。這套組合容易導入，也能讓程式碼 review 更聚焦在真正的邏輯變更。</p>
+]]></content>
+      <categories>
+        <category>技術筆記</category>
+      </categories>
+      <tags>
+        <tag>Angular</tag>
+        <tag>Prettier</tag>
+        <tag>Husky</tag>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Angular Reactive Forms：textarea 顯示目前字數與上限</title>
+    <url>/2024/12/27/angular-textarea-character-counter/</url>
+    <content><![CDATA[<p>表單中的文字說明欄位常需要限制輸入長度，並即時顯示目前字數。Angular Reactive Forms 可以直接透過 <code>FormControl</code> 綁定狀態，不需要手動操作 DOM 或以固定 id 尋找元素。</p>
+<span id="more"></span>
+
+<h2 id="建立表單控制項"><a href="#建立表單控制項" class="headerlink" title="建立表單控制項"></a>建立表單控制項</h2><p>在元件中設定最大長度與非 nullable 的控制項：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Component</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;<br><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">FormControl</span>, <span class="hljs-title class_">ReactiveFormsModule</span>, <span class="hljs-title class_">Validators</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/forms&#x27;</span>;<br><br><span class="hljs-meta">@Component</span>(&#123;<br>  <span class="hljs-attr">selector</span>: <span class="hljs-string">&#x27;app-remark-field&#x27;</span>,<br>  <span class="hljs-attr">imports</span>: [<span class="hljs-title class_">ReactiveFormsModule</span>],<br>  <span class="hljs-attr">templateUrl</span>: <span class="hljs-string">&#x27;./remark-field.component.html&#x27;</span>,<br>  <span class="hljs-attr">styleUrl</span>: <span class="hljs-string">&#x27;./remark-field.component.scss&#x27;</span>,<br>&#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">RemarkFieldComponent</span> &#123;<br>  <span class="hljs-keyword">readonly</span> maxLength = <span class="hljs-number">200</span>;<br><br>  <span class="hljs-keyword">readonly</span> remarkControl = <span class="hljs-keyword">new</span> <span class="hljs-title class_">FormControl</span>(<span class="hljs-string">&#x27;&#x27;</span>, &#123;<br>    <span class="hljs-attr">nonNullable</span>: <span class="hljs-literal">true</span>,<br>    <span class="hljs-attr">validators</span>: [<span class="hljs-title class_">Validators</span>.<span class="hljs-title function_">maxLength</span>(<span class="hljs-variable language_">this</span>.<span class="hljs-property">maxLength</span>)],<br>  &#125;);<br><br>  <span class="hljs-keyword">get</span> <span class="hljs-title function_">currentLength</span>(): <span class="hljs-built_in">number</span> &#123;<br>    <span class="hljs-keyword">return</span> <span class="hljs-variable language_">this</span>.<span class="hljs-property">remarkControl</span>.<span class="hljs-property">value</span>.<span class="hljs-property">length</span>;<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="在範本顯示字數"><a href="#在範本顯示字數" class="headerlink" title="在範本顯示字數"></a>在範本顯示字數</h2><p>將計數器放在欄位容器內，並以 Angular binding 顯示目前長度：</p>
+<figure class="highlight html"><table><tr><td class="code"><pre><code class="hljs html"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;textarea-field&quot;</span>&gt;</span><br>  <span class="hljs-tag">&lt;<span class="hljs-name">label</span> <span class="hljs-attr">for</span>=<span class="hljs-string">&quot;remark&quot;</span>&gt;</span>說明<span class="hljs-tag">&lt;/<span class="hljs-name">label</span>&gt;</span><br><br>  <span class="hljs-tag">&lt;<span class="hljs-name">textarea</span></span><br><span class="hljs-tag">    <span class="hljs-attr">id</span>=<span class="hljs-string">&quot;remark&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">rows</span>=<span class="hljs-string">&quot;4&quot;</span></span><br><span class="hljs-tag">    [<span class="hljs-attr">formControl</span>]=<span class="hljs-string">&quot;remarkControl&quot;</span></span><br><span class="hljs-tag">    [<span class="hljs-attr">attr.maxlength</span>]=<span class="hljs-string">&quot;maxLength&quot;</span></span><br><span class="hljs-tag">    <span class="hljs-attr">placeholder</span>=<span class="hljs-string">&quot;請輸入說明&quot;</span></span><br><span class="hljs-tag">  &gt;</span><span class="hljs-tag">&lt;/<span class="hljs-name">textarea</span>&gt;</span><br><br>  <span class="hljs-tag">&lt;<span class="hljs-name">span</span> <span class="hljs-attr">class</span>=<span class="hljs-string">&quot;character-count&quot;</span> <span class="hljs-attr">aria-live</span>=<span class="hljs-string">&quot;polite&quot;</span>&gt;</span><br>    &#123;&#123; currentLength &#125;&#125; / &#123;&#123; maxLength &#125;&#125;<br>  <span class="hljs-tag">&lt;/<span class="hljs-name">span</span>&gt;</span><br><span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight scss"><table><tr><td class="code"><pre><code class="hljs scss"><span class="hljs-selector-class">.textarea-field</span> &#123;<br>  <span class="hljs-attribute">position</span>: relative;<br>&#125;<br><br><span class="hljs-selector-tag">textarea</span> &#123;<br>  <span class="hljs-attribute">box-sizing</span>: border-box;<br>  <span class="hljs-attribute">min-height</span>: <span class="hljs-number">8rem</span>;<br>  <span class="hljs-attribute">padding-bottom</span>: <span class="hljs-number">1.5rem</span>;<br>  <span class="hljs-attribute">width</span>: <span class="hljs-number">100%</span>;<br>&#125;<br><br><span class="hljs-selector-class">.character-count</span> &#123;<br>  <span class="hljs-attribute">bottom</span>: <span class="hljs-number">0.5rem</span>;<br>  <span class="hljs-attribute">color</span>: <span class="hljs-number">#6b7280</span>;<br>  <span class="hljs-attribute">font-size</span>: <span class="hljs-number">0.75rem</span>;<br>  <span class="hljs-attribute">pointer-events</span>: none;<br>  <span class="hljs-attribute">position</span>: absolute;<br>  <span class="hljs-attribute">right</span>: <span class="hljs-number">0.75rem</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>顯示內容為「目前字數／最大字數」。若要顯示剩餘字數，可改成 <code>&#123;&#123; maxLength - currentLength &#125;&#125;</code>，並將文案明確寫成「剩餘字數」。</p>
+<h2 id="為什麼不要直接操作-DOM？"><a href="#為什麼不要直接操作-DOM？" class="headerlink" title="為什麼不要直接操作 DOM？"></a>為什麼不要直接操作 DOM？</h2><p>使用 <code>document.getElementById()</code> 與 <code>innerHTML</code> 會讓資料狀態分散在 Angular 之外，也容易因重複 id、多個元件實例或伺服器端渲染而出現問題。將 UI 完全由 FormControl 與 template binding 驅動，可讓驗證、畫面與提交資料保持同步。</p>
+<h2 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h2><p><code>maxlength</code> 負責限制輸入，<code>Validators.maxLength</code> 負責表單驗證，template binding 則負責顯示狀態。三者搭配即可完成可重用且易維護的文字字數提示欄位。</p>
+]]></content>
+      <categories>
+        <category>技術筆記</category>
+      </categories>
+      <tags>
+        <tag>Angular</tag>
+        <tag>Reactive Forms</tag>
+        <tag>textarea</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用 FFmpeg 偵測並裁切影片黑邊</title>
+    <url>/2026/03/25/ffmpeg-remove-video-black-bars/</url>
+    <content><![CDATA[<p>影片被嵌入不同尺寸的版面時，若來源檔本身含有上下或左右黑邊，使用 CSS 的 <code>object-fit: cover</code> 也無法真正移除它們。這時可先用 FFmpeg 偵測可裁切範圍，再輸出新的影片檔。</p>
+<span id="more"></span>
+
+<h2 id="1-偵測黑邊範圍"><a href="#1-偵測黑邊範圍" class="headerlink" title="1. 偵測黑邊範圍"></a>1. 偵測黑邊範圍</h2><p>對來源影片執行 <code>cropdetect</code>：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">ffmpeg -i input.mp4 -vf &quot;cropdetect&quot; -f null - 2&gt;&amp;1 | tail -20<br></code></pre></td></tr></table></figure>
+
+<p>輸出中會出現類似以下的建議：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">crop=1616:1072:152:4<br></code></pre></td></tr></table></figure>
+
+<p>四個數值依序是：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">crop=寬度:高度:左側偏移:上側偏移<br></code></pre></td></tr></table></figure>
+
+<p>建議多觀察幾行輸出，選擇反覆出現且合理的數值。若影片畫面本身有長時間的全黑場景，可能需要從不同時間點取樣確認。</p>
+<h2 id="2-輸出裁切後的影片"><a href="#2-輸出裁切後的影片" class="headerlink" title="2. 輸出裁切後的影片"></a>2. 輸出裁切後的影片</h2><p>先輸出成新檔，保留來源影片以便驗證：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">ffmpeg -i input.mp4 \<br>  -vf &quot;crop=1616:1072:152:4&quot; \<br>  -c:v libx264 \<br>  -crf 18 \<br>  -preset slow \<br>  -c:a copy \<br>  output-crop.mp4<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><code>crop</code>：使用偵測出的裁切範圍。</li>
+<li><code>libx264</code>：以 H.264 重新編碼影片。</li>
+<li><code>crf 18</code>：品質與檔案大小的常用平衡值；數字愈小品質愈高、檔案也愈大。</li>
+<li><code>preset slow</code>：以較長處理時間換取較佳壓縮效率。</li>
+<li><code>-c:a copy</code>：直接複製原始音軌，不重新編碼。</li>
+</ul>
+<p>若影片確定是無聲的背景影片，或不需要保留音軌，才改用 <code>-an</code>：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><code class="hljs shell">ffmpeg -i input.mp4 -vf &quot;crop=1616:1072:152:4&quot; -c:v libx264 -crf 18 -an output-crop.mp4<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-確認後再取代檔案"><a href="#3-確認後再取代檔案" class="headerlink" title="3. 確認後再取代檔案"></a>3. 確認後再取代檔案</h2><p>先播放 <code>output-crop.mp4</code>，確認畫面比例、音訊與檔案大小都符合預期。確認後再以版本控制或備份方式取代原檔，避免直接覆寫而無法復原。</p>
+<h2 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h2><p><code>cropdetect</code> 用來取得裁切建議，<code>crop</code> 負責實際裁切。先輸出新檔並確認結果，是處理影音素材時最安全的流程。</p>
+]]></content>
+      <categories>
+        <category>技術筆記</category>
+      </categories>
+      <tags>
+        <tag>FFmpeg</tag>
+        <tag>Video</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>前端地圖工具怎麼選？從 2D、3D、圖資到空間分析整理</title>
+    <url>/2025/04/14/frontend-map-library-selection/</url>
+    <content><![CDATA[<p>地圖功能不只是「在頁面放一張地圖」。從一般標記、路線與行政區圖層，到地形、3D 模型與空間分析，不同需求適合的工具差異很大。<br>本文從前端渲染、圖資服務與後端空間資料三個層次整理常見選項。</p>
+<span id="more"></span>
+
+<h2 id="先分清楚工具的角色"><a href="#先分清楚工具的角色" class="headerlink" title="先分清楚工具的角色"></a>先分清楚工具的角色</h2><p>地圖系統常見的角色如下：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><code class="hljs text">空間資料庫／分析          圖資服務與資料格式              前端渲染與互動<br>PostGIS                 WMS / WMTS                  Leaflet<br>SpatiaLite      →       Vector Tiles / GeoJSON  →   OpenLayers<br>                        3D Tiles                    MapLibre GL JS<br>                                                    CesiumJS<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>GeoJSON</strong>：交換點、線、多邊形等向量地理資料的格式。</li>
+<li><strong>WMS／WMTS</strong>：向伺服器取得地圖影像或地圖瓦片的服務標準。</li>
+<li><strong>Vector Tiles</strong>：以向量資料傳送地圖圖徵，適合前端動態樣式與大量資料渲染。</li>
+<li><strong>PostGIS</strong>：PostgreSQL 的空間資料擴充，適合查詢範圍、距離、相交與包含關係。</li>
+<li><strong>Turf.js</strong>：可在瀏覽器或 Node.js 端處理 GeoJSON 的空間運算工具。</li>
+</ul>
+<h2 id="常見前端地圖函式庫"><a href="#常見前端地圖函式庫" class="headerlink" title="常見前端地圖函式庫"></a>常見前端地圖函式庫</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>強項</th>
+<th>適合情境</th>
+<th>留意事項</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Leaflet</td>
+<td>輕量、學習門檻低</td>
+<td>標記、簡單圖層、資料視覺化</td>
+<td>大量向量資料與複雜 GIS 功能需額外設計</td>
+</tr>
+<tr>
+<td>OpenLayers</td>
+<td>GIS 格式與投影支援完整</td>
+<td>WMS、WMTS、專業圖層與 2D GIS</td>
+<td>API 較多，學習曲線較陡</td>
+</tr>
+<tr>
+<td>MapLibre GL JS</td>
+<td>向量瓦片與樣式客製</td>
+<td>高互動 2D 地圖、客製底圖與圖層</td>
+<td>需規劃 vector tile 與樣式來源</td>
+</tr>
+<tr>
+<td>CesiumJS</td>
+<td>真 3D 地球、地形、時間軸</td>
+<td>3D 地形、模型、飛行軌跡與大範圍視覺化</td>
+<td>專案體積與效能需求較高</td>
+</tr>
+<tr>
+<td>ArcGIS Maps SDK for JavaScript</td>
+<td>完整 ArcGIS 生態系</td>
+<td>已使用 ArcGIS 平台的專業 GIS 系統</td>
+<td>授權與平台整合成本需先評估</td>
+</tr>
+<tr>
+<td>Google Maps JavaScript API</td>
+<td>地點搜尋、路線與商業地點資料</td>
+<td>導航、店家搜尋、一般商業地圖</td>
+<td>用量與費用應依官方方案評估</td>
+</tr>
+</tbody></table>
+<h2 id="2D、偽-3D-與真-3D-的差別"><a href="#2D、偽-3D-與真-3D-的差別" class="headerlink" title="2D、偽 3D 與真 3D 的差別"></a>2D、偽 3D 與真 3D 的差別</h2><p>MapLibre GL JS 這類向量地圖函式庫主要處理平面地圖，可透過傾斜視角與建物高度營造 3D 效果，適合街道、商圈與資料圖層互動。</p>
+<p>CesiumJS 則以球面地球與 3D 場景為核心，可處理地形高程、3D Tiles、模型、時間軸與相機漫遊。若需求只是顯示行政區、標記或熱區圖，直接使用 Cesium 往往會增加不必要的複雜度。</p>
+<h2 id="Angular-整合原則"><a href="#Angular-整合原則" class="headerlink" title="Angular 整合原則"></a>Angular 整合原則</h2><p>不論選擇哪套函式庫，都建議將地圖初始化與資源釋放封裝在元件中：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">AfterViewInit</span>, <span class="hljs-title class_">Component</span>, <span class="hljs-title class_">OnDestroy</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;@angular/core&#x27;</span>;<br><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> L <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;leaflet&#x27;</span>;<br><br><span class="hljs-meta">@Component</span>(&#123;<br>  <span class="hljs-attr">selector</span>: <span class="hljs-string">&#x27;app-map&#x27;</span>,<br>  <span class="hljs-attr">template</span>: <span class="hljs-string">&#x27;&lt;div id=&quot;map&quot; class=&quot;map&quot;&gt;&lt;/div&gt;&#x27;</span>,<br>  <span class="hljs-attr">styles</span>: <span class="hljs-string">&#x27;.map &#123; height: 400px; &#125;&#x27;</span>,<br>&#125;)<br><span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> <span class="hljs-title class_">MapComponent</span> <span class="hljs-keyword">implements</span> <span class="hljs-title class_">AfterViewInit</span>, <span class="hljs-title class_">OnDestroy</span> &#123;<br>  <span class="hljs-keyword">private</span> map?: L.<span class="hljs-property">Map</span>;<br><br>  <span class="hljs-title function_">ngAfterViewInit</span>(): <span class="hljs-built_in">void</span> &#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">map</span> = L.<span class="hljs-title function_">map</span>(<span class="hljs-string">&#x27;map&#x27;</span>).<span class="hljs-title function_">setView</span>([<span class="hljs-number">25.033</span>, <span class="hljs-number">121.565</span>], <span class="hljs-number">13</span>);<br>  &#125;<br><br>  <span class="hljs-title function_">ngOnDestroy</span>(): <span class="hljs-built_in">void</span> &#123;<br>    <span class="hljs-variable language_">this</span>.<span class="hljs-property">map</span>?.<span class="hljs-title function_">remove</span>();<br>  &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>實際專案中，應改用 <code>ViewChild</code> 取得地圖容器，避免多個元件實例使用相同 id；並將圖層、事件與資料轉換邏輯拆到 service，減少元件複雜度。</p>
+<h2 id="依需求選擇"><a href="#依需求選擇" class="headerlink" title="依需求選擇"></a>依需求選擇</h2><ul>
+<li><strong>標記、簡單互動地圖</strong>：優先評估 Leaflet。</li>
+<li><strong>WMS／WMTS、多投影或 GIS 圖層管理</strong>：優先評估 OpenLayers。</li>
+<li><strong>高度客製化的向量地圖樣式</strong>：評估 MapLibre GL JS。</li>
+<li><strong>地形、3D 模型、時間序列或球面視覺化</strong>：評估 CesiumJS。</li>
+<li><strong>需要地點搜尋、導航與商業地圖資料</strong>：評估 Google Maps 或其他商業地圖服務。</li>
+<li><strong>需要空間查詢與資料治理</strong>：將 PostGIS 與後端 API 納入架構，而不是把所有計算放在瀏覽器。</li>
+</ul>
+<h2 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h2><p>選擇地圖工具時，先回答資料從哪裡來、需要 2D 還是 3D、是否涉及專業 GIS 格式，以及預計的流量與授權成本。前端函式庫只是其中一層；圖資授權、瓦片服務、資料量與後端空間分析能力，往往才是影響專案成敗的關鍵。</p>
+]]></content>
+      <categories>
+        <category>技術筆記</category>
+      </categories>
+      <tags>
+        <tag>Angular</tag>
+        <tag>GIS</tag>
+        <tag>Map</tag>
+        <tag>GeoJSON</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Jest 單元測試入門：生命週期與 Mock Function</title>
+    <url>/2026/05/12/jest-unit-test-notes/</url>
+    <content><![CDATA[<p>Jest 是常見的 JavaScript 與 TypeScript 測試框架。除了撰寫斷言外，最常用的能力是安排測試生命週期，以及用 mock 隔離 API、資料庫或其他外部依賴。</p>
+<span id="more"></span>
+
+<h2 id="測試案例與群組"><a href="#測試案例與群組" class="headerlink" title="測試案例與群組"></a>測試案例與群組</h2><p><code>test</code> 與 <code>it</code> 功能相同，可搭配 <code>describe</code> 將相關案例分組：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;sum&#x27;</span>, <span class="hljs-function">() =&gt;</span> &#123;<br>  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;adds two numbers&#x27;</span>, <span class="hljs-function">() =&gt;</span> &#123;<br>    <span class="hljs-title function_">expect</span>(<span class="hljs-number">1</span> + <span class="hljs-number">2</span>).<span class="hljs-title function_">toBe</span>(<span class="hljs-number">3</span>);<br>  &#125;);<br><br>  <span class="hljs-title function_">it</span>(<span class="hljs-string">&#x27;returns zero when both inputs are zero&#x27;</span>, <span class="hljs-function">() =&gt;</span> &#123;<br>    <span class="hljs-title function_">expect</span>(<span class="hljs-number">0</span> + <span class="hljs-number">0</span>).<span class="hljs-title function_">toBe</span>(<span class="hljs-number">0</span>);<br>  &#125;);<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<p>開發期間可用 <code>test.only</code> 暫時只跑某個案例，或用 <code>test.skip</code> 暫時略過案例；提交前應移除它們，避免 CI 少跑測試。</p>
+<h2 id="測試生命週期"><a href="#測試生命週期" class="headerlink" title="測試生命週期"></a>測試生命週期</h2><p>Jest 提供四個常用 Hook：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-title function_">beforeAll</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>  <span class="hljs-comment">// 整個 describe 區塊開始前執行一次</span><br>&#125;);<br><br><span class="hljs-title function_">beforeEach</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>  <span class="hljs-comment">// 每個測試案例前執行</span><br>&#125;);<br><br><span class="hljs-title function_">afterEach</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>  <span class="hljs-comment">// 每個測試案例後執行</span><br>&#125;);<br><br><span class="hljs-title function_">afterAll</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>  <span class="hljs-comment">// 整個 describe 區塊結束後執行一次</span><br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<p>大多數單元測試應在 <code>beforeEach</code> 建立新的測試資料，避免前一個案例修改狀態後影響下一個案例。</p>
+<h2 id="使用-jest-fn-建立-Mock"><a href="#使用-jest-fn-建立-Mock" class="headerlink" title="使用 jest.fn() 建立 Mock"></a>使用 <code>jest.fn()</code> 建立 Mock</h2><p>假設畫面需要透過 service 取得產品清單，可在測試中建立假的 service，而不呼叫真正的 API：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">import</span> &#123; <span class="hljs-title class_">Observable</span>, <span class="hljs-keyword">of</span> &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;rxjs&#x27;</span>;<br><br><span class="hljs-keyword">type</span> <span class="hljs-title class_">Product</span> = &#123; <span class="hljs-attr">id</span>: <span class="hljs-built_in">number</span>; <span class="hljs-attr">name</span>: <span class="hljs-built_in">string</span> &#125;;<br><br><span class="hljs-keyword">interface</span> <span class="hljs-title class_">ProductService</span> &#123;<br>  <span class="hljs-title function_">getProducts</span>(): <span class="hljs-title class_">Observable</span>&lt;<span class="hljs-title class_">Product</span>[]&gt;;<br>&#125;<br><br><span class="hljs-keyword">const</span> <span class="hljs-attr">products</span>: <span class="hljs-title class_">Product</span>[] = [&#123; <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Notebook&#x27;</span> &#125;];<br><br><span class="hljs-keyword">const</span> <span class="hljs-attr">productService</span>: jest.<span class="hljs-property">Mocked</span>&lt;<span class="hljs-title class_">ProductService</span>&gt; = &#123;<br>  <span class="hljs-attr">getProducts</span>: jest.<span class="hljs-title function_">fn</span>().<span class="hljs-title function_">mockReturnValue</span>(<span class="hljs-title function_">of</span>(products)),<br>&#125;;<br></code></pre></td></tr></table></figure>
+
+<p>接著可以驗證方法是否被呼叫，以及收到的結果是否符合預期：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts">productService.<span class="hljs-title function_">getProducts</span>().<span class="hljs-title function_">subscribe</span>(<span class="hljs-function">(<span class="hljs-params">result</span>) =&gt;</span> &#123;<br>  <span class="hljs-title function_">expect</span>(result).<span class="hljs-title function_">toEqual</span>(products);<br>&#125;);<br><br><span class="hljs-title function_">expect</span>(productService.<span class="hljs-property">getProducts</span>).<span class="hljs-title function_">toHaveBeenCalledTimes</span>(<span class="hljs-number">1</span>);<br></code></pre></td></tr></table></figure>
+
+<p>若 mock 的是 Promise，可使用 <code>mockResolvedValue</code>：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">const</span> getProfile = jest.<span class="hljs-title function_">fn</span>().<span class="hljs-title function_">mockResolvedValue</span>(&#123; <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Kimi&#x27;</span> &#125;);<br><br><span class="hljs-keyword">await</span> <span class="hljs-title function_">expect</span>(<span class="hljs-title function_">getProfile</span>()).<span class="hljs-property">resolves</span>.<span class="hljs-title function_">toEqual</span>(&#123; <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Kimi&#x27;</span> &#125;);<br></code></pre></td></tr></table></figure>
+
+<h2 id="清除-Mock-狀態"><a href="#清除-Mock-狀態" class="headerlink" title="清除 Mock 狀態"></a>清除 Mock 狀態</h2><p>同一個 mock 被多個案例使用時，可在每次測試後清除呼叫紀錄：</p>
+<figure class="highlight ts"><table><tr><td class="code"><pre><code class="hljs ts"><span class="hljs-title function_">afterEach</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>  jest.<span class="hljs-title function_">clearAllMocks</span>();<br>&#125;);<br></code></pre></td></tr></table></figure>
+
+<p><code>clearAllMocks</code> 只清除呼叫資訊；若還要移除 mock implementation，使用 <code>resetAllMocks</code>。若以 <code>jest.spyOn</code> 取代原始方法，則用 <code>restoreAllMocks</code> 還原。</p>
+<h2 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h2><p>好的單元測試應只驗證一個明確行為，並以 mock 隔離外部依賴。先掌握 <code>describe</code>、<code>test</code>、<code>expect</code>、生命週期 Hook 與 <code>jest.fn()</code>，就足以覆蓋大部分元件與 service 的基礎測試情境。</p>
+]]></content>
+      <categories>
+        <category>技術筆記</category>
+      </categories>
+      <tags>
+        <tag>Jest</tag>
+        <tag>Unit Test</tag>
+        <tag>TypeScript</tag>
+      </tags>
+  </entry>
+</search>

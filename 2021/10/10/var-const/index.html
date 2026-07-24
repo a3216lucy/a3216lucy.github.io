@@ -1,0 +1,674 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-TW" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="../../../../img/icon.png">
+  <link rel="icon" href="../../../../img/icon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Kimi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="JavaScript 可以用 var、let、const 宣告變數，但在現代 JavaScript 中，最實用的原則其實很簡單：預設使用 const；確定需要重新賦值時才用 let；新程式碼避免使用 var。 理解三者的作用域、提升與重複宣告差異後，就能知道這個原則從何而來。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JS 宣告變數：var、let、const 差異與使用時機">
+<meta property="og:url" content="https://lyskimi.org/2021/10/10/var-const/index.html">
+<meta property="og:site_name" content="Kimi&#39;s Personal Blog">
+<meta property="og:description" content="JavaScript 可以用 var、let、const 宣告變數，但在現代 JavaScript 中，最實用的原則其實很簡單：預設使用 const；確定需要重新賦值時才用 let；新程式碼避免使用 var。 理解三者的作用域、提升與重複宣告差異後，就能知道這個原則從何而來。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2021-10-09T20:36:50.000Z">
+<meta property="article:modified_time" content="2026-07-24T07:47:40.540Z">
+<meta property="article:author" content="Kimi">
+<meta property="article:tag" content="JavaScript">
+<meta property="article:tag" content="Studies">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>JS 宣告變數：var、let、const 差異與使用時機 - Kimi&#39;s Personal Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="../../../../css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="../../../../css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="../../../../css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lyskimi.org","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="../../../../js/utils.js" ></script>
+  <script  src="../../../../js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="../../../../index.html">
+      <strong>Kimi&#39;s Personal Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../index.html" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首頁</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../archives/" target="_self">
+                <i class="iconfont icon-book"></i>
+                <span>文章</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分類</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>作品</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('../../../../img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">JS 宣告變數：var、let、const 差異與使用時機</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2021-10-10 04:36" pubdate>
+          2021-10-10
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.1k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          9 分鐘
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">JS 宣告變數：var、let、const 差異與使用時機</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>JavaScript 可以用 <code>var</code>、<code>let</code>、<code>const</code> 宣告變數，但在現代 JavaScript 中，最實用的原則其實很簡單：<strong>預設使用 <code>const</code>；確定需要重新賦值時才用 <code>let</code>；新程式碼避免使用 <code>var</code>。</strong></p>
+<p>理解三者的作用域、提升與重複宣告差異後，就能知道這個原則從何而來。</p>
+<span id="more"></span>
+
+<h2 id="快速結論"><a href="#快速結論" class="headerlink" title="快速結論"></a>快速結論</h2><figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">const</span> apiUrl = <span class="hljs-string">&#x27;/api&#x27;</span>; <span class="hljs-comment">// 預設使用 const</span><br><br><span class="hljs-keyword">let</span> page = <span class="hljs-number">1</span>; <span class="hljs-comment">// 值需要重新賦值時使用 let</span><br>page += <span class="hljs-number">1</span>;<br><br><span class="hljs-keyword">var</span> legacyValue = <span class="hljs-string">&#x27;old code&#x27;</span>; <span class="hljs-comment">// 只在維護舊程式碼時遇到</span><br></code></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th><code>var</code></th>
+<th><code>let</code></th>
+<th><code>const</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>作用域</td>
+<td>函式作用域</td>
+<td>區塊作用域</td>
+<td>區塊作用域</td>
+</tr>
+<tr>
+<td>可重新賦值</td>
+<td>可以</td>
+<td>可以</td>
+<td>不可以</td>
+</tr>
+<tr>
+<td>可在同一作用域重複宣告</td>
+<td>可以</td>
+<td>不可以</td>
+<td>不可以</td>
+</tr>
+<tr>
+<td>宣告前存取</td>
+<td>得到 <code>undefined</code></td>
+<td>TDZ，拋出錯誤</td>
+<td>TDZ，拋出錯誤</td>
+</tr>
+<tr>
+<td>新程式碼建議</td>
+<td>不建議</td>
+<td>需要變動時使用</td>
+<td>預設使用</td>
+</tr>
+</tbody></table>
+<h2 id="1-作用域：var-是函式作用域，let-與-const-是區塊作用域"><a href="#1-作用域：var-是函式作用域，let-與-const-是區塊作用域" class="headerlink" title="1. 作用域：var 是函式作用域，let 與 const 是區塊作用域"></a>1. 作用域：<code>var</code> 是函式作用域，<code>let</code> 與 <code>const</code> 是區塊作用域</h2><p>區塊作用域指的是 <code>&#123;&#125;</code> 所包住的範圍，例如 <code>if</code>、<code>for</code>、<code>while</code> 或單純的大括號。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">if</span> (<span class="hljs-literal">true</span>) &#123;<br>  <span class="hljs-keyword">var</span> varMessage = <span class="hljs-string">&#x27;var 不受區塊限制&#x27;</span>;<br>  <span class="hljs-keyword">let</span> letMessage = <span class="hljs-string">&#x27;let 只存在於區塊內&#x27;</span>;<br>  <span class="hljs-keyword">const</span> constMessage = <span class="hljs-string">&#x27;const 只存在於區塊內&#x27;</span>;<br>&#125;<br><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(varMessage); <span class="hljs-comment">// &#x27;var 不受區塊限制&#x27;</span><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(letMessage); <span class="hljs-comment">// ReferenceError</span><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(constMessage); <span class="hljs-comment">// ReferenceError</span><br></code></pre></td></tr></table></figure>
+
+<p><code>var</code> 不會被 <code>if</code> 區塊限制，而是以最近的函式為範圍：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">function</span> <span class="hljs-title function_">getStatus</span>(<span class="hljs-params"></span>) &#123;<br>  <span class="hljs-keyword">if</span> (<span class="hljs-literal">true</span>) &#123;<br>    <span class="hljs-keyword">var</span> status = <span class="hljs-string">&#x27;ready&#x27;</span>;<br>  &#125;<br><br>  <span class="hljs-keyword">return</span> status; <span class="hljs-comment">// &#x27;ready&#x27;</span><br>&#125;<br><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(status); <span class="hljs-comment">// ReferenceError：函式外無法存取</span><br></code></pre></td></tr></table></figure>
+
+<p>區塊作用域可縮小變數可被存取與修改的範圍，因此更容易閱讀，也能降低同名變數互相影響的機率。</p>
+<h2 id="2-const-不能重新賦值，不代表物件完全不可變"><a href="#2-const-不能重新賦值，不代表物件完全不可變" class="headerlink" title="2. const 不能重新賦值，不代表物件完全不可變"></a>2. <code>const</code> 不能重新賦值，不代表物件完全不可變</h2><p><code>const</code> 限制的是「變數綁定」不能改指向另一個值：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">const</span> userName = <span class="hljs-string">&#x27;Kimi&#x27;</span>;<br>userName = <span class="hljs-string">&#x27;Alex&#x27;</span>; <span class="hljs-comment">// TypeError</span><br></code></pre></td></tr></table></figure>
+
+<p>若值是物件或陣列，仍可以修改其內部內容：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">const</span> user = &#123; <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Kimi&#x27;</span> &#125;;<br><br>user.<span class="hljs-property">name</span> = <span class="hljs-string">&#x27;Alex&#x27;</span>; <span class="hljs-comment">// 可以</span><br>user = &#123; <span class="hljs-attr">name</span>: <span class="hljs-string">&#x27;Mina&#x27;</span> &#125;; <span class="hljs-comment">// TypeError：不能重新指派 user</span><br></code></pre></td></tr></table></figure>
+
+<p>因此，<code>const</code> 不等於 immutable。若需要不可變資料，仍要避免直接修改物件，或使用 <code>Object.freeze</code>、immutable update 等方式。</p>
+<h2 id="3-for-迴圈與非同步-callback"><a href="#3-for-迴圈與非同步-callback" class="headerlink" title="3. for 迴圈與非同步 callback"></a>3. <code>for</code> 迴圈與非同步 callback</h2><p>以下是 <code>var</code> 最常見的陷阱之一：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) &#123;<br>  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(i);<br>  &#125;, <span class="hljs-number">100</span>);<br>&#125;<br><br><span class="hljs-comment">// 3</span><br><span class="hljs-comment">// 3</span><br><span class="hljs-comment">// 3</span><br></code></pre></td></tr></table></figure>
+
+<p><code>setTimeout</code> 的 callback 會在迴圈結束後才執行，而三個 callback 讀到的是同一個 <code>i</code>。迴圈結束時，<code>i</code> 已經是 <code>3</code>。</p>
+<p>改用 <code>let</code> 後，JavaScript 會為每一次迭代建立各自的綁定：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">3</span>; i++) &#123;<br>  <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> &#123;<br>    <span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(i);<br>  &#125;, <span class="hljs-number">100</span>);<br>&#125;<br><br><span class="hljs-comment">// 0</span><br><span class="hljs-comment">// 1</span><br><span class="hljs-comment">// 2</span><br></code></pre></td></tr></table></figure>
+
+<p>舊程式碼可用 IIFE 解決 <code>var</code> 的問題，但新程式碼直接使用 <code>let</code> 更清楚。</p>
+<h2 id="4-Hoisting-與暫時死區（TDZ）"><a href="#4-Hoisting-與暫時死區（TDZ）" class="headerlink" title="4. Hoisting 與暫時死區（TDZ）"></a>4. Hoisting 與暫時死區（TDZ）</h2><p><code>var</code>、<code>let</code> 與 <code>const</code> 的宣告都與 JavaScript 的執行階段建立流程有關，常被統稱為 hoisting。不過它們在宣告前被存取時，行為不同。</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(count); <span class="hljs-comment">// undefined</span><br><span class="hljs-keyword">var</span> count = <span class="hljs-number">1</span>;<br></code></pre></td></tr></table></figure>
+
+<p>上例可概念化為：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">var</span> count;<br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(count); <span class="hljs-comment">// undefined</span><br>count = <span class="hljs-number">1</span>;<br></code></pre></td></tr></table></figure>
+
+<p>這讓程式看起來像是「尚未宣告卻可使用」，容易隱藏錯誤。</p>
+<p><code>let</code> 與 <code>const</code> 也會在進入作用域時建立綁定，但在執行到宣告前不可存取；這段區間稱為暫時死區（Temporal Dead Zone，TDZ）：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(greeting); <span class="hljs-comment">// ReferenceError</span><br><span class="hljs-keyword">let</span> greeting = <span class="hljs-string">&#x27;hello&#x27;</span>;<br></code></pre></td></tr></table></figure>
+
+<p>TDZ 促使變數先宣告、後使用，讓控制流程更容易理解。實務上不需要刻意依賴任何一種 hoisting 行為，應將宣告放在使用位置之前。</p>
+<h2 id="5-重複宣告"><a href="#5-重複宣告" class="headerlink" title="5. 重複宣告"></a>5. 重複宣告</h2><p><code>var</code> 允許在同一作用域用相同名稱重複宣告：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">var</span> theme = <span class="hljs-string">&#x27;light&#x27;</span>;<br><span class="hljs-keyword">var</span> theme = <span class="hljs-string">&#x27;dark&#x27;</span>;<br><br><span class="hljs-variable language_">console</span>.<span class="hljs-title function_">log</span>(theme); <span class="hljs-comment">// &#x27;dark&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>這可能在大型檔案或多人協作時意外覆蓋變數。<code>let</code> 與 <code>const</code> 會直接阻止這類錯誤：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">const</span> theme = <span class="hljs-string">&#x27;light&#x27;</span>;<br><span class="hljs-keyword">const</span> theme = <span class="hljs-string">&#x27;dark&#x27;</span>; <span class="hljs-comment">// SyntaxError: Identifier &#x27;theme&#x27; has already been declared</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="實務使用準則"><a href="#實務使用準則" class="headerlink" title="實務使用準則"></a>實務使用準則</h2><p>可以按照下面順序選擇：</p>
+<ol>
+<li>先使用 <code>const</code>。</li>
+<li>如果變數在同一作用域內需要重新賦值，改為 <code>let</code>。</li>
+<li>不在新程式碼中使用 <code>var</code>；只有維護舊專案時才需要理解它的行為。</li>
+</ol>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs ts"><span class="hljs-keyword">const</span> maxRetries = <span class="hljs-number">3</span>;<br><span class="hljs-keyword">let</span> retries = <span class="hljs-number">0</span>;<br><br><span class="hljs-keyword">while</span> (retries &lt; maxRetries) &#123;<br>  retries += <span class="hljs-number">1</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>這個原則能讓「哪些值會變動」在閱讀程式碼時一目了然，也能避開 <code>var</code> 的函式作用域、重複宣告與非同步迴圈陷阱。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="../../../../categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" class="category-chain-item">技術筆記</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="../../../../tags/JavaScript/" class="print-no-link">#JavaScript</a>
+      
+        <a href="../../../../tags/Studies/" class="print-no-link">#Studies</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="../../../../2022/01/19/Tailwind/" title="TailwindCSS 逐步上手">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">TailwindCSS 逐步上手</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="../../../09/30/pm361_activity/" title="【心得分享】寫在活動之後">
+                        <span class="hidden-mobile">【心得分享】寫在活動之後</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目錄</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜尋</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">關鍵字</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <span>Kimi 2026</span> <i class="iconfont icon-love"></i> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo </span></a> <span>Theme </span> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="../../../../js/events.js" ></script>
+<script  src="../../../../js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="../../../../js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="../../../../js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="../../../../js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允許 JavaScript 運行的環境下瀏覽效果更佳</div>
+  </noscript>
+</body>
+</html>

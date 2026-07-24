@@ -1,0 +1,716 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-TW" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="../../../../img/icon.png">
+  <link rel="icon" href="../../../../img/icon.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="Kimi">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="紀錄一下在 Linux 裸機環境從零安裝 Nginx、部署前端靜態網站，到設定 HTTPS 的完整流程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 裸機安裝 Nginx 部署前端筆記">
+<meta property="og:url" content="https://lyskimi.org/2025/02/26/linux-nginx-setup/index.html">
+<meta property="og:site_name" content="Kimi&#39;s Personal Blog">
+<meta property="og:description" content="紀錄一下在 Linux 裸機環境從零安裝 Nginx、部署前端靜態網站，到設定 HTTPS 的完整流程。">
+<meta property="og:locale" content="zh_TW">
+<meta property="article:published_time" content="2025-02-26T03:38:00.000Z">
+<meta property="article:modified_time" content="2026-07-23T08:06:53.124Z">
+<meta property="article:author" content="Kimi">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Nginx">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Linux 裸機安裝 Nginx 部署前端筆記 - Kimi&#39;s Personal Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="../../../../css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="../../../../css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="../../../../css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"lyskimi.org","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":["home"]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="../../../../js/utils.js" ></script>
+  <script  src="../../../../js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="../../../../index.html">
+      <strong>Kimi&#39;s Personal Blog</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../index.html" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首頁</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../archives/" target="_self">
+                <i class="iconfont icon-book"></i>
+                <span>文章</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分類</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="../../../../links/" target="_self">
+                <i class="iconfont icon-link-fill"></i>
+                <span>作品</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('../../../../img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle">Linux 裸機安裝 Nginx 部署前端筆記</span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2025-02-26 11:38" pubdate>
+          2025-02-26
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.4k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          12 分鐘
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Linux 裸機安裝 Nginx 部署前端筆記</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>紀錄一下在 Linux 裸機環境從零安裝 Nginx、部署前端靜態網站，到設定 HTTPS 的完整流程。</p>
+<span id="more"></span>
+
+<h2 id="1-安裝-Nginx"><a href="#1-安裝-Nginx" class="headerlink" title="1. 安裝 Nginx"></a>1. 安裝 Nginx</h2><p>首先，安裝 Nginx：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo apt update<br>sudo apt install nginx<br></code></pre></td></tr></table></figure>
+
+<h2 id="2-建立目錄"><a href="#2-建立目錄" class="headerlink" title="2. 建立目錄"></a>2. 建立目錄</h2><p>接著，建立你所需要的目錄 <code>/var/www/html/front</code>，並確保 Nginx 有權限讀取該目錄：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo mkdir -p /var/www/html/front<br></code></pre></td></tr></table></figure>
+
+<h2 id="3-設定目錄權限"><a href="#3-設定目錄權限" class="headerlink" title="3. 設定目錄權限"></a>3. 設定目錄權限</h2><p>確保 Nginx 能夠讀取該目錄，將權限設置為 Nginx 的執行使用者（默認是 www-data）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo chown -R www-data:www-data /var/www/html<br>sudo chmod -R 755 /var/www/html<br></code></pre></td></tr></table></figure>
+
+<h2 id="4-修改-Nginx-設定"><a href="#4-修改-Nginx-設定" class="headerlink" title="4. 修改 Nginx 設定"></a>4. 修改 Nginx 設定</h2><p>打開 Nginx 設定檔（<code>/etc/nginx/sites-available/default</code>），修改 root 設定，使其指向你創建的目錄 <code>/var/www/html/front</code>：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo vim /etc/nginx/sites-available/default<br></code></pre></td></tr></table></figure>
+
+<p>修改 server 區塊中的 root 設定為：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs ts">server &#123;<br>    listen <span class="hljs-number">80</span> default_server;<br>    listen [::]:<span class="hljs-number">80</span> default_server;<br><br>    root /<span class="hljs-keyword">var</span>/www/html/front;<br>    index index.<span class="hljs-property">html</span>;<br><br>    server_name _;<br><br>    location / &#123;<br>        try_files $uri $uri/ =<span class="hljs-number">404</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h2 id="5-測試-Nginx-設定"><a href="#5-測試-Nginx-設定" class="headerlink" title="5. 測試 Nginx 設定"></a>5. 測試 Nginx 設定</h2><p>在重新啟動 Nginx 之前，先檢查 Nginx 配置是否正確：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo nginx -t<br></code></pre></td></tr></table></figure>
+
+<p>如果沒有錯誤，將顯示 syntax is okay 和 test is successful。</p>
+<h2 id="6-重新啟動-Nginx"><a href="#6-重新啟動-Nginx" class="headerlink" title="6. 重新啟動 Nginx"></a>6. 重新啟動 Nginx</h2><p>如果配置沒有問題，重新啟動 Nginx 使設定生效：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo systemctl restart nginx<br></code></pre></td></tr></table></figure>
+
+<h2 id="7-上傳前端檔案"><a href="#7-上傳前端檔案" class="headerlink" title="7. 上傳前端檔案"></a>7. 上傳前端檔案</h2><p>將你的前端 build 檔案（通常在 dist 或 build 資料夾內）複製到 <code>/var/www/html/front</code> 目錄：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">scp -r ./dist/* user@your_server:/var/www/html/front/<br></code></pre></td></tr></table></figure>
+
+<p>或者如果你在伺服器內操作，直接複製：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">cp -r ./dist/* /var/www/html/front/<br></code></pre></td></tr></table></figure>
+
+<hr>
+<p>若是發生 scp 時，permission denied，則可以授權登入的帳號擁有該目錄，然後再重新執行一次 scp。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo chown -R your_user:your_user /var/www/html/front<br></code></pre></td></tr></table></figure>
+
+<hr>
+<p>若想刪除，可以使用：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo rm -rf /var/www/html/front/*<br></code></pre></td></tr></table></figure>
+
+<h2 id="8-測試前端佈署"><a href="#8-測試前端佈署" class="headerlink" title="8. 測試前端佈署"></a>8. 測試前端佈署</h2><p>完成後，先確認 Nginx 是否有在運行：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo systemctl status nginx<br></code></pre></td></tr></table></figure>
+
+<p>如果看到 <strong>“active (running)”</strong>，代表 Nginx 正在運行。<br>如果沒有運行，可以啟動：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo systemctl start nginx<br></code></pre></td></tr></table></figure>
+
+<p>再來，確認 Nginx 監聽的 Port</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo netstat -tulnp | grep nginx<br></code></pre></td></tr></table></figure>
+
+<p>會看到類似</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">tcp   LISTEN  0  128  0.0.0.0:80   0.0.0.0:*   users:((&quot;nginx&quot;,pid=1234,fd=6))<br></code></pre></td></tr></table></figure>
+
+<p>這表示 Nginx 監聽 80 Port<br>可以在瀏覽器中輸入 server IP:port 來檢查前端是否正確顯示，例如：</p>
+<figure class="highlight md"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs md">http://your<span class="hljs-emphasis">_server_</span>IP:port<br></code></pre></td></tr></table></figure>
+
+<h2 id="補充一：調整-Nginx-設定檔"><a href="#補充一：調整-Nginx-設定檔" class="headerlink" title="補充一：調整 Nginx 設定檔"></a>補充一：調整 Nginx 設定檔</h2><p>預設安裝，通常 Nginx 會監聽 80。<br>但你可以檢查設定：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo vim /etc/nginx/sites-available/default<br><br>// 若有多個站台，也會各自有一份設定檔<br>sudo vim /etc/nginx/sites-available/example.com<br></code></pre></td></tr></table></figure>
+
+<p>看看 server 區塊：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs ts">server &#123;<br>    listen <span class="hljs-number">80</span>;<br>    server_name <span class="hljs-variable constant_">YOUR_SERVER_IP</span>;<br><br>    root /<span class="hljs-keyword">var</span>/www/html/front;<br>    index index.<span class="hljs-property">html</span>;<br><br>    location / &#123;<br>        try_files $uri /index.<span class="hljs-property">html</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>listen 80; → 代表 Nginx 監聽 80 Port</li>
+<li>root &#x2F;var&#x2F;www&#x2F;html&#x2F;front; → 你的前端 build 檔案應該在這個目錄</li>
+<li>index index.html; → 預設加載 index.html</li>
+</ul>
+<p>如果修改了設定，記得重新啟動 Nginx：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo systemctl restart nginx<br></code></pre></td></tr></table></figure>
+
+<p>這樣就完成了！</p>
+<h2 id="補充二：修改-Nginx-樣式"><a href="#補充二：修改-Nginx-樣式" class="headerlink" title="補充二：修改 Nginx 樣式"></a>補充二：修改 Nginx 樣式</h2><p>若是發現 assets、css style 有讀不到問題，可以至 nginx.conf 調整：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo vim  /etc/nginx/nginx.conf<br></code></pre></td></tr></table></figure>
+
+<p>完成配置修改後，檢查 Nginx 配置是否正確：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo nginx -t<br></code></pre></td></tr></table></figure>
+
+<p>如果配置文件沒有錯誤，重新啟動 Nginx 使更改生效：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo systemctl restart nginx<br></code></pre></td></tr></table></figure>
+
+<p>這樣就完成了！</p>
+<h2 id="補充三：查看錯誤-Log"><a href="#補充三：查看錯誤-Log" class="headerlink" title="補充三：查看錯誤 Log"></a>補充三：查看錯誤 Log</h2><p>可以執行以下指令來觀看：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs shell">// 錯誤 LOG<br>sudo tail -f /var/log/nginx/error.log<br><br>// 執行 API LOG<br>sudo cat /var/log/nginx/access.log<br></code></pre></td></tr></table></figure>
+
+<h2 id="補充四：預設讓-http（80-port）-都導轉至-https（443-port）"><a href="#補充四：預設讓-http（80-port）-都導轉至-https（443-port）" class="headerlink" title="補充四：預設讓 http（80 port） 都導轉至 https（443 port）"></a>補充四：預設讓 http（80 port） 都導轉至 https（443 port）</h2><blockquote>
+<p>參考文章：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://hackmd.io/@warrenpig/create-self-signed-https-nginx-app">用Nginx架設local端https應用</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.gtwang.org/linux/nginx-create-and-install-ssl-certificate-on-ubuntu-linux/">NGINX 設定 HTTPS 網頁加密連線，建立自行簽署的 SSL 憑證</a></li>
+</ul>
+</blockquote>
+<h3 id="建立一個放置憑證的目錄"><a href="#建立一個放置憑證的目錄" class="headerlink" title="建立一個放置憑證的目錄"></a>建立一個放置憑證的目錄</h3><p>目錄的路徑可以自由選擇，放在哪裡都可以，而考量到這個憑證是 NGINX 專用的，所以跟 NGINX 的設定檔放在一起可能會比較好管理。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo mkdir /etc/nginx/ssl<br></code></pre></td></tr></table></figure>
+
+<h3 id="產生自行簽署的-SSL-憑證"><a href="#產生自行簽署的-SSL-憑證" class="headerlink" title="產生自行簽署的 SSL 憑證"></a>產生自行簽署的 SSL 憑證</h3><p>使用 <code>openssl</code> 產生自行簽署的 SSL 憑證，並且將憑證的存放路徑設成剛剛上面建立的目錄：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/nginx.key -out /etc/nginx/ssl/nginx.crt<br></code></pre></td></tr></table></figure>
+
+<p>若是要 .p12 檔 轉成 .crt 跟 .key，可以使用：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo openssl pkcs12 -in /etc/ssl/private/your_cert.p12 -clcerts -nokeys -out /etc/ssl/private/your_cert.crt -legacy<br><br>sudo openssl pkcs12 -in /etc/ssl/private/your_cert.p12 -nocerts -nodes -out /etc/ssl/private/your_cert.key -legacy<br></code></pre></td></tr></table></figure>
+
+<p>以下是這裡使用到的參數與簡略說明：</p>
+<ul>
+<li><code>req</code>：使用 X.509 Certificate Signing Request（CSR） Management 產生憑證。</li>
+<li><code>-x509</code>：建立自行簽署的憑證。</li>
+<li><code>-nodes</code>：不要使用密碼保護，因為這個憑證是 NGINX 伺服器要使用的，如果設定密碼的話，會讓伺服器每次在啟動時都需要輸入密碼。</li>
+<li><code>-days 365</code>：設定憑證的使用期限，單位是天，如果不想時常重新產生憑證，可以設長一點。</li>
+<li><code>-newkey rsa:2048</code>：同時產生新的 RSA 2048 位元的金鑰。</li>
+<li><code>-keyout</code>：設定金鑰儲存的位置。</li>
+<li><code>-out</code>：設定憑證儲存的位置。</li>
+</ul>
+<p>這裡我們會同時建立憑證與金鑰，建立的過程中會需要填寫一些基本的資料：</p>
+<ul>
+<li>Country Name：TW</li>
+<li>State or Province Name (full name)：Taiwan</li>
+<li>Locality Name (eg, city)：Taipei</li>
+<li>Organization Name (eg, company)：My Company</li>
+<li>Organizational Unit Name (eg, section)：My Unit</li>
+<li>Common Name (e.g. server FQDN or YOUR name)：example.com</li>
+<li>Email Address：<a href="mailto:&#x79;&#x6f;&#117;&#64;&#x65;&#x78;&#x61;&#109;&#x70;&#108;&#x65;&#x2e;&#x63;&#x6f;&#x6d;">&#x79;&#x6f;&#117;&#64;&#x65;&#x78;&#x61;&#109;&#x70;&#108;&#x65;&#x2e;&#x63;&#x6f;&#x6d;</a></li>
+</ul>
+<ol>
+<li>國家代碼，台灣就填 <code>TW</code>。</li>
+<li>州或省，台灣就填 <code>Taiwan</code>。</li>
+<li>城市，例如台北就填 <code>Taipei</code>。</li>
+<li>公司名稱。</li>
+<li>部門名稱。</li>
+<li>伺服器的 FQDN，這個一定要填寫正確，如果沒有申請網域名稱的話，也可以用 IP 位址替代。</li>
+<li>E-mail 信箱。</li>
+</ol>
+<p>填寫完成之後，憑證與金鑰的建立就完成了，而存放位置就在 <code>/etc/nginx/ssl</code> 目錄中。</p>
+<h3 id="設定-NGINX-伺服器"><a href="#設定-NGINX-伺服器" class="headerlink" title="設定 NGINX 伺服器"></a>設定 NGINX 伺服器</h3><p>在原本的設定檔中</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo vim /etc/nginx/sites-available/default<br></code></pre></td></tr></table></figure>
+
+<p>加上 SSL 的設定，並且設定憑證與金鑰的路徑：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><code class="hljs json">server <span class="hljs-punctuation">&#123;</span><br>    listen <span class="hljs-number">80</span> default_server;<br>    listen <span class="hljs-punctuation">[</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">:</span><span class="hljs-number">80</span> default_server;<br><br>    # 導向至 HTTPS<br>    rewrite ^(.*) https<span class="hljs-punctuation">:</span><span class="hljs-comment">//$host$1 permanent;</span><br><span class="hljs-punctuation">&#125;</span><br><br>server <span class="hljs-punctuation">&#123;</span><br>    # 加入 SSL 設定<br>    listen <span class="hljs-number">443</span> ssl default_server;<br>    listen <span class="hljs-punctuation">[</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">:</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">:</span><span class="hljs-number">443</span> ssl default_server;<br><br>    # 憑證與金鑰的路徑<br>    ssl_certificate /etc/nginx/ssl/nginx.crt;<br>    ssl_certificate_key /etc/nginx/ssl/nginx.key;    <br><br>    root /var/www/html/front;<br>    index index.html index.htm index.nginx-debian.html;<br>    server_name _;<br>    <br>    location / <span class="hljs-punctuation">&#123;</span><br>        # First attempt to serve request as file<span class="hljs-punctuation">,</span> then<br>        # as directory<span class="hljs-punctuation">,</span> then fall back to displaying a <span class="hljs-number">404.</span><br>        try_files $uri $uri/ =<span class="hljs-number">404</span>;<br>    <span class="hljs-punctuation">&#125;</span><br><br>    # 反向代理後端 API 的範例<br>    location /api/ <span class="hljs-punctuation">&#123;</span><br>        proxy_pass https<span class="hljs-punctuation">:</span><span class="hljs-comment">//127.0.0.1:5001/api/;</span><br>        proxy_set_header Host $host;<br>        proxy_set_header X-Real-IP $remote_addr;<br>        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;<br>        proxy_set_header X-Forwarded-Proto $scheme;  # 設置轉發的協議為 HTTPS<br>    <span class="hljs-punctuation">&#125;</span><br><span class="hljs-punctuation">&#125;</span><br></code></pre></td></tr></table></figure>
+
+<p>接著重新啟動 NGINX 伺服器：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">sudo service nginx restart<br></code></pre></td></tr></table></figure>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="../../../../categories/%E6%8A%80%E8%A1%93%E7%AD%86%E8%A8%98/" class="category-chain-item">技術筆記</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="../../../../tags/Linux/" class="print-no-link">#Linux</a>
+      
+        <a href="../../../../tags/Nginx/" class="print-no-link">#Nginx</a>
+      
+    </div>
+  
+</div>
+
+
+              
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="../../../03/05/angular-localhost-https/" title="Angular 本機開發如何使用 HTTPS 啟動 ng serve">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Angular 本機開發如何使用 HTTPS 啟動 ng serve</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="../../20/angular-localhost-cors-proxy/" title="Angular 本機開發遇到 CORS 問題：使用 Proxy 代理 API">
+                        <span class="hidden-mobile">Angular 本機開發遇到 CORS 問題：使用 Proxy 代理 API</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目錄</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜尋</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">關鍵字</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <span>Kimi 2026</span> <i class="iconfont icon-love"></i> <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo </span></a> <span>Theme </span> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a>
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="../../../../js/events.js" ></script>
+<script  src="../../../../js/plugins.js" ></script>
+
+
+
+
+
+  
+    <script  src="../../../../js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="../../../../js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="../../../../js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允許 JavaScript 運行的環境下瀏覽效果更佳</div>
+  </noscript>
+</body>
+</html>
